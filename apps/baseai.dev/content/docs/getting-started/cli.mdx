@@ -19,7 +19,7 @@ The BaseAI CLI allows you to develop, build, and deploy BaseAI primitives from t
 ## Basic Usage
 
 ```bash
-npx baseai [command]
+npx baseai@latest <command> [flag]
 ```
 
 ---
@@ -42,12 +42,12 @@ The following commands are available in the CLI:
 
 ---
 
-### `init` command
+### `help` command
 
-`baseai init` initializes the setup of BaseAI at the root of your application. It installs `baseai` in your application, creates a `baseai` folder at the root, and adds a `baseai.config.json` file to this folder.
+`baseai help` provides information about the available commands, flags and their usage.
 
 ```bash
-npx baseai init
+npx baseai@latest help
 ```
 
 ---
@@ -57,7 +57,7 @@ npx baseai init
 `baseai dev` starts the local server of BaseAI in development mode. This command is used for testing `pipes`, `memory` and `tools` of your application locally before deploying them to Langbase.
 
 ```bash
-npx baseai dev
+npx baseai@latest dev
 ```
 
 ---
@@ -67,7 +67,7 @@ npx baseai dev
 `baseai pipe` starts the process of creating a pipe in your application. Once a pipe is created, it will be available in the `pipes` folder of `baseai`.
 
 ```bash
-npx baseai pipe
+npx baseai@latest pipe
 ```
 
 ---
@@ -77,7 +77,7 @@ npx baseai pipe
 `baseai memory` starts the process of creating a memory in your application. Once a memory is created, it will be available in the `memory` folder of `baseai`.
 
 ```bash
-npx baseai memory
+npx baseai@latest memory
 ```
 
 ---
@@ -87,7 +87,7 @@ npx baseai memory
 `baseai tool` starts the process of creating a tool in your application. Once a tool is created, it will be available in the `tools` folder of `baseai`.
 
 ```bash
-npx baseai tool
+npx baseai@latest tool
 ```
 
 ---
@@ -97,13 +97,13 @@ npx baseai tool
 `baseai add` adds a pipe present on Langbase to your project. Once done, the pipe and its tools will become available in the `pipes` and `tools` folder of `baseai` respectively.
 
 ```bash
-npx baseai add [owner-login/pipe-name]
+npx baseai@latest add [owner-login/pipe-name]
 ```
 
 OR
 
 ```bash
-npx baseai add [link-to-pipe]
+npx baseai@latest add [link-to-pipe]
 ```
 
 ---
@@ -113,7 +113,7 @@ npx baseai add [link-to-pipe]
 `baseai auth` starts the authentication process of BaseAI with Langbase. Once done, you will be able to deploy `pipes`, `memory` and `tools` of your application to Langbase.
 
 ```bash
-npx baseai auth
+npx baseai@latest auth
 ```
 
 ---
@@ -123,7 +123,7 @@ npx baseai auth
 `baseai build` builds `pipes`, `memory` and `tools` of your application with BaseAI. These build files are then used during the deployment to Langbase.
 
 ```bash
-npx baseai build
+npx baseai@latest build
 ```
 
 ---
@@ -133,7 +133,7 @@ npx baseai build
 `baseai deploy` deploys `pipes`, `memory` and `tools` of your application to Langbase.
 
 ```bash
-npx baseai deploy
+npx baseai@latest deploy
 ```
 
 ---
