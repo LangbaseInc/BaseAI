@@ -1,0 +1,232 @@
+---
+title: 'Pipe Quickstart - Create your first Pipe'
+description: "A step-by-step guide to creating your first AI pipe in just one minute. Run locally, build, experiment, and deploy your AI features with BaseAI."
+tags:
+    - baseai
+    - pipe
+    - langbase
+section: 'Pipe'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Quickstart: Build an AI to Generate Titles
+
+### Let's build your first AI pipe in a minute.
+
+---
+
+In this quickstart guide, you will locally:
+
+-   **Create** an AI [pipe](https://langbase.com/docs/pipe) that uses an LLM to generate titles.
+-   **Use** an LLM model like GPT, Llama, Mistral, etc.
+-   **Build** your pipe with configuration and meta settings.
+-   **Design** a prompt with system, safety, and few-shot messages.
+-   **Experiment** with your AI pipe locally using BaseAI.
+-   **Observe** real-time performance, usage, and logs.
+-   **Deploy** your AI features to Langbase API (global, highly available, and scalable) for production.
+
+---
+
+### Let's get started
+
+Let’s build a Pipe locally using BaseAI that will generate title ideas for your next blog using [any LLM](/docs/supported-models-and-providers/) from OpenAI, Together, Anthropic, etc. This is going to be fun. _Much fun!_
+
+---
+
+Pipe is your custom-built AI agent as an API. It's the fastest way to ship AI features/apps.
+
+<CTAButtons className="mt-2 mb-2"
+    primary={{ href: '/pipe/quickstart', text: '⌘ What is a Pipe?', sub:'(Learn more)' }}
+/>
+
+<Img
+	light="https://langbase.com/docs/pipe/pipe.png"
+	dark="https://langbase.com/docs/pipe/pipe.png"
+	alt="What is a Pipe"
+	caption="What is a Pipe"
+/>
+
+---
+
+## Step #0: Initialize BaseAI
+
+Please initialize BaseAI in your project using the following command:
+
+```bash
+npx baseai@latest init
+```
+
+## Step #1: Create a Pipe
+
+Navigate to your project directory, and create a new pipe using the `baseai pipe` command. It will ask you for the name, description, and other details of the pipe step-by-step. Add the name, description, and set status to private:
+
+```bash
+npx baseai@latest pipe
+```
+
+## Step #2: Add your prompt
+
+It will ask for the system prompt next. We will use the following system prompt to generate title ideas:
+
+```bash
+You're a helpful AI assistant. Give me 5 title ideas for an article about the topic given by the user.
+```
+
+Enter this prompt in the terminal. It will create a pipe in your current directory under `baseai/pipes/ai-title-generator.ts`.
+
+## Step #3: View and Configure your pipe
+
+Your pipe is created successfully at `/baseai/pipes/ai-title-generator.ts`. Open the file, it will look like this:
+
+```ts
+// baseai/pipes/ai-title-generator.ts
+import {PipeI} from '@baseai/core';
+
+const buildPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'ai-title-generator',
+	description: 'Pipe to create title ideas with AI',
+	status: 'private',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{
+			role: 'system',
+			content: `You're a helpful AI assistant. Give me 5 title ideas for an article about the topic given by the user.`,
+		},
+	],
+	variables: [],
+	memory: [],
+	tools: [],
+});
+
+export default buildPipe;
+```
+
+In the file, you can see the configuration of the pipe. You can modify the configuration as per your requirements. For instance, you can change the model, temperature, max_tokens, etc.
+
+It is called `buildPipe` by default. You can change the name of the function as per your requirements. Let's name it `titleGeneratorPipeConfig`.
+
+```ts
+// baseai/pipes/ai-title-generator.ts
+import {PipeI} from '@baseai/core';
+
+export const titleGeneratorPipeConfig = (): PipeI => ({
+	... // Configuration
+});
+
+export default titleGeneratorPipeConfig;
+```
+
+## Step #4: Use the Pipe
+
+Now that you have created the pipe, let's see it in action. Create a `index.ts` file in your project directory.
+
+```bash
+# Create a new file index.ts
+touch index.ts
+```
+
+We will use the `Pipe` primitive from `@baseai/core` to run the pipe. Add the following code to `index.ts` file:
+
+```ts
+import { Pipe, getRunner } from '@baseai/core';
+import { titleGeneratorPipeConfig } from './baseai/pipes/ai-title-generator';
+
+// Instantiate the pipe
+const pipe = new Pipe({
+	...titleGeneratorPipeConfig(),
+});
+
+// Demo user message
+const userMsg = 'Generate 5 blog title ideas for an article about Large Language Models';
+
+// Run the pipe in streaming mode
+(async () => {
+	{
+		// Run Stream
+		const {stream} = await pipe.run({
+			messages: [{role: 'user', content: userMsg}],
+			stream: true,
+			rawResponse: true,
+		});
+
+		const runner = getRunner(stream);
+
+		runner.on('error', error => {
+			console.error('Error:', error);
+		});
+
+		runner.on('content', content => {
+			process.stdout.write(content);
+		});
+	}
+})();
+```
+
+We have added a demo user message to generate 5 blog title ideas for an article about LLMs. You can change this user message as per your requirements.
+
+```txt
+Generate 5 blog title ideas for an article about Large Language Models
+```
+
+Since we are using an OpenAI model, your OpenAI key is required. Create a `.env` file in your project's root directory and add your OpenAI API key like this.
+
+```bash
+touch .env
+
+OPENAI_API_KEY="your-open-ai-key" # Add your OpenAI API key in .env file
+```
+## Step #6 Start baseai server
+
+To run the pipe locally, you need to start the BaseAI server. Run the following command in your terminal:
+
+```bash
+npx baseai@latest dev
+```
+
+This command will start the BaseAI server. You will also see the real-time logs in your terminal for observability.
+
+## Step #5: Run the code
+
+Run the `index.ts` file using the following command:
+
+```bash
+npx tsx index.ts
+```
+
+It will prompt the LLM model to get the response for your title generation query. It will look something like this:
+
+```txt
+Here are five blog title ideas for an article about Large Language Models (LLMs):
+
+1. **"Unlocking the Power of Large Language Models: How They’re Shaping the Future of AI"**
+2. **"The Rise of Large Language Models: Transforming Communication and Knowledge Processing"**
+3. **"Exploring the Potential of LLMs: From GPT to BERT and Beyond"**
+4. **"Large Language Models Explained: What They Are and Why They Matter in AI"**
+5. **"Demystifying LLMs: How These AI Models Are Revolutionizing Industries"**
+```
+
+This all happens locally on your machine and the response should be streamed in your terminal.
+
+---
+
+## Next Steps
+
+✨ **Congratulations!** You have successfully created an AI Title generator pipe locally using BaseAI.
+
+After testing locally, you can deploy this pipe seamlessly to Langbase using the [deploy](/docs/deployment/deploy) command.
+
+---

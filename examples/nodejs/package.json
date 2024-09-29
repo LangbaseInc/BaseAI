@@ -1,0 +1,27 @@
+{
+	"name": "example-nodejs",
+	"private": true,
+	"version": "0.0.0",
+	"description": "Nodejs example on how to use BaseAI",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"baseai": "baseai",
+		"pipe.run": "npx tsx ./examples/pipe.run.ts",
+		"pipe.run.stream": "npx tsx ./examples/pipe.run.stream.ts",
+		"pipe.run.stream.loop": "npx tsx ./examples/pipe.run.stream.loop.ts",
+		"pipe.generate.text": "npx tsx ./examples/pipe.generate.text.ts",
+		"pipe.stream.text": "npx tsx ./examples/pipe.stream.text.ts"
+	},
+	"keywords": [],
+	"author": "Ahmad Awais <me@AhmadAwais.com> (https://twitter.com/MrAhmadAwais)",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"@baseai/core": "^0.0.21",
+		"dotenv": "^16.4.5"
+	},
+	"devDependencies": {
+		"baseai": "^0.0.21",
+		"tsx": "^4.19.0"
+	}
+}

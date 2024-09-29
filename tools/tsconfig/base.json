@@ -1,0 +1,21 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "Default",
+	"compilerOptions": {
+		"strict": true,
+		"composite": false,
+		"declaration": true,
+		"skipLibCheck": true,
+		"inlineSources": false,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"noUnusedLocals": false,
+		"isolatedModules": true,
+		"moduleResolution": "node",
+		"noUnusedParameters": false,
+		"preserveWatchOutput": true,
+		"forceConsistentCasingInFileNames": true,
+		"types": ["@types/node", "vitest/globals"]
+	},
+	"exclude": ["node_modules"]
+}

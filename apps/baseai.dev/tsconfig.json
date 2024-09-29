@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/mdx/xremark.ts", "src/scripts/generate-docs-data.mts", "src/mdx/xrehype.ts", "src/mdx/xrecma.ts", "src/mdx/themes/index.mjs", "src/mdx/languages.mjs", "src/mdx/recma.mjs", "src/mdx/languages.mts"],
+	"exclude": ["node_modules", "./src/scripts/*.ts"]
+}

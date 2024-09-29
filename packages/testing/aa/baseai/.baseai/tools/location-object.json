@@ -1,0 +1,1 @@
+{"type":"function","function":{"name":"locationObject","description":"convert text to user objection","parameters":{"type":"object","properties":{"location":{"type":"string","description":"Location of the user"}},"required":["location"]}}}

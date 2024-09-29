@@ -1,0 +1,175 @@
+---
+title: 'Quickstart'
+description: "Let's create a Chat With Docs RAG system using memory and AI LLM models like GPT, Llama, and Mistral. Build and deploy with ease."
+tags:
+    - baseai
+    - memory
+    - langbase
+    - quickstart
+section: 'Memory'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Quickstart: Build FAQs RAG using Memory
+
+Retrieval-Augmented Generation (RAG) is a technique where a large language model (LLM) is supplemented with external information from a retrieval system to improve response quality. Here’s how it works:
+
+1.	**Query**: The user submits a query, and embeddings are generated.
+2.	**Retrieval**: Relevant information is retrieved from memory using similarity search.
+3.	**Augmentation**: The retrieved data is combined with the query.
+4.	**Generation**: The augmented input is passed to LLM to generate a more accurate response.
+
+**Let's build your first RAG using memory in a minute.**
+
+---
+
+In this quickstart guide, you will locally:
+
+-   **Create** a [memory](https://langbase.com/docs/memorysets/overview) in BaseAI.
+-   **Build** a RAG by connecting your [pipe](https://langbase.com/docs/pipe) and memory.
+
+---
+
+### Let's get started
+
+Let's create a chat with docs system for [Pipe FAQs](https://langbase.com/docs/pipe/faqs) using memory to answer questions about Pipe.
+
+---
+
+## Step #0: Setup
+
+Initialize BaseAI in root of your project using the following command:
+
+```bash
+npx baseai@latest init
+```
+
+## Step #1: Create a Memory
+
+Create a new memory using the `memory` command. It will ask you for name and description of the memory. Use `chat-with-docs` as the memory name.
+
+```bash
+baseai memory
+```
+
+It creates a memory at `baseai/memory/chat-with-docs` in your current directory. Add documents to `baseai/memory/chat-with-docs/documents` to use them in the memory.
+
+## Step #2: Add OpenAI API Key
+
+Add your OpenAI API key to the `.env` file in the root of your project. It is required to generate embeddings for the documents.
+
+```bash
+OPENAI_API_KEY=your-openai-api-key
+```
+
+## Step #2: Create embeddings
+
+Save [Pipe FAQs](https://langbase.com/docs/pipe/faqs) page as a `.pdf` or `.txt` and add it to the memory. Next, create embeddings for the documents using the `embed` command. It will embed the documents and create a semantic index for the memory. Pass the memory name to the `embed` command using the `--memory` flag or `-m` for short.
+
+```bash
+baseai embed -m chat-with-docs
+```
+
+Once the embeddings are created, it will print a success message in the terminal.
+
+## Step #3: Create a Pipe and Connect Memory
+
+Let's create a [Pipe](/docs/pipe/quickstart) and connect memory to it. Use the `pipe` command to create a new pipe. In addition to the pipe name and description, it will ask you to select the memory to use.
+
+Use `chat-with-docs-rag` as the pipe name and select the memory `chat-with-docs` to connect it to the pipe.
+
+```bash
+baseai pipe
+```
+
+It will create a pipe in your current directory under `baseai/pipes/chat-with-docs-rag.ts`. It prints the path in the terminal. You can open the file and see the details.
+
+
+## Step #4: Use the Pipe
+
+In your `src/index.ts` file, add the following code:
+
+
+```ts
+import { Pipe, streamText, getRunner } from '@baseai/core';
+import chatWithDocsPipeConfig from './baseai/pipes/chat-with-docs-rag';
+
+// Instantiate the pipe
+const pipe = new Pipe(chatWithDocsPipeConfig());
+
+async function main() {
+	const {stream} = await streamText({
+		pipe,
+		messages: [{role: 'user', content: 'How to create a pipe?'}],
+	});
+
+	// Convert the stream to a stream runner.
+	const runner = getRunner(stream);
+
+	// Listen for events.
+	runner.on('connect', () => {
+		console.log('Stream started.\n');
+	});
+
+	runner.on('content', content => {
+		process.stdout.write(content);
+	});
+
+	runner.on('end', () => {
+		console.log('\nStream ended.');
+	});
+
+	runner.on('error', error => {
+		console.error('Error:', error);
+	});
+}
+
+main();
+
+```
+
+## Step #5: Run the dev server
+
+Use the following command to run the dev server:
+
+```bash
+npx baseai@latest dev
+```
+
+This listens to all LLM requests and runs the pipe on the LLM model.
+
+## Step #6: Run the code
+
+Run the `index.ts` file using the following command:
+
+```bash
+npx tsx index.ts
+```
+
+It will prompt the LLM model to get answers to your questions. It will search the memory and provide you with the best possible answer to your question.
+
+For instance, if you ask `How to create a pipe?`, it gives you the answer from the memory.
+
+```txt
+To create a Pipe, you need to follow these steps:
+
+1. Select any LLM model (by default, OpenAI gpt-4o-mini is selected).
+2. If the Pipe is of type generate, simply run it.
+3. If it is a chat pipe, write "hello" in Playground and then run the Pipe.
+
+Additionally, keep in mind that when you create a Pipe, it already contains a readme which can be edited at any time [1].
+
+Sources:
+[1] pipe faqs.txt
+```
+
+
+
+---
+
+## Next Steps
+
+✨ **Congratulations!** You have successfully created a RAG system using memory. You can deploy this system to Langbase using the [deploy](/deployment/deploy) command.
+
+---

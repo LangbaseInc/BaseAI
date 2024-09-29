@@ -1,0 +1,534 @@
+---
+title: 'usePipe()'
+description: "Everything you need to know about the usePipe() React hook."
+tags:
+    - baseai
+    - api-reference
+    - usePipe react hook
+    - stream text
+    - generate text
+section: 'API reference'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# usePipe()
+
+You can use the `usePipe()` React hook to generate text or handle stream from model provider. It internal manages the state and provides you with all the necessary callbacks and properties to work with LLM.
+
+The BaseAI core package provides a `usePipe()` hook that you can use in your app.
+
+---
+
+## API reference
+
+## `usePipe(options)`
+
+<Row>
+    <Col>
+        Handle text or stream from model provider.
+
+        ```tsx {{title: 'hook Signature'}}
+        usePipe(options);
+
+        // With types.
+        usePipe(options: UsePipeOptions)
+        ```
+
+        ## options
+        <Properties>
+            ### UsePipeOptions
+            <Property name="options" type="UsePipeOptions">
+                ```ts {{title: 'UsePipeOptions Object'}}
+                interface UsePipeOptions {
+                    apiRoute?: string;
+                    onResponse?: (message: Message) => void;
+                    onFinish?: (messages: Message[]) => void;
+                    onConnect?: () => void;
+                    onError?: (error: Error) => void;
+                    threadId?: string;
+                    initialMessages?: Message[];
+                    stream?: boolean;
+                }
+                ```
+
+                *Following are the properties of the options object.*
+            </Property>
+        </Properties>
+
+        ---
+
+        ### apiRoute
+
+        <Properties>
+            <Property name="apiRoute" type="string">
+                The API route to call that returns LLM response.
+            </Property>
+        </Properties>
+
+        ---
+
+        ### onResponse
+
+        <Properties>
+            <Property name="onResponse" type="(message: Message) => void">
+                The callback function that is called when a response is received from the API.
+
+                <Properties>
+                    <Property name="messages" type="Message">
+                        The message object.
+
+                        <Sub name="message" type="Message">
+                            ```ts {{title: 'Message Object'}}
+                            interface Message {
+                                role: MessageRole;
+                                content: string;
+                                name?: string;
+                            }
+                            ```
+
+                            <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                                The role of the author of this message.
+                            </Sub>
+                            <Sub name="content" type="string">
+                                The contents of the chunk message. Null if a tool is called.
+                            </Sub>
+                            <Sub name="name" type="string | undefined">
+                                An name for the participant. Provides the model information to differentiate between participants of the same role.
+                            </Sub>
+                        </Sub>
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### onFinish
+
+        <Properties>
+            <Property name="onFinish" type="(message: Message) => void">
+                The callback function that is called when the API call is finished.
+
+                <Properties>
+                    <Property name="messages" type="Message">
+                        The message object.
+
+                        <Sub name="message" type="Message">
+                            ```ts {{title: 'Message Object'}}
+                            interface Message {
+                                role: MessageRole;
+                                content: string;
+                                name?: string;
+                            }
+                            ```
+
+                            <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                                The role of the author of this message.
+                            </Sub>
+                            <Sub name="content" type="string">
+                                The contents of the chunk message. Null if a tool is called.
+                            </Sub>
+                            <Sub name="name" type="string | undefined">
+                                An name for the participant. Provides the model information to differentiate between participants of the same role.
+                            </Sub>
+                        </Sub>
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### onConnect
+
+        <Properties>
+            <Property name="onConnect" type="() => void">
+                The callback function that is called when the API call is connected.
+            </Property>
+        </Properties>
+
+        ---
+
+        ### onError
+
+        <Properties>
+            <Property name="onError" type="(error: Error) => void;">
+                The callback function that is called when an  error occurs.
+                <Properties>
+                    <Property name="error" type="Error">
+                        The error object containing information about what went wrong.
+                    </Property>
+                </Properties>
+            </Property>
+
+        </Properties>
+
+        ---
+
+        ### threadId
+
+        <Properties>
+            <Property name="threadId" type="string | undefined">
+                The ID of the thread. Enable if you want to continue the conversation in the same thread from the second message onwards. Works only with deployed pipes.
+
+                - If `threadId` is not provided, a new thread will be created. E.g. first message of a new chat will not have a threadId.
+                - After the first message, a new `threadId` will be returned.
+                - Use this `threadId` to continue the conversation in the same thread from the second message onwards.
+            </Property>
+        </Properties>
+
+        ---
+
+        ### initialMessages
+
+        <Properties>
+            <Property name="initialMessages" type="Message[] | undefined">
+                An array of messages to be sent to the LLM.
+
+                <Properties>
+                    <Property name="messages" type="Message">
+                        The message object.
+
+                        <Sub name="message" type="Message">
+                            ```ts {{title: 'Message Object'}}
+                            interface Message {
+                                role: MessageRole;
+                                content: string;
+                                name?: string;
+                            }
+                            ```
+
+                            <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                                The role of the author of this message.
+                            </Sub>
+                            <Sub name="content" type="string">
+                                The contents of the chunk message. Null if a tool is called.
+                            </Sub>
+                            <Sub name="name" type="string | undefined">
+                                An name for the participant. Provides the model information to differentiate between participants of the same role.
+                            </Sub>
+                        </Sub>
+                </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### stream
+
+        <Properties>
+            <Property name="stream" type="boolean | undefined">
+                Whether to stream the response from the API.
+
+                Default: `true`
+            </Property>
+        </Properties>
+
+        ---
+
+        ## Return Object
+
+        The `usePipe` hook returns the following object:
+
+        ```ts {{ title: 'usePipe return object' }}
+        interface UsePipeReturn {
+            input: string;
+            stop: () => void;
+            isLoading: boolean;
+            error: Error | null;
+            messages: Message[];
+            threadId: string | null;
+            setMessages: (newMessages: Message[]) => void;
+            regenerate: (options: PipeRequestOptions) => Promise<void>;
+            sendMessage: (content: string, options: PipeRequestOptions) => Promise<void>;
+            handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+            handleSubmit: (event?: React.FormEvent<HTMLFormElement>, options: PipeRequestOptions) => void;
+        }
+        ```
+
+        <Properties>
+            <Property name="input" type="string">
+                The input value of the input field.
+            </Property>
+
+            <Property name="stop" type="() => void">
+               A function that stops the response from the API.
+            </Property>
+
+            <Property name="isLoading" type="boolean">
+                A boolean value that indicates whether the API call is in progress.
+            </Property>
+
+            <Property name="error" type="Error | null">
+                The error object containing information about what went wrong.
+            </Property>
+
+            <Property name="messages" type="Message">
+                The message object.
+
+                <Sub name="message" type="Message">
+                    ```ts {{title: 'Message Object'}}
+                    interface Message {
+                        role: MessageRole;
+                        content: string;
+                        name?: string;
+                    }
+                    ```
+
+                    <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                        The role of the author of this message.
+                    </Sub>
+                    <Sub name="content" type="string">
+                        The contents of the chunk message. Null if a tool is called.
+                    </Sub>
+                    <Sub name="name" type="string | undefined">
+                        An name for the participant. Provides the model information to differentiate between participants of the same role.
+                    </Sub>
+                </Sub>
+            </Property>
+
+            <Property name="threadId" type="string | null">
+                The ID of the thread. Enable if you want to continue the conversation in the same thread from the second message onwards. Works only with deployed pipes.
+
+                - If `threadId` is not provided, a new thread will be created. E.g. first message of a new chat will not have a threadId.
+                - After the first message, a new `threadId` will be returned.
+                - Use this `threadId` to continue the conversation in the same thread from the second message onwards.
+            </Property>
+
+            <Property name="setMessages" type="(newMessages: Message[]) => void">
+                A function that sets the messages.
+
+                <Property name="messages" type="Message">
+                    The message object.
+
+                    <Sub name="message" type="Message">
+                        ```ts {{title: 'Message Object'}}
+                        interface Message {
+                            role: MessageRole;
+                            content: string;
+                            name?: string;
+                        }
+                        ```
+
+                        <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                            The role of the author of this message.
+                        </Sub>
+                        <Sub name="content" type="string">
+                            The contents of the chunk message. Null if a tool is called.
+                        </Sub>
+                        <Sub name="name" type="string | undefined">
+                            An name for the participant. Provides the model information to differentiate between participants of the same role.
+                        </Sub>
+                    </Sub>
+                </Property>
+            </Property>
+
+            <Property name="regenerate" type="(options: PipeRequestOptions) => Promise<void">
+                A function that regenerates the response from the API.
+
+                <Sub name="PipeRequestOptions">
+                    ```ts {{title: 'PipeRequestOptions'}}
+                    interface PipeRequestOptions {
+                        headers?: Record<string, string> | Headers;
+                        body?: any;
+                        data?: any;
+                        allowEmptySubmit?: boolean;
+                    }
+                    ```
+
+                    <Properties>
+                        <Property name="headers" type="Record<string, string> | Headers">
+                        Additional headers to be sent with the request.
+                        </Property>
+                        <Property name="body" type="any">
+                            The body of the request.
+                        </Property>
+                        <Property name="data" type="any">
+                            The data to be sent with the request.
+                        </Property>
+                        <Property name="allowEmptySubmit" type="boolean">
+                            Whether to allow an empty submit. If `true`, the request will be sent even if the input is empty.
+                        </Property>
+                    </Properties>
+                </Sub>
+            </Property>
+
+            <Property name="sendMessage" type="(content: string, options: PipeRequestOptions) => Promise<void>">
+                A function that sends a message to the API.
+
+                <Properties>
+                    <Property name="content" type="string">
+                        The content of the message.
+                    </Property>
+                </Properties>
+
+                <Sub name="PipeRequestOptions">
+                    ```ts {{title: 'PipeRequestOptions'}}
+                    interface PipeRequestOptions {
+                        headers?: Record<string, string> | Headers;
+                        body?: any;
+                        data?: any;
+                        allowEmptySubmit?: boolean;
+                    }
+                    ```
+
+                    <Properties>
+                        <Property name="headers" type="Record<string, string> | Headers">
+                        Additional headers to be sent with the request.
+                        </Property>
+                        <Property name="body" type="any">
+                            The body of the request.
+                        </Property>
+                        <Property name="data" type="any">
+                            The data to be sent with the request.
+                        </Property>
+                        <Property name="allowEmptySubmit" type="boolean">
+                            Whether to allow an empty submit. If `true`, the request will be sent even if the input is empty.
+                        </Property>
+                    </Properties>
+                </Sub>
+            </Property>
+
+            <Property name="handleInputChange" type="(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void">
+                A function that handles the input change event.
+            </Property>
+
+            <Property name="handleSubmit" type="(e?: React.FormEvent<HTMLFormElement>, options: PipeRequestOptions) => void">
+                A function that handles the form submit and call the API.
+
+                <Sub name="PipeRequestOptions">
+                    ```ts {{title: 'PipeRequestOptions'}}
+                    interface PipeRequestOptions {
+                        headers?: Record<string, string> | Headers;
+                        body?: any;
+                        data?: any;
+                        allowEmptySubmit?: boolean;
+                    }
+                    ```
+
+                    <Properties>
+                        <Property name="headers" type="Record<string, string> | Headers">
+                        Additional headers to be sent with the request.
+                        </Property>
+                        <Property name="body" type="any">
+                            The body of the request.
+                        </Property>
+                        <Property name="data" type="any">
+                            The data to be sent with the request.
+                        </Property>
+                        <Property name="allowEmptySubmit" type="boolean">
+                            Whether to allow an empty submit. If `true`, the request will be sent even if the input is empty.
+                        </Property>
+                    </Properties>
+                </Sub>
+            </Property>
+
+        </Properties>
+    </Col>
+
+    <Col sticky>
+
+        ### `usePipe` hook example
+
+        <CodeGroup exampleTitle="usePipe()" title="usePipe()">
+
+            ```tsx {{ title: 'page.tsx' }}
+            import { usePipe } from '@baseai/core';
+
+            export default function ChatComponent() {
+                const {
+                    messages,
+                    input,
+                    handleInputChange,
+                    handleSubmit,
+                    isLoading,
+                    error,
+                    regenerate,
+                    stop,
+                    setMessages,
+                    threadId,
+                    sendMessage,
+                } = usePipe({
+                    stream: true,
+                    apiRoute: '<REPLACE-WITH-YOUR-API-ROUTE>',
+                    onResponse: (message) => {},
+                    onFinish: (messages) => {},
+                    onError: (error) => {},
+                    initialMessages: [
+                        {role: 'assistant', content: 'Hello! How can I help you?'},
+                        {role: 'user', content: 'Who is an AI engineer?'},
+                    ], // You can set initial messages here if needed
+                });
+
+                // UI
+                return <></>
+            }
+            ```
+
+            ```ts {{ title: 'route.ts' }}
+            import buildPipe from '@/baseai/pipes/agent';
+            import {Pipe} from '@baseai/core';
+            import {NextRequest} from 'next/server';
+
+            export async function POST(req: NextRequest) {
+                const runOptions = await req.json();
+
+                // 1. Initiate the Pipe.
+                const pipe = new Pipe(buildPipe());
+
+                // 2. Run the Pipe.
+                const {stream, threadId} = await pipe.run(runOptions);
+
+                // 3. Return the ReadableStream directly.
+                return new Response(stream, {
+                    status: 200,
+                    headers: {
+                        'lb-thread-id': threadId ?? '',
+                    },
+                });
+            }
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant.`,
+                    }
+                ],
+                variables: [],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+
+        </CodeGroup>
+
+    </Col>
+</Row>
+
+---

@@ -1,0 +1,34 @@
+{
+	"extends": "./node_modules/@baseai/tsconfig/node16.json",
+	// "include": ["."],
+	"include": ["src"],
+	"compilerOptions": {
+		// "jsx": "react",
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"stripInternal": true,
+		"noUnusedLocals": true,
+		"baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
+		"paths": {
+			"@/*": ["src/*"] // Maps all imports starting with "@" to the src folder
+		},
+		// frmnxt options.
+		"strict": true,
+		"jsx": "react-jsx",
+		"esModuleInterop": true,
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"verbatimModuleSyntax": true,
+		// frmhon options.
+		"types": ["node"],
+		// Build
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		// "allowImportingTsExtensions": true,
+		// "noEmit": true
+		"sourceMap": true,
+		"outDir": "dist",
+		"declaration": true,
+		"declarationMap": true
+	}
+}

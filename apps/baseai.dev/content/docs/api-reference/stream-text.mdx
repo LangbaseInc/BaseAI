@@ -1,0 +1,651 @@
+---
+title: 'streamText()'
+description: "Everything you need to know about the streamText method."
+tags:
+    - baseai
+    - api-reference
+    - streamText
+section: 'API reference'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# streamText()
+
+You can use the `streamText()` function to stream text using pipes with any LLM. Streaming provides a better user experience, as the moment an LLM starts generating text the user can start seeing words print out in a stream just like ChatGPT.
+
+For example, it can stream a text completion based on a user prompt like "Who is an AI Engineer?" or give it a an entire doc and ask it to summarize it.
+
+The BaseAI core package provides a `streamText()` function that you can use in your app.
+
+---
+
+## API reference
+
+## `streamText(options)`
+
+<Row>
+    <Col>
+        Stream a text completion using `streamText()` function.
+
+        ```ts {{title: 'Function Signature'}}
+        streamText(options)
+
+        // With types.
+        streamText(options: RunOptions & {pipe: Pipe})
+        ```
+
+        ## options
+        <Properties>
+            ### RunOptions
+            <Property name="options" type="RunOptions">
+                ```ts {{title: 'RunOptions Object'}}
+                interface RunOptions {
+                    messages?: Message[];
+                    variables?: Variable[];
+                    threadId?: string;
+                    rawResponse?: boolean;
+                }
+                ```
+
+                *Following are the properties of the options object.*
+            </Property>
+        </Properties>
+
+        ---
+
+        ### messages
+
+        <Properties>
+            <Property name="messages" type="Array<Message>">
+                A messages array including the following properties. Optional if variables are provided.
+
+                ```ts {{title: 'Message Object'}}
+                interface Message {
+                    role: 'user' | 'assistant' | 'system'| 'tool';
+                    content: string | null;
+                    name?: string;
+                    tool_call_id?: string;
+                    tool_calls?: ToolCall[];
+                }
+                ```
+
+                ---
+
+                <Properties>
+                    <Property name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                        The role of the author of this message.
+                    </Property>
+                    <Property name="content" type="string">
+                        The contents of the chunk message.
+                    </Property>
+                    <Property name="name" type="string">
+                        The name of the tool called by LLM
+                    </Property>
+                    <Property name="tool_call_id" type="string">
+                        The id of the tool called by LLM
+                    </Property>
+
+                    <Property name="tool_calls" type="Array<ToolCall>">
+                        The array of tools sent to LLM.
+
+                        ```ts {{title: 'ToolCall Object'}}
+                        interface ToolCall {
+                            id: string;
+                            type: 'function';
+                            function: Function;
+                        }
+                        ```
+
+                        <Property name="function" type="Function">
+                            Function definition sent to LLM.
+
+                            ```ts {{title: 'Function Object'}}
+                            export interface Function {
+                                name: string;
+                                arguments: string;
+                            }
+                            ```
+                        </Property>
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### variables
+
+        <Properties>
+            <Property name="variables" type="Array<Variable>">
+                A variables array including the `name` and `value` params. Optional if messages are provided.
+
+                ```ts {{title: 'Variable Object'}}
+                interface Variable {
+                    name: string;
+                    value: string;
+                }
+                ```
+
+                <Properties>
+                    <Property name="name" type="string">
+                        The name of the variable.
+                    </Property>
+                    <Property name="value" type="string">
+                        The value of the variable.
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### threadId
+
+        <Properties>
+            <Property name="threadId" type="string | undefined">
+                The ID of the thread. Enable if you want to continue the conversation in the same thread from the second message onwards. Works only with deployed pipes.
+
+                - If `threadId` is not provided, a new thread will be created. E.g. first message of a new chat will not have a threadId.
+                - After the first message, a new `threadId` will be returned.
+                - Use this `threadId` to continue the conversation in the same thread from the second message onwards.
+            </Property>
+        </Properties>
+
+        ---
+
+        ### rawResponse
+
+        <Properties>
+            <Property name="rawResponse" type="boolean | undefined">
+                Enable if you want to get complete raw LLM response.
+
+                Default: `false`
+            </Property>
+        </Properties>
+
+        ---
+
+        ## options
+
+        <Properties>
+            ### Pipe
+            <Property name="options" type="Pipe">
+               The Pipe instance to use for text generation.
+            </Property>
+        </Properties>
+    </Col>
+
+    <Col sticky>
+
+        ### Create an `agent` pipe
+
+        ```bash {{ title: 'Create a new Pipe' }}
+        npx baseai@latest pipe
+        pnpx baseai@latest pipe
+        ```
+
+        ### Add OpenAI API key to `.env` file
+
+        ```bash {{ title: '.env file' }}
+        OPENAI_API_KEY="<REPLACE-WITH-YOUR-OPENAI-KEY>"
+        ```
+
+        ### `streamText()` example
+
+        <CodeGroup exampleTitle="streamText()" title="streamText()">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, streamText, getRunner} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                const {stream} = await streamText({
+                    pipe,
+                    messages: [{role: 'user', content: 'Hello'}],
+                });
+
+                // NOTE: This is a Node.js only example.
+                // Stream works differently in browsers.
+                const runner = getRunner(stream);
+
+                // Method 1: Using event listeners
+                runner.on('connect', () => {
+                    console.log('Stream started.\n');
+                });
+
+                runner.on('content', content => {
+                    process.stdout.write(content);
+                });
+
+                runner.on('end', () => {
+                    console.log('\nStream ended.');
+                });
+
+                runner.on('error', error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant.`,
+                    }
+                ],
+                variables: [],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+
+        </CodeGroup>
+
+        ### Variables with `streamText()`
+
+        <CodeGroup exampleTitle="streamText()" title="streamText()">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, streamText, getRunner} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                const {stream} = await streamText({
+                    pipe,
+                    variables: [{name: 'question', value: 'AI Engineer'}],
+                });
+
+                // NOTE: This is a Node.js only example.
+                // Stream works differently in browsers.
+                const runner = getRunner(stream);
+
+                // Method 1: Using event listeners
+                runner.on('connect', () => {
+                    console.log('Stream started.\n');
+                });
+
+                runner.on('content', content => {
+                    process.stdout.write(content);
+                });
+
+                runner.on('end', () => {
+                    console.log('\nStream ended.');
+                });
+
+                runner.on('error', error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant. Answer {{question}}`,
+                    }
+                ],
+                variables: [{name: 'question', value: ''}],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+        </CodeGroup>
+
+        ### Chat using `streamText()` (Deployed Pipe only)
+
+        <CodeGroup exampleTitle="streamText()" title="Chat using `generateText()`">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, streamText, getRunner} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                // Message 1: Tell something to the LLM.
+                const response1 = await streamText({
+                    pipe,
+                    messages: [{role: 'user', content: 'My company is called Langbase'}],
+                });
+
+                // Convert the stream to a stream runner.
+                const runner1 = getRunner(response1.stream);
+
+                // Method 1: Using event listeners
+                runner1.on('connect', () => {
+                    console.log('Stream started.\n');
+                });
+
+                runner1.on('content', content => {
+                    process.stdout.write(content);
+                });
+
+                runner1.on('end', () => {
+                    console.log('\nStream ended.');
+                });
+
+                runner1.on('error', error => {
+                    console.error('Error:', error);
+                });
+
+                // Message 2: Ask something about the first message.
+                // Continue the conversation in the same thread by sending
+                // `threadId` from the second message onwards.
+                const response2 = await streamText({
+                    pipe,
+                    threadId: response1.threadId!,
+                    messages: [{role: 'user', content: 'Tell me the name of my company?'}],
+                });
+
+                // Convert the stream to a stream runner.
+                const runner2 = getRunner(response2.stream);
+
+                // Method 1: Using event listeners
+                runner2.on('connect', () => {
+                    console.log('Stream 2 started.\n');
+                });
+
+                // You'll see any LLM will know the company is `Langbase`
+                // since it's the same chat thread. This is how you can
+                // continue a conversation in the same thread.
+                runner2.on('content', content => {
+                    process.stdout.write(content);
+                });
+
+                runner2.on('end', () => {
+                    console.log('\nStream ended.');
+                });
+
+                runner2.on('error', error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant. Answer {{question}}`,
+                    }
+                ],
+                variables: [{name: 'question', value: ''}],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+
+        </CodeGroup>
+    </Col>
+</Row>
+
+---
+
+<Row>
+    <Col>
+
+        ## Response
+
+        Response of `streamText()` is a `Promise<RunResponseStream>`.
+
+        ```ts {{title: 'RunResponseStream Object'}}
+        interface RunResponseStream {
+            stream: ReadableStream<any>;
+            threadId: string | null;
+            rawResponse?: {
+                headers: Record<string, string>;
+            };
+        }
+        ```
+
+        <Properties>
+            <Property name="threadId" type="string">
+                The ID of the thread. Useful for a chat pipe to continue the conversation in the same thread. Optional.
+            </Property>
+            <Property name="rawResponse" type="Object">
+                The different headers of the response.
+            </Property>
+            <Property name="stream" type="ReadableStream">
+                Stream is a StreamText object with a streamed sequence of StreamChunk objects.
+
+                ```ts {{title: 'StreamResponse Object'}}
+                type StreamText = ReadableStream<StreamChunk>;
+                ```
+
+                ### StreamChunk
+
+                <Property name="StreamChunk" type="StreamChunk">
+                    Represents a streamed chunk of a completion response returned by model, based on the provided input.
+
+                    ```js {{title: 'StreamChunk Object'}}
+                    interface StreamChunk {
+                        id: string;
+                        object: string;
+                        created: number;
+                        model: string;
+                        choices: ChoiceStream[];
+                    }
+                    ```
+
+                    A `StreamChunk` object has the following properties.
+
+                    <Properties>
+                        <Property name="id" type="string">
+                            The ID of the response.
+                        </Property>
+
+                        <Property name="object" type="string">
+                            The object type name of the response.
+                        </Property>
+
+                        <Property name="created" type="number">
+                            The timestamp of the response creation.
+                        </Property>
+
+                        <Property name="model" type="string">
+                            The model used to generate the response.
+                        </Property>
+
+                        <Property name="choices" type="ChoiceStream[]">
+                            A list of chat completion choices. Can contain more than one elements if n is greater than 1.
+
+                        ```js {{title: 'Choice Object for streamText()'}}
+                        interface ChoiceStream {
+                            index: number;
+                            delta: Delta;
+                            logprobs: boolean | null;
+                            finish_reason: string;
+                        }
+                        ```
+                        </Property>
+
+                        <Sub name="index" type="number">
+                            The index of the choice in the list of choices.
+                        </Sub>
+
+                        <Sub name="delta" type="Delta">
+                            A chat completion delta generated by streamed model responses.
+
+                            ```js {{title: 'Delta Object'}}
+                                interface Delta {
+                                    role?: Role;
+                                    content?: string | null;
+                                    tool_calls?: ToolCall[];
+                                }
+                            ```
+                        <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                            The role of the author of this message.
+                        </Sub>
+                        <Sub name="content" type="string | null">
+                            The contents of the chunk message. Null if a tool is called.
+                        </Sub>
+
+                        <Sub name="tool_calls" type="Array<ToolCall>">
+                            The array of the tools called by LLM
+
+                            ```js {{title: 'ToolCall Object'}}
+                            interface ToolCall {
+                                id: string;
+                                type: 'function';
+                                function: Function;
+                            }
+                            ```
+
+                            <Sub name="id" type="string">
+                                The ID of the tool call.
+                            </Sub>
+
+                            <Sub name="type" type="'function'">
+                                The type of the tool. Currently, only `function` is supported.
+                            </Sub>
+
+                            <Sub name="function" type="Function">
+                                The function that the model called.
+
+                                ```js {{title: 'Function Object'}}
+                                export interface Function {
+                                    name: string;
+                                    arguments: string;
+                                }
+                                ```
+
+                                <Sub name="name" type="string">
+                                    The name of the function to call.
+                                </Sub>
+
+                                <Sub name="arguments" type="string">
+                                    The arguments to call the function with, as generated by the model in JSON format.
+                                </Sub>
+                            </Sub>
+                            </Sub>
+                        </Sub>
+
+                        <Sub name="logprobs" type="boolean or null">
+                            Log probability information for the choice. Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
+                        </Sub>
+
+                        <Sub name="finish_reason" type="string">
+                            The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, length if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, `tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function. It could also be `eos` end of sequence and depends on the type of LLM, you can check their docs.
+                        </Sub>
+
+                        </Properties>
+                </Property>
+            </Property>
+        </Properties>
+    </Col>
+    <Col sticky>
+        ```js  {{ title: 'Response of streamText()' }}
+        // Response of a streamText() call is a Promise<StreamResponse>.
+        {
+            "threadId": "string-uuid-123",
+            "stream": StreamText // example of streamed chunks below.
+        }
+        ```
+
+        ```json {{ title: 'StreamText has stream chunks' }}
+        // A stream chunk looks like this …
+        {
+            "id": "chatcmpl-123",
+            "object": "chat.completion.chunk",
+            "created": 1719848588,
+            "model": "gpt-4o-mini",
+            "system_fingerprint": "fp_44709d6fcb",
+            "choices": [{
+                "index": 0,
+                "delta": { "content": "Hi" },
+                "logprobs": null,
+                "finish_reason": null
+            }]
+        }
+
+        // More chunks as they come in...
+        {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1719848588,"model":"gpt-4o-mini","system_fingerprint":"fp_44709d6fcb","choices":[{"index":0,"delta":{"content":"there"},"logprobs":null,"finish_reason":null}]}
+        …
+        {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1719848588,"model":"gpt-4o-mini","system_fingerprint":"fp_44709d6fcb","choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}]}
+        ```
+    </Col>
+</Row>
+
+---

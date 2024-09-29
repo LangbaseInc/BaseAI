@@ -1,0 +1,60 @@
+---
+title: "Deploy Pipe, tools, and memory on Langbase"
+description: "Learn how to run a summarizer pipe in Node.js using BaseAI."
+tags:
+    - baseai
+    - langbase
+    - learn
+    - pipe
+    - tool
+    - memory
+    - deploy
+section: "deploy"
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Deploy Pipe, tools, and memory on Langbase
+
+### Learn how to deploy pipes, tools, and memory on Langbase
+
+---
+
+In this learn guide, you will deploy the summarizer pipe, tools, and memory on Langbase.
+
+---
+
+## Step #1: Authenticate with Langbase (optional)
+
+We will deploy the AI pipe, tool and memory on Langbase to use it as a highly scalable API. If you have already authenticated with Langbase, you may skip this step. However, if this is your first time, please authenticate using the following command:
+
+```bash
+npx baseai@latest auth
+```
+
+## Step #2: Deploy on Langbase
+
+To deploy the pipe, tool, and memory, run the following command:
+
+```bash
+npx baseai@latest deploy
+```
+
+This will deploy the pipe to Langbase and return the URL of the deployed pipe. The pipe deployment happens in three different ways which you can read [here](/docs/deployment/deploy).
+
+---
+
+Congratulations! You have successfully:
+
+-  **Created** a summarization agent AI pipe.
+-  **Ran** the AI pipe with configuration and meta settings.
+-  **Created** a weather tool that returns the current weather for a given location.
+-  **Integrated** the tool in the agent pipe.
+-  **Ran** the AI pipe with the integrated tool.
+-  **Created** a memory and add documents to it.
+-  **Embeded** the memory to generate embeddings for the documents.
+-  **Integrated** the memory with the agent pipe.
+-  **Ran** the AI pipe with the integrated memory.
+-  **Deployed** your AI features to Langbase API (global, highly available, and scalable) for production.
+
+---

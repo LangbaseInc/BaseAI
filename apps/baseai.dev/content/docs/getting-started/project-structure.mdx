@@ -1,0 +1,72 @@
+---
+title: 'Project Structure'
+description: "Project structure of a BaseAI application."
+tags:
+    - baseai
+    - project structure
+    - langbase
+section: 'Getting Started'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Project Structure
+
+This page provides an overview of the project structure of a BaseAI application. It covers top-level files and folders, configuration files, and other conventions within the app using BaseAI.
+
+---
+
+## Overview
+
+The `baseai` folder is present at the root of your application. This folder contains all of the files and folders required to run BaseAI both locally and in production. Here is the structure of the `baseai` folder:
+
+```
+- baseai
+  - .baseai
+  - pipes
+  - memory
+  - tools
+  - baseai.config.ts
+```
+
+| Name | Description |
+| --- | --- |
+| `.baseai` | Contains the build files of BaseAI |
+| [`pipes`](/docs/pipe/quickstart) | Pipes folder |
+| [`memory`](/docs/memory/quickstart) | Memory folder |
+| [`tools`](/docs/tools/quickstart) | Tools folder |
+| `baseai.config.ts` | BaseAI configuration file |
+
+---
+
+### `pipes`
+
+This directory contains all of the pipes that are used in the application. Each pipe is a separate file that contains the configurations of that particular pipe.
+
+Please check out the [pipes quickstart](/docs/pipe/quickstart) to get started.
+
+---
+
+### `memory`
+
+This directory contains all of the memory files that are used in the application. Each memory is a separate folder that contains an `index.ts` file to define memory config.
+
+The `memory` folder also contains a `documents` folder that contains all of the documents that are used by the memory. Each document is a separate file that can be used to perform RAG operations.
+
+Please check out the [memory quickstart](/docs/memory/quickstart) to get started.
+
+---
+
+### `tools`
+
+`tools` folder contains all of the tools that are used by the pipes of the application. Each tool is a separate file that contains the function definition and configration of a tool.
+
+Please check out the [tools quickstart](/docs/tools/quickstart) to get started.
+
+---
+
+### `baseai.config.ts`
+
+`baseai.config.ts` file is present in the `baseai` folder. This file contains the configurations of BaseAI that are used by the CLI during the development of your application.
+
+---

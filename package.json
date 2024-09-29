@@ -1,0 +1,76 @@
+{
+	"private": true,
+	"name": "baseai",
+	"license": "Apache-2.0",
+	"scripts": {
+		"dev": "turbo dev",
+		"dev:pkgs": "turbo run dev --filter=./packages/*",
+		"build:pkgs": "turbo run build --filter=./packages/*",
+		"baseai": "node packages/baseai/dist/index.js",
+		"baseai:dev": "nodemon --watch packages/baseai/dist -e js packages/baseai/dist/index.js dev",
+		"prepare": "husky",
+		"lint": "turbo lint",
+		"test": "turbo test",
+		"build": "turbo build",
+		"changeset": "changeset",
+		"publint": "turbo publint",
+		"type-check": "turbo type-check",
+		"version-packages": "changeset version && pnpm clean-examples && pnpm install --no-frozen-lockfile --filter=./packages/* --filter=./tools/* ",
+		"clean": "turbo clean",
+		"clean-all": "turbo clean && rm -rf node_modules",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"release": "turbo clean && pnpm i && turbo build --filter=./packages/* --filter=./tools/* && changeset publish",
+		"releaseSite": "turbo build --filter=baseai.dev^... && changeset publish",
+		"releasex": "turbo build && changeset publish",
+		"prettier-check": "prettier --check \"**/*.{js,ts,tsx,md,mdx}\"",
+		"prettier-fix": "prettier --write \"**/*.{js,ts,tsx,md,mdx}\"",
+		"devv": "turbo dev --no-cache  --concurrency 16 --continue",
+		"ci:release": "turbo clean && turbo build && changeset publish",
+		"clean-examples": "node .github/scripts/cleanup-examples-changesets.mjs",
+		"update-examples": "npx tsx .github/scripts/update-examples.ts",
+		"ci:version": "changeset version && node .github/scripts/cleanup-examples-changesets.mjs && pnpm install --no-frozen-lockfile",
+		"snapshot": "changeset --empty && changeset version --snapshot && changeset publish --no-git-tag --snapshot"
+	},
+	"devDependencies": {
+		"@baseai/eslint-config": "workspace:*",
+		"@changesets/cli": "^2.27.8",
+		"@types/node": "^22.6.1",
+		"eslint": "^8.57.0",
+		"husky": "^9.1.6",
+		"lint-staged": "^15.2.7",
+		"nodemon": "^3.1.7",
+		"prettier": "^3.3.2",
+		"publint": "^0.2.11",
+		"turbo": "^2.1.2",
+		"vitest": "^1.6.0"
+	},
+	"packageManager": "pnpm@9.4.0",
+	"engines": {
+		"node": ">=18"
+	},
+	"lint-staged": {
+		"*": [
+			"prettier --ignore-unknown --write"
+		]
+	},
+	"homepage": "https://langbase.com/docs",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LangbaseInc/baseai.git"
+	},
+	"bugs": {
+		"url": "https://github.com/LangbaseInc/baseai/issues"
+	},
+	"keywords": [
+		"ai",
+		"llm",
+		"baseai",
+		"base ai",
+		"langbase",
+		"langbase.com",
+		"generative AI"
+	],
+	"dependencies": {
+		"dotenv": "^16.4.5"
+	}
+}

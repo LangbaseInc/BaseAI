@@ -1,0 +1,139 @@
+---
+title: 'BaseAI CLI'
+description: "CLI reference of BaseAI CLI."
+tags:
+    - baseai
+    - cli
+    - langbase
+section: 'Getting Started'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# BaseAI CLI
+
+The BaseAI CLI allows you to develop, build, and deploy BaseAI primitives from the command line to Langbase. This document provides an overview of the commands available in the CLI.
+
+---
+
+## Basic Usage
+
+```bash
+npx baseai [command]
+```
+
+---
+
+## Commands
+
+The following commands are available in the CLI:
+
+| Command | Description |
+| --- | --- |
+| `init` | Initializes the setup of BaseAI |
+| `dev` | Starts the local server of BaseAI in development mode |
+| `pipe` | Starts the process of creating a pipe in your application |
+| `memory` | Starts the process of creating a memory in your application |
+| `tool` | Starts the process of creating a tool in your application |
+| `add` | Adds a pipe present on Langbase to your project |
+| `auth` | Starts the authentication process of BaseAI with Langbase |
+| `build` | Builds `pipes`, `memory` and `tools` for deployment to Langbase |
+| `deploy` | Deploys your BaseAI application to Langbase |
+
+---
+
+### `init` command
+
+`baseai init` initializes the setup of BaseAI at the root of your application. It installs `baseai` in your application, creates a `baseai` folder at the root, and adds a `baseai.config.json` file to this folder.
+
+```bash
+npx baseai init
+```
+
+---
+
+### `dev` command
+
+`baseai dev` starts the local server of BaseAI in development mode. This command is used for testing `pipes`, `memory` and `tools` of your application locally before deploying them to Langbase.
+
+```bash
+npx baseai dev
+```
+
+---
+
+### `pipe` command
+
+`baseai pipe` starts the process of creating a pipe in your application. Once a pipe is created, it will be available in the `pipes` folder of `baseai`.
+
+```bash
+npx baseai pipe
+```
+
+---
+
+### `memory` command
+
+`baseai memory` starts the process of creating a memory in your application. Once a memory is created, it will be available in the `memory` folder of `baseai`.
+
+```bash
+npx baseai memory
+```
+
+---
+
+### `tool` command
+
+`baseai tool` starts the process of creating a tool in your application. Once a tool is created, it will be available in the `tools` folder of `baseai`.
+
+```bash
+npx baseai tool
+```
+
+---
+
+### `add` command
+
+`baseai add` adds a pipe present on Langbase to your project. Once done, the pipe and its tools will become available in the `pipes` and `tools` folder of `baseai` respectively.
+
+```bash
+npx baseai add [owner-login/pipe-name]
+```
+
+OR
+
+```bash
+npx baseai add [link-to-pipe]
+```
+
+---
+
+### `auth` command
+
+`baseai auth` starts the authentication process of BaseAI with Langbase. Once done, you will be able to deploy `pipes`, `memory` and `tools` of your application to Langbase.
+
+```bash
+npx baseai auth
+```
+
+---
+
+### `build` command
+
+`baseai build` builds `pipes`, `memory` and `tools` of your application with BaseAI. These build files are then used during the deployment to Langbase.
+
+```bash
+npx baseai build
+```
+
+---
+
+### `deploy` command
+
+`baseai deploy` deploys `pipes`, `memory` and `tools` of your application to Langbase.
+
+```bash
+npx baseai deploy
+```
+
+---

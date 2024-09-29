@@ -1,0 +1,110 @@
+---
+title: 'Create'
+description: "Create a tool locally using BaseAI CLI."
+tags:
+    - baseai
+    - tools
+    - langbase
+section: 'Tool'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Create a tool
+
+Create a tool locally using BaseAI CLI.
+
+---
+
+## Step #0: Initialize BaseAI
+
+Please initialize BaseAI in your project using the following command:
+
+```bash
+npx baseai@latest init
+```
+
+## Step #1 Create a tool
+
+Create a new tool using the `tool` command. It will ask you for name and description of the tool.
+
+```bash
+npx baseai@latest tool
+```
+
+The CLI will ask you to provide the name and description of the tool. Let's call it `getCurrentWeather` and provide a description like `Get the current weather for a given location`.
+
+Your tool will be created at `/baseai/tools/get-current-weather.ts`.
+
+## Step #2: View and configure the tool
+
+Now that we have created a current weather tool, let's open the file and see what we have in there.
+
+<CodeGroup exampleTitle="Current weather tool" title="getCurrentWeather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import { ToolI } from '@baseai/core';
+
+export async function getCurrentWeather() {
+	// Your tool logic here
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+</CodeGroup>
+
+The `run` key in the `getCurrentWeatherTool` object is the function that will be executed when the tool is called. You can write your logic to get the current weather for a given location in the `getCurrentWeather` function. Let's add a static return for now.
+
+Here's what the updated `get-current-weather.ts` file will look like:
+
+<CodeGroup exampleTitle="Current weather tool" title="Configure the weather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+</CodeGroup>
+
+You can see that I have also added parameters to the `getCurrentWeather` function. The LLM will give values to these parameters when it calls the tool.
+
+---

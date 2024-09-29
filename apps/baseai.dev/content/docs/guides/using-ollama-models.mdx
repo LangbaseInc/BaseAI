@@ -1,0 +1,178 @@
+---
+title: 'Use Local Ollama Models in BaseAI'
+description: "Learn how to build an agentic AI pipe that uses local Ollama models."
+tags:
+    - baseai
+    - langbase
+    - guide
+section: 'guides'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Using Local Ollama Models in BaseAI Pipes
+
+Learn how to use an Ollama model (running locally on your machine) in your BaseAI Pipes.
+
+---
+
+In this guide, you will learn how to locally:
+
+- Setup and run an Ollama model.
+- Configure a BaseAI Pipe to use the Ollama model.
+
+---
+
+## Step #0: Initialize BaseAI and Ollama
+
+Please initialize BaseAI in your project using the following command:
+
+```bash
+npx baseai@latest init
+```
+
+Next, install and run an Ollama model:
+
+1. **Install Ollama**: Follow the instructions in the [Ollama repository](https://github.com/ollama/ollama/blob/main/README.md) to install Ollama.
+
+2. **Run an Ollama model**: Now we need to run an Ollama model using Ollama CLI. For example, let's run the `tinyllama` model:
+
+```bash
+ollama run tinyllama
+```
+
+It will download the model and start it on your local machine.
+
+<Note>
+BaseAI uses the default Ollama local URL `http://localhost:11434` to connect to the Ollama model. Make sure the Ollama model is running on this URL.
+</Note>
+
+## Step #1: Create a Pipe
+
+Create a new pipe using the `baseai pipe` command. You’ll be asked for the name, description, and other details. For this example, set the pipe name to `ollama-pipe`.
+
+```bash
+npx baseai@latest pipe
+```
+
+The pipe file will be created in your current directory under `baseai/pipes/ollama-pipe.ts`.
+
+### Step #2: Configure the Pipe for Ollama
+
+Open the newly created pipe file. You'll see the basic configuration. Now, update the model to use Ollama.
+
+```ts
+// baseai/pipes/ollama-pipe.ts
+import {PipeI} from '@baseai/core';
+
+const buildPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!,
+	name: 'ollama-pipe',
+	description: 'Pipe running an Ollama model.'
+	status: 'private',
+	model: 'ollama:tinyllama', // updated the model to use Ollama tinyllama model
+	stream: true,
+	json: false,
+	store: true,
+	moderate: false,
+	top_p: 1,
+	max_tokens: 500,
+	temperature: 0.7,
+	presence_penalty: 0.5,
+	frequency_penalty: 0.5,
+	messages: [
+		{
+			role: 'system',
+			content: `You are an AI assistant.`,
+		},
+	],
+	variables: [],
+	memory: [],
+	tools: [],
+});
+
+export default buildPipe;
+```
+
+Here, the model is set to `ollama:tinyllama`, but you can replace it with another Ollama model as needed. Here is the list of available [Ollama models](https://ollama.com/library).
+
+## Step #2: Use the Pipe
+
+Now that your pipe is configured, create a new file `index.ts` to run it:
+
+```bash
+touch index.ts
+```
+
+In `index.ts`, add the following code to run your pipe:
+
+```ts
+import { Pipe, getRunner } from '@baseai/core';
+import { buildPipe } from './baseai/pipes/ollama-pipe';
+
+// Instantiate the pipe
+const pipe = new Pipe({
+	...buildPipe(),
+});
+
+// Demo user message
+const userMsg = 'Hello';
+
+// Run the pipe
+(async () => {
+	{
+		// Run the pipe in streaming mode
+		const {stream} = await pipe.run({
+			messages: [{role: 'user', content: userMsg}],
+			stream: true,
+			rawResponse: true,
+		});
+
+		const runner = getRunner(stream);
+
+		runner.on('error', error => {
+			console.error('Error:', error);
+		});
+
+		runner.on('content', content => {
+			process.stdout.write(content);
+		});
+	}
+})();
+```
+
+In this example, we use the `Pipe` primitive from `@baseai/core` to run the pipe with Ollama. We are sending a user message `Hello` to the pipe and streaming the response.
+
+## Step #3: Start BaseAI Server
+
+Start the BaseAI server locally to run the pipe:
+
+```bash
+npx baseai@latest dev
+```
+
+This starts the BaseAI server and allows you to observe real-time logs and performance metrics in your terminal.
+
+## Step #4: Run Your Code
+
+Finally, run the `index.ts` file to see the Ollama model in action:
+
+```bash
+npx tsx index.ts
+```
+
+You should see the response from the Ollama model streaming in your terminal.
+
+---
+
+## Next Steps
+
+Congratulations! 🎉 You've successfully created an AI pipe that uses an Ollama model running locally on your machine.
+
+Experiment with different models, prompts, and configurations. Once you're ready, deploy your pipe to Langbase API using the [deploy command](https://langbase.com/docs/deployment/deploy).
+
+<Note>
+Currently, BaseAI supports Ollama models for **local use only**. When you deploy a pipe with an Ollama model, it will be replaced by OpenAI models in the production environment.
+</Note>
+
+---

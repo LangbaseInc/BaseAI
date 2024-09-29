@@ -1,0 +1,84 @@
+---
+title: 'BaseAI Config'
+description: "Config of BaseAI CLI."
+tags:
+    - baseai
+    - config
+    - langbase
+section: 'Getting Started'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# BaseAI Configuration file
+
+Here's an overview of the BaseAI project structure in your application.
+
+---
+
+## Overview
+
+The `baseai` folder is present at the root of your application/project. This folder contains the BaseAI configuration file named as
+`baseai.config.ts`.
+
+```shell
+# Your project's root directory
+- baseai
+  - baseai.config.ts
+```
+
+This file contains all the default configurations of BaseAI that are used by the CLI during the development of your application. You can modify these configurations as per your requirements.
+
+```ts
+// baseai/baseai.config.ts
+import type {BaseAIConfig} from '@baseai/core';
+
+export const config: BaseAIConfig = {
+  "log": {
+    "isEnabled": true,
+    "logSensitiveData": false,
+    "pipe": true,
+    "pipe.completion": true,
+    "pipe.request": true,
+    "pipe.response": true,
+    "tool": false,
+    "memory": false
+  },
+  "memory": {
+    "useLocalEmbeddings": false
+  },
+  "envFilePath": ".env"
+};
+```
+
+Here is a breakdown of the configurations present in the `baseai.config.ts` file.
+
+### `log`
+
+The `log` object contains the configurations for logging in the application. You can enable or disable logging for different parts of the application like pipes, tools, and memory.
+
+---
+
+### `memory`
+
+The `memory` object contains the configurations for memory in the application. You can enable or disable the use of local embeddings for memory.
+
+```ts
+"memory": {
+  "useLocalEmbeddings": false
+}
+```
+
+Please check out the [memory quickstart](/docs/memory/quickstart) to get started.
+
+---
+
+### `envFilePath`
+
+The `envFilePath` key contains the path to the `.env` file in your application. You can change the path as per your requirements. It is set to the root of the application by default.
+
+```ts
+"envFilePath": ".env"
+```
+
+---

@@ -1,0 +1,77 @@
+---
+title: 'FAQs'
+description: "Let's take a look at some frequently asked questions about tools."
+tags:
+    - baseai
+    - tools
+    - langbase
+section: 'Tool'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# FAQs
+
+Let's take a look at some frequently asked questions about tools.
+
+---
+
+## What is tool calling?
+
+LLM tool calling allows a language model (like GPT) to use external tools (functions inside your codebase) to **perform** tasks it can't handle alone.
+
+Instead of just generating text, the model can **respond with a tool call** (name of the function to call with parameters) that triggers a function in your code.
+
+You can use tool calling to get the model to do things like fetch live information, run code for complex calculations, get some data from a database, or interact with other systems.
+
+### Key benefits:
+
+- **Enhanced capabilities**: Lets the model go beyond text generation, enabling it to do more practical tasks.
+- **Better accuracy**: For tasks like precise calculations or up-to-date data, it ensures correct, reliable results.
+- **Wider applications**: Makes the model more useful in real-world situations, allowing it to interact with other systems seamlessly.
+
+---
+
+## How to create a tool using BaseAI?
+
+You can create a `tool` command by running the following command in your terminal:
+
+```bash
+npx baseai@latest tool
+```
+
+You can learn more about it [here](/docs/tool/quickstart).
+
+---
+
+## What models in BaseAI support tool calling?
+
+Currently all the OpenAI models like GPT-3, GPT-4, etc., support tool calling in BaseAI.
+
+---
+
+## How to use tool calling in BaseAI?
+
+We have a detailed guide on how to use tool calling in BaseAI. You can learn more [here](/docs/tools/quickstart).
+
+---
+
+## Can I use tool calling in my private AI agent pipe?
+
+Yes, you can use tool calling in any AI agent pipe configured with OpenAI models.
+
+---
+
+## Can I call other pipes from a tool?
+
+Yes, you can call other pipes from a tool. Since tool is a function in your code, you can call any pipe from it.
+
+---
+
+## Are my tools deployed on Langbase when I deploy a Pipe?
+
+Yes, all your Pipe tools are deployed when you deploy a Pipe. Please note that only the tool definition is deployed, not the actual code. So you will need to ensure that the code is available in your codebase.
+
+You can learn more about deploying a Pipe [here](/docs/deployment/deploy).
+
+---

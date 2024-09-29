@@ -1,0 +1,78 @@
+---
+title: 'BaseAI Logs'
+description: "Logs in BaseAI."
+tags:
+    - baseai
+    - logs
+    - langbase
+section: 'Getting Started'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Logs
+
+Here's an overview of the BaseAI project structure in your application.
+
+---
+
+## Overview
+
+The logging system in BaseAI allows for flexible and hierarchical control over log output. You can view real-time logs in your terminal while running the local BaseAI server.
+
+To view logs, make sure you have baseai running in your terminal. You can start the server by running the following command:
+
+```bash
+npx baseai@latest dev
+```
+
+This starts the local server of BaseAI in development mode. You will view the logs in your terminal as you run any BaseAI command, like creating a pipe, tool, memory or running your pipes. View all the available commands in the [CLI reference](/docs/getting-started/cli).
+
+### Log Configurations
+
+By default, all logs are enabled. You can customize the logging system by modifying the configuration in the `baseai.config.ts` file. It is located in the `baseai` folder at the root of your application.
+
+```shell
+# Your project's root directory
+- baseai
+  - baseai.config.ts
+```
+
+Here is the default configuration of the logging system in BaseAI:
+
+```ts
+export const defaultConfig: BaseAIConfig = {
+	log: {
+		// Enable or disable logging
+		isEnabled: true,
+		// Log sensitive data
+		logSensitiveData: false,
+		// Toggle specific log categories
+		pipe: true,
+		'pipe.completion': true,
+		'pipe.request': true,
+		'pipe.response': true,
+		tool: false,
+		memory: false
+	}
+	// Other default configuration options can be added here
+};
+```
+
+- `isEnabled`: Master switch to enable/disable all logging.
+- `logSensitiveData`: Controls whether sensitive data should be logged.
+- Category toggles: Use dot-notation to enable/disable specific categories and subcategories.
+
+### Hierarchical Categories
+
+The logging system supports hierarchical categories. This means:
+
+1. If a parent category is set to `false`, all its subcategories will be disabled, regardless of their individual settings.
+2. If a parent category is not specified or set to `true`, subcategories can be individually controlled.
+
+For example:
+
+- If `pipe: false`, all `pipe.*` logs will be disabled.
+- If `pipe: true` and `pipe.request: false`, all `pipe.request.*` logs will be disabled, but `pipe.response.*` logs will still be active (if not explicitly disabled).
+
+---

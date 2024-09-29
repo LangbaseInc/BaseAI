@@ -1,0 +1,41 @@
+---
+title: 'Create'
+description: "Create a memory using BaseAI CLI."
+tags:
+    - baseai
+    - memory
+    - langbase
+section: 'Memory'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Create a Memory
+
+Create a memory locally using BaseAI CLI.
+
+---
+
+## Step #1 Create memory
+
+Create a new memory using the `memory` command. It will ask you for name and description of the memory.
+
+Let's use the name `chat-with-docs` for this example.
+
+```bash
+baseai memory
+```
+
+It creates a memory at `baseai/memory/chat-with-docs` in your current directory. Add documents to `baseai/memory/chat-with-docs/documents` for use.
+
+## Step #2 Add documents
+
+Add documents to the memory by placing them in the `documents` directory of the memory.
+
+---
+
+## Next Steps
+
+Use the [`embed` command to generate embeddings](/docs/memory/embed) for the documents in the memory.
+
+---

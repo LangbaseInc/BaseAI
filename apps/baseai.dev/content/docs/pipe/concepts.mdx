@@ -1,0 +1,79 @@
+---
+title: 'Concepts'
+description: "Core concepts of Pipe like variables, safety, experiments, few-shot training, etc."
+tags:
+    - baseai
+    - concepts
+    - langbase
+section: 'Pipe'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Concepts
+
+Pipe is the fastest way to turn ideas into AI. Pipe is like an AI feature. It is a high-level layer to Large Language Models (LLMs) that creates a personalized AI assistant for your queries.
+
+Let's understand the key concepts of Pipe:
+
+---
+
+## Meta
+
+The Pipe meta defines its configuration. It contains the following information:
+
+### Stream mode
+
+Handles whether the Pipe should [stream](https://langbase.com/docs/features/stream) the response or not. If enabled, the Pipe will stream the response in real-time.
+
+### Store messages
+
+Pipe can store both prompts and their completions if the [Store messages](https://langbase.com/docs/features/store-messages) in Pipe meta is enabled on. Otherwise, only [system prompts](https://langbase.com/docs/features/prompt) and [few-shot messages](https://langbase.com/docs/features/few-shot) will be saved. No completions, final prompts or variables will be retained to ensure privacy.
+
+### Moderate
+
+Available only for OpenAI models. [Moderation](https://langbase.com/docs/features/moderation) endpoint by OpenAI identifies harmful content. If enabled, Langbase blocks flagged requests automatically.
+
+### JSON
+
+Enforces the completion to be in [JSON format](https://langbase.com/docs/features/json-mode). If enabled, the completion will be in JSON format.
+
+---
+
+## Variables
+
+Any text written between `{{}}` in your prompt instructions acts as a [variable](https://langbase.com/docs/features/variables) to which you can assign different values using the variable section. Variables will appear once you add them using `{{variableName}}`.
+
+On runtime, these [variable](https://langbase.com/docs/features/variables) will dynamically populate with the assigned values during execution
+
+---
+
+## Safety
+
+Define AI [safety](https://langbase.com/docs/features/safety) prompt for any LLM inside a Pipe. For instance, do not answer questions outside of the given context.
+
+One of its use cases can be to ensure the LLM does not provide any sensitive information in its response from the provided context.
+
+---
+
+## Experiments
+
+They help you learn how your latest Pipe config will affect LLM response by running it against your previous `generate` requests.
+
+One example of [Experiments](https://langbase.com/docs/features/experiments) can be changing Pipe's LLM model to `gemma-7b-it` from `gpt-4-turbo-preview` to check how the response will look like.
+
+---
+
+## Few-shot training
+
+It helps AI LLM pick up and apply knowledge from just a handful of examples.
+
+Pipe lets you define multiple user and AI assistant prompts and completion pairs that can be used to [few-shot train](https://langbase.com/docs/features/few-shot) any LLM.
+
+---
+
+## Pipe level keysets
+
+Pipe LLM keyset is specific to each individual pipe. When selected, the Pipe doesn't use the user/org LLM API keys but instead use the Pipe level [keyset](https://langbase.com/docs/features/keysets) added to it in its settings.
+
+---

@@ -1,0 +1,54 @@
+---
+title: 'FAQ'
+description: "Let's take a look at some frequently asked questions about Add."
+tags:
+    - baseai
+    - add
+    - clone
+    - AI
+section: 'Add'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# FAQs
+
+Let's take a look at some frequently asked questions about Add.
+
+---
+
+## What is Add?
+
+BaseAI `add` command lets you to clone any public (or your private) AI pipes from Langbase in your project.
+
+---
+
+## How to use Add?
+
+You can run the following command in your terminal to add a pipe in your project:
+
+```bash
+npx baseai@latest add <pipe-link>
+```
+
+Replace `<pipe-link>` with agent pipe link. You can learn more about it [here](/docs/add/quickstart).
+
+---
+
+## Do pipe tools also get cloned with the pipe?
+
+Yes, when you clone a pipe using `add` command, all the pipe tools definitions used in the pipe will also get cloned. The tools will be available in the `baseai/tools` directory of your project.
+
+---
+
+## Can I add a private AI agent pipe in my project?
+
+Yes, you can add your private AI agent pipe from Langbase. To do this, you need to first authenticate yourself by running the following command:
+
+```bash
+npx baseai@latest auth
+```
+
+Learn more about authentication [here](/docs/deployment/authentication).
+
+---

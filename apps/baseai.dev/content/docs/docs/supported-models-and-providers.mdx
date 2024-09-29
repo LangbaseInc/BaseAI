@@ -1,0 +1,194 @@
+---
+title: "Supported models and providers"
+description: "Explore all the models and providers supported by BaseAI & Langbase."
+tags:
+    - baseai
+    - AI framework
+    - llm providers
+    - models
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Supported LLM models and providers
+
+<div className="mt-6 text-xl leading-8">
+BaseAI and Langbase supports a wide range of latest Large Language Models (LLMs) and providers. We are continuously adding support for the latest models as they are released. Here are some of the models and providers supported by Langbase.
+</div>
+
+## Supported LLM Providers
+
+We currently support the following LLM providers.
+
+- OpenAI
+- Together
+- Anthropic
+- Groq
+- Google
+- Cohere
+- Fireworks AI
+- Perplexity
+- Mistral AI
+- Ollama *(local-only)*
+
+You can use any of these providers to build your Pipe, by adding your provider's key. Please feel free to request any specific provider you would like to use.
+
+## Supported LLM Models
+
+We support the following LLM models from the above providers. Please feel free to request any specific model you would like to use.
+
+### Ollama
+
+All Ollama models are supported by BaseAI. See the list of Ollama models [here](https://ollama.com/library).
+
+<Note>
+Currently, BaseAI supports Ollama models for **local use only**. When you deploy a pipe with an Ollama model, it will be replaced by OpenAI models in the production environment.
+
+Learn more about [using Ollama models](/docs/guides/using-ollama-models) in BaseAI.
+</Note>
+
+### OpenAI
+
+| Model                                                                        | Provider | Owner  | Context | Cost*                                        |
+|------------------------------------------------------------------------------|----------|--------|---------|----------------------------------------------|
+| o1-preview           <br/> ID:  <InlineCopy content="openai:o1-preview" />          | OpenAI   | OpenAI | 128,000 | $15.0         prompt <br/> $60.0  completion |
+| o1-mini              <br/> ID:  <InlineCopy content="openai:o1-mini" />             | OpenAI   | OpenAI | 128,000 | $3.0          prompt <br/> $12.0  completion |
+| gpt-4o               <br/> ID:  <InlineCopy content="openai:gpt-4o" />              | OpenAI   | OpenAI | 128,000 | $5.0          prompt <br/> $15.0  completion |
+| gpt-4o-2024-08-06    <br/> ID:  <InlineCopy content="openai:gpt-4o-2024-08-06" />   | OpenAI   | OpenAI | 128,000 | $2.5          prompt <br/> $10.0  completion |
+| gpt-4o-mini          <br/> ID:  <InlineCopy content="openai:gpt-4o-mini" />         | OpenAI   | OpenAI | 128,000 | $0.15         prompt <br/> $0.6   completion |
+| gpt-4-turbo          <br/> ID:  <InlineCopy content="openai:gpt-4-turbo" />         | OpenAI   | OpenAI | 128,000 | $10.0         prompt <br/> $30.0  completion |
+| gpt-4-turbo-preview  <br/> ID:  <InlineCopy content="openai:gpt-4-turbo-preview" /> | OpenAI   | OpenAI | 128,000 | $10.0         prompt <br/> $30.0  completion |
+| gpt-4-0125-preview   <br/> ID:  <InlineCopy content="openai:gpt-4-0125-preview" />  | OpenAI   | OpenAI | 128,000 | $10.0         prompt <br/> $30.0  completion |
+| gpt-4-1106-preview   <br/> ID:  <InlineCopy content="openai:gpt-4-1106-preview" />  | OpenAI   | OpenAI | 128,000 | $10.0         prompt <br/> $30.0  completion |
+| gpt-4                <br/> ID:  <InlineCopy content="openai:gpt-4" />               | OpenAI   | OpenAI | 8,192   | $30.0         prompt <br/> $60.0  completion |
+| gpt-4-0613           <br/> ID:  <InlineCopy content="openai:gpt-4-0613" />          | OpenAI   | OpenAI | 8,192   | $30.0         prompt <br/> $60.0  completion |
+| gpt-4-32k            <br/> ID:  <InlineCopy content="openai:gpt-4-32k" />           | OpenAI   | OpenAI | 32,768  | $60.0         prompt <br/> $120.0 completion |
+| gpt-3.5-turbo-0125   <br/> ID:  <InlineCopy content="openai:gpt-3.5-turbo-0125" />  | OpenAI   | OpenAI | 16,385  | $0.5          prompt <br/> $1.5   completion |
+| gpt-3.5-turbo-1106   <br/> ID:  <InlineCopy content="openai:gpt-3.5-turbo-1106" />  | OpenAI   | OpenAI | 16,385  | $1.0          prompt <br/> $2.0   completion |
+| gpt-3.5-turbo        <br/> ID:  <InlineCopy content="openai:gpt-3.5-turbo" />       | OpenAI   | OpenAI | 4,096   | $1.5          prompt <br/> $2.0   completion |
+| gpt-3.5-turbo-16k    <br/> ID:  <InlineCopy content="openai:gpt-3.5-turbo-16k" />   | OpenAI   | OpenAI | 16,385  | $3.0          prompt <br/> $4.0   completion |
+
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Together AI
+
+| Model                                                                                                            | Provider | Owner      | Context | Cost*                                        |
+|------------------------------------------------------------------------------------------------------------------|----------|------------|---------|----------------------------------------------|
+| Llama-3.1-405B-Instruct-Turbo  <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo" /> | Together | Meta       | 4,096   | $5            prompt <br/> $5     completion |
+| Llama-3.1-70B-Instruct-Turbo   <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" />  | Together | Meta       | 8,192   | $0.88         prompt <br/> $0.88  completion |
+| Llama-3.1-8B-Instruct-Turbo    <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo" />   | Together | Meta       | 8,192   | $0.18         prompt <br/> $0.18  completion |
+| Llama-3-70b-chat-hf            <br/> ID:  <InlineCopy content="together:meta-llama/Llama-3-70b-chat-hf" />                | Together | Meta       | 8,192   | $0.9          prompt <br/> $0.9   completion |
+| Llama-3-8b-chat-hf             <br/> ID:  <InlineCopy content="together:meta-llama/Llama-3-8b-chat-hf" />                 | Together | Meta       | 8,192   | $0.2          prompt <br/> $0.2   completion |
+| Llama-2-13b-chat-hf            <br/> ID:  <InlineCopy content="together:meta-llama/Llama-2-13b-chat-hf" />                | Together | Meta       | 4,096   | $0.225        prompt <br/> $0.225 completion |
+| gemma-2b-it                    <br/> ID:  <InlineCopy content="together:google/gemma-2b-it" />                            | Together | Google     | 8,192   | $0.1          prompt <br/> $0.1   completion |
+| 7B-Instruct-v0.1               <br/> ID:  <InlineCopy content="together:mistralai/Mistral-7B-Instruct-v0.1" />            | Together | Mistral    | 4,096   | $0.2          prompt <br/> $0.2   completion |
+| 7B-Instruct-v0.2               <br/> ID:  <InlineCopy content="together:mistralai/Mistral-7B-Instruct-v0.2" />            | Together | Mistral    | 32,768  | $0.2          prompt <br/> $0.2   completion |
+| Mixtral-8x7B-Instruct-v0.1     <br/> ID:  <InlineCopy content="together:mistralai/Mixtral-8x7B-Instruct-v0.1" />          | Together | Mistral    | 32,768  | $0.6          prompt <br/> $0.6   completion |
+| Mixtral-8x22B-Instruct-v0.1    <br/> ID:  <InlineCopy content="together:mistralai/Mixtral-8x22B-Instruct-v0.1" />         | Together | Mistral    | 64,000  | $1.2          prompt <br/> $1.2   completion |
+| DBRX-instruct                  <br/> ID:  <InlineCopy content="together:databricks/dbrx-instruct" />                      | Together | Databricks | 32,768  | $1.2          prompt <br/> $1.2   completion |
+
+
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Anthropic
+
+| Model                                                                             | Provider  | Owner     | Context | Cost*                                       |
+|-----------------------------------------------------------------------------------|-----------|-----------|---------|---------------------------------------------|
+| claude-3.5-sonnet  <br/> ID:  <InlineCopy content="anthropic:claude-3-5-sonnet-20240620" /> | Anthropic | Anthropic | 200K    | $3            prompt <br/> $15   completion |
+| claude-3-opus      <br/> ID:  <InlineCopy content="anthropic:claude-3-opus-20240229" />     | Anthropic | Anthropic | 200K    | $15           prompt <br/> $75   completion |
+| claude-3-sonnet    <br/> ID:  <InlineCopy content="anthropic:claude-3-sonnet-20240229" />   | Anthropic | Anthropic | 200K    | $3            prompt <br/> $15   completion |
+| claude-3-haiku     <br/> ID:  <InlineCopy content="anthropic:claude-3-haiku-20240307" />    | Anthropic | Anthropic | 200K    | $0.25         prompt <br/> $1.25 completion |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Google AI
+
+| Model                                                                         | Provider | Owner  | Context | Cost*                                      |
+|-------------------------------------------------------------------------------|----------|--------|---------|--------------------------------------------|
+| gemini-1.5-pro    <br/> ID:  <InlineCopy content="google:gemini-1.5-pro-latest" />   | Google   | Google | upto 1M | $7            prompt <br/> $21  completion |
+| gemini-1.5-flash  <br/> ID:  <InlineCopy content="google:gemini-1.5-flash-latest" /> | Google   | Google | upto 1M | $0.075        prompt <br/> $0.3 completion |
+| gemini-1.0-pro    <br/> ID:  <InlineCopy content="google:gemini-pro" />              | Google   | Google | 30,720  | $0.5          prompt <br/> $1.5 completion |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Groq
+
+| Model                                                                              | Provider | Owner   | Context | Cost*                                       |
+|------------------------------------------------------------------------------------|----------|---------|---------|---------------------------------------------|
+| Llama-3.1-70b-versatile <br/> ID: <InlineCopy content="groq:llama-3.1-70b-versatile" /> | Groq     | Meta    | 131,072 | $0.59         prompt <br/> $0.79 completion |
+| Llama-3.1-8b-instant <br/> ID: <InlineCopy content="groq:llama-3.1-8b-instant" />       | Groq     | Meta    | 131,072 | $0.59         prompt <br/> $0.79 completion |
+| Llama-3-70b         <br/> ID: <InlineCopy content="groq:llama3-70b-8192" />             | Groq     | Meta    | 8,192   | $0.59         prompt <br/> $0.79 completion |
+| Llama-3-8b          <br/> ID: <InlineCopy content="groq:llama3-8b-8192" />              | Groq     | Meta    | 8,192   | $0.05         prompt <br/> $0.1  completion |
+| Mixtral-8x7B        <br/> ID: <InlineCopy content="groq:mixtral-8x7b-32768" />          | Groq     | Mistral | 32,768  | $0.27         prompt <br/> $0.27 completion |
+| gemma2-9b-it        <br/> ID: <InlineCopy content="groq:gemma2-9b-it" />                | Groq     | Google  | 8,192   | $0.2          prompt <br/> $0.2  completion |
+| gemma-7b-it         <br/> ID: <InlineCopy content="groq:gemma-7b-it" />                 | Groq     | Google  | 8,192   | $0.07         prompt <br/> $0.07 completion |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Fireworks AI
+
+| Model                                                                        | Provider     | Owner | Context | Cost*                                      |
+|------------------------------------------------------------------------------|--------------|-------|---------|--------------------------------------------|
+| Llama-3.2-3b    <br/> ID:  <InlineCopy content="fireworks:llama-v3p2-3b-instruct" />   | Fireworks AI | Meta  | 131,072 | $0.1          prompt <br/> $0.1 completion |
+| Llama-3.2-1b    <br/> ID:  <InlineCopy content="fireworks:llama-v3p2-1b-instruct" />   | Fireworks AI | Meta  | 131,072 | $0.1          prompt <br/> $0.1 completion |
+| Llama-3.1-405b  <br/> ID:  <InlineCopy content="fireworks:llama-v3p1-405b-instruct" /> | Fireworks AI | Meta  | 131,072 | $3            prompt <br/> $3   completion |
+| Llama-3.1-70b   <br/> ID:  <InlineCopy content="fireworks:llama-v3p1-70b-instruct" />  | Fireworks AI | Meta  | 131,072 | $0.9          prompt <br/> $0.9 completion |
+| Llama-3.1-8b    <br/> ID:  <InlineCopy content="fireworks:llama-v3p1-8b-instruct" />   | Fireworks AI | Meta  | 131,072 | $0.2          prompt <br/> $0.2 completion |
+| yi-large        <br/> ID:  <InlineCopy content="fireworks:yi-large" />                 | Fireworks AI | 01.AI | 32,768  | $3            prompt <br/> $3   completion |
+| Llama-3-70b     <br/> ID:  <InlineCopy content="fireworks:llama-v3-70b-instruct" />    | Fireworks AI | Meta  | 8,192   | $0.9          prompt <br/> $0.9 completion |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Perplexity
+
+| Model                                                                                                    | Provider   | Owner | Context | Cost*                                      |
+|----------------------------------------------------------------------------------------------------------|------------|-------|---------|--------------------------------------------|
+| llama-3.1-sonar-huge-128k-online   <br/> ID:  <InlineCopy content="perplexity:llama-3.1-sonar-huge-128k-online" />  | Perplexity | Meta  | 127,072 | $5            prompt <br/> $5  completion  |
+| llama-3.1-sonar-large-128k-online  <br/> ID:  <InlineCopy content="perplexity:llama-3.1-sonar-large-128k-online" /> | Perplexity | Meta  | 127,072 | $1            prompt <br/> $1 completion   |
+| llama-3.1-sonar-small-128k-online  <br/> ID:  <InlineCopy content="perplexity:llama-3.1-sonar-small-128k-online" /> | Perplexity | Meta  | 127,072 | $0.2          prompt <br/> $0.2 completion |
+| llama-3.1-sonar-large-128k-chat    <br/> ID:  <InlineCopy content="perplexity:llama-3.1-sonar-large-128k-chat" />   | Perplexity | Meta  | 131,072 | $1            prompt <br/> $1 completion   |
+| llama-3.1-sonar-small-128k-chat    <br/> ID:  <InlineCopy content="perplexity:llama-3.1-sonar-small-128k-chat" />   | Perplexity | Meta  | 131,072 | $0.2          prompt <br/> $0.2 completion |
+
+<span className='text-xs'>* USD per Million tokens. Perplexity charges <strong>additional $5 per each request</strong> on its online models.</span>
+
+### Mistral AI
+
+| Model                                                                          | Provider   | Owner      | Context | Cost*                                        |
+|--------------------------------------------------------------------------------|------------|------------|---------|----------------------------------------------|
+| Mistral Large 2       <br/> ID:  <InlineCopy content="mistral:mistral-large-latest" /> | Mistral AI | Mistral AI | 128K    | $3 prompt <br/> $9 completion                |
+| Mistral Nemo  <br/> ID:  <InlineCopy content="mistral:open-mistral-nemo" />            | Mistral AI | Mistral AI | 128K    | $0.3 prompt            <br/> $0.3 completion |
+| Codestral  <br/> ID:  <InlineCopy content="mistral:codestral-latest" />                | Mistral AI | Mistral AI | 32,768  | $1 prompt            <br/> $3 completion     |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+### Cohere
+
+| Model                                                              | Provider | Owner  | Context | Cost*                                     |
+|--------------------------------------------------------------------|----------|--------|---------|-------------------------------------------|
+| command-r       <br/> ID:  <InlineCopy content="cohere:command-r" />      | Cohere   | Cohere | 128K    | $0.5 prompt <br/> $1.5 completion         |
+| command-r-plus  <br/> ID:  <InlineCopy content="cohere:command-r-plus" /> | Cohere   | Cohere | 128K    | $3 prompt            <br/> $15 completion |
+
+<span className='text-xs'>* USD per Million tokens</span>
+
+## JSON Mode Support
+
+See the [list of models that support JSON mode](/features/json-mode) and how to use it in your Pipe.
+
+<Note>
+Completion and Prompt costs are based on the provider's pricing. Langbase does not charge on top of the provider's costs.
+</Note>
+
+## Deprecated Models
+
+The following models are deprecated and no longer available for use in pipes. It is recommended to switch to a supported model.
+
+| Model                   | Provider     | Owner  | Deprecated on | Reason                       |
+|-------------------------|--------------|--------|---------------|------------------------------|
+| qwen2-72b               | Fireworks AI | QwenLM | 13-08-2024    | Discontinued by Fireworks AI |
+| Llama-3-70b-chat-hf     | Together AI  | Meta   | 15-09-2024    | Discontinued by Together AI  |
+| Llama-2-7B-32K-Instruct | Together AI  | Meta   | 15-09-2024    | Discontinued by Together AI  |
+| gemma-7b-it             | Together AI  | Meta   | 15-09-2024    | Discontinued by Together AI  |
+
+---

@@ -1,0 +1,27 @@
+name: Bug report
+description: Report a bug for BaseAI.
+labels: []
+body:
+    - type: markdown
+      attributes:
+          value: |
+              This template is to report bugs for the BaseAI. If you need help with your own project, feel free to [start a new thread in our discussions](https://github.com/LangbaseInc/baseai/discussions).
+    - type: textarea
+      attributes:
+          label: Description
+          description: A detailed bug description for BaseAI and steps to reproduce it. Include the API, framework, and AI provider you're using.
+          placeholder: |
+              Steps to reproduce...
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Code example
+          description: Provide an example code snippet that may have a problem
+          placeholder: |
+              ...
+    - type: textarea
+      attributes:
+          label: Additional context
+          description: |
+              Any additional information that might help us investigate.

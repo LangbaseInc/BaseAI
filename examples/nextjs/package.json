@@ -1,0 +1,40 @@
+{
+	"name": "example-nextjs",
+	"description": "An example Next.js app using BaseAI",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"baseai": "baseai"
+	},
+	"dependencies": {
+		"@baseai/core": "^0.0.21",
+		"@radix-ui/react-slot": "^1.1.0",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.416.0",
+		"mathjs": "^13.1.1",
+		"mxcn": "^2.0.0",
+		"next": "14.2.5",
+		"openai": "^4.53.0",
+		"react": "^18",
+		"react-dom": "^18",
+		"tailwind-merge": "^2.4.0",
+		"tailwindcss-animate": "^1.0.7"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"baseai": "^0.0.21",
+		"eslint": "^8",
+		"eslint-config-next": "14.2.5",
+		"mini-css-extract-plugin": "^2.9.0",
+		"postcss": "^8",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5"
+	}
+}

@@ -1,0 +1,371 @@
+---
+title: 'Quickstart'
+description: "A step-by-step guide to creating your first tools in just one minute. Run locally, build, experiment, and deploy your AI features with BaseAI."
+tags:
+    - baseai
+    - tools
+    - langbase
+section: 'Tool'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Quickstart: Build a weather tool
+
+### Let's build your first tool in a minute.
+
+---
+
+In this quickstart guide, you will locally:
+
+-  **Create** a weather tool that returns the current weather for a given location.
+-  **Create** a local AI agent pipe that uses the tool to generate weather information.
+-  **Integrate** the tool in the agent pipe.
+-  **Run** the AI pipe with configuration and meta settings.
+-  **Build** your pipe with integrated tools.
+-  **Deploy** your AI features to Langbase API (global, highly available, and scalable) for production.
+
+---
+
+### Let's get started
+
+Let's build a tool locally using BaseAI that will return the current weather for a given location.
+
+---
+
+
+## Step #0: Initialize BaseAI
+
+Please initialize BaseAI in your project using the following command:
+
+```bash
+npx baseai@latest init
+```
+
+## Step #1: Create a weather tool
+
+We need to create a tool now. To do it, inside your project, run the following command in the terminal:
+
+```bash
+npx baseai@latest tool
+```
+
+The CLI will ask you to provide the name and description of the tool. Let's call it `getCurrentWeather` and provide a description like `Get the current weather for a given location`.
+
+Your tool will be created at `/baseai/tools/get-current-weather.ts`.
+
+## Step #2: View and configure the tool
+
+Now that we have created a current weather tool, let's open the file and see what we have in there.
+
+<CodeGroup exampleTitle="Current weather tool" title="getCurrentWeather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import { ToolI } from '@baseai/core';
+
+export async function getCurrentWeather() {
+	// Your tool logic here
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+</CodeGroup>
+
+The `run` key in the `getCurrentWeatherTool` object is the function that will be executed when the tool is called. You can write your logic to get the current weather for a given location in the `getCurrentWeather` function. Let's add a static return for now.
+
+Here's what the updated `get-current-weather.ts` file will look like:
+
+<CodeGroup exampleTitle="Current weather tool" title="Configure the weather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+</CodeGroup>
+
+You can see that I have also added parameters to the `getCurrentWeather` function. The LLM will give values to these parameters when it calls the tool.
+
+## Step #3: Create an AI agent Pipe
+
+Navigate to your project directory, and create a new pipe using the `baseai pipe` command. It will ask you for the name, description, and other details of the pipe step-by-step.
+
+Since we already created a tool in preview step, `baseai pipe` will ask you to select the tool you want to use in the pipe. Select the `get-current-weather` tool in this case.
+
+```bash
+npx baseai@latest pipe
+```
+
+## Step #4: View and configure your pipe
+
+Your pipe is created successfully at `/baseai/pipes/weather-agent.ts`. Open the file, it will look like this:
+
+<CodeGroup exampleTitle="BaseAI Pipe & Tool" title="Weather agent pipe">
+
+```ts {{ title: './baseai/pipes/weather-agent.ts' }}
+import {PipeI} from '@baseai/core';
+import getCurrentWeatherTool from '../tools/get-current-weather';
+
+const buildPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'weather-agent',
+	description: '',
+	status: 'private',
+	model: 'openai:gpt-4o-mini',
+	stream: false,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{role: 'system', content: `You are a helpful AI assistant.`},
+		{
+			role: 'system',
+			name: 'rag',
+			content:
+				"Below is some CONTEXT for you to answer the questions. ONLY answer from the CONTEXT. CONTEXT consists of multiple information chunks. Each chunk has a source mentioned at the end.\n\nFor each piece of response you provide, cite the source in brackets like so: [1].\n\nAt the end of the answer, always list each source with its corresponding number and provide the document name. like so [1] Filename.doc.\n\nIf you don't know the answer, just say that you don't know. Ask for more context and better questions if needed.",
+		},
+	],
+	variables: [],
+	memory: [],
+	tools: [getCurrentWeatherTool()],
+});
+
+export default buildPipe;
+```
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+</CodeGroup>
+
+As you can see in the `buildPipe` function, we have added the `getCurrentWeatherTool` to the `tools` array. This will allow the pipe to use the tool to get the current weather for a given location. I have also turn off the stream.
+
+## Step #5: Integrate the pipe with your app
+
+Create a `index.ts` file in your project and import the pipe you created in the previous step. We will use the Pipe primitive from `@baseai/core` to run the pipe.
+
+```bash
+# Create a new file index.ts
+touch index.ts
+
+# Install the required packages
+npm install @baseai/core dotenv
+```
+
+Add the following code to `index.ts` file:
+
+<CodeGroup exampleTitle="BaseAI Pipe & Tool" title="Run AI agent Pipe with tools">
+
+```ts {{ title: 'index.ts' }}
+import 'dotenv/config';
+import {Pipe, generateText} from '@baseai/core';
+import summarizerPipe from './baseai/pipes/summarizer';
+
+const pipe = new Pipe(summarizerPipe());
+
+const userMsg = `What's the weather in San Francisco?`;
+
+async function main() {
+	const response = await generateText({
+		pipe,
+		messages: [{role: 'user', content: userMsg}],
+	});
+
+	console.log(response.completion);
+}
+
+main();
+```
+
+```ts {{ title: './baseai/pipes/weather-agent.ts' }}
+import {PipeI} from '@baseai/core';
+import getCurrentWeatherTool from '../tools/get-current-weather';
+
+const buildPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'weather-agent',
+	description: '',
+	status: 'private',
+	model: 'openai:gpt-4o-mini',
+	stream: false,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{role: 'system', content: `You are a helpful AI assistant.`},
+		{
+			role: 'system',
+			name: 'rag',
+			content:
+				"Below is some CONTEXT for you to answer the questions. ONLY answer from the CONTEXT. CONTEXT consists of multiple information chunks. Each chunk has a source mentioned at the end.\n\nFor each piece of response you provide, cite the source in brackets like so: [1].\n\nAt the end of the answer, always list each source with its corresponding number and provide the document name. like so [1] Filename.doc.\n\nIf you don't know the answer, just say that you don't know. Ask for more context and better questions if needed.",
+		},
+	],
+	variables: [],
+	memory: [],
+	tools: [getCurrentWeatherTool()],
+});
+
+export default buildPipe;
+```
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+</CodeGroup>
+
+We have added a demo user message and asked for the weather in San Francisco. You can change this user message as per your requirements.
+
+```txt
+What's the weather in San Francisco?
+```
+
+Since we are using an OpenAI model, your OpenAI key is required. Please create an `.env` file in the root directory using the following command:
+
+```bash
+touch .env
+```
+
+Once you have created the `.env` file, add your OpenAI key to it.
+
+```txt
+OPENAI_API_KEY="your-open-ai-key" # Add your OpenAI API key in .env file
+```
+
+## Step #4: Run the code
+
+Run the `index.ts` file using the following command:
+
+```bash
+npx tsx index.ts
+```
+
+It will prompt the LLM model to get answers to your weather query.
+
+```txt
+The current weather in San Francisco is 72 degrees Fahrenheit.
+```
+
+Earlier in step no. 2, we added 72 degrees Fahrenheit as a static return. You can see this value was sent to the LLM and it used it to generate the response.
+
+This all happens locally on your machine and the response should be streamed in your terminal.
+
+---
+
+## Next Steps
+
+Now that you have successfully created a tool and used it in a Pipe, you can deploy this pipe seamlessly on Langbase using the [deploy](/docs/deployment/deploy) command.
+
+---

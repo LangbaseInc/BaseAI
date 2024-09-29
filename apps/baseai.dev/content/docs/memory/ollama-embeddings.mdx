@@ -1,0 +1,90 @@
+---
+title: 'Ollama Embeddings'
+description: "Use Ollama embeddings with BaseAI CLI."
+tags:
+    - baseai
+    - memory
+    - langbase
+    - embed documents
+section: 'Memory'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Use Ollama for Embeddings
+
+By default BaseAI uses OpenAI embeddings for memory. You can use Ollama embeddings with BaseAI CLI. 
+
+---
+
+## Step #0: Prerequisites
+
+1. **Install Ollama**: Follow the instructions in the [Ollama repository](https://github.com/ollama/ollama/blob/main/README.md) to install Ollama.
+
+2. **Download Ollama embeddings model**: We use `mxbai-embed-large` model in BaseAI.
+
+```bash
+ollama pull mxbai-embed-large 
+```
+
+<Note>
+BaseAI uses the default local url `http://localhost:11434` to connect to the Ollama model. Make sure the Ollama model is running on this url.
+</Note>
+
+## Step #1: Configure BaseAI to use Ollama embeddings
+
+Use following command to configure BaseAI to use Ollama embeddings.
+
+```bash
+npx baseai@latest config embeddings --local true
+```
+
+This command will set the `useLocalEmbeddings` flag to `true` in the BaseAI configuration file. This flag tells BaseAI to use the local Ollama embeddings model.
+
+<CodeGroup exampleTitle="BaseAI Configuration" title="Configure BaseAI to use Ollama embeddings">
+
+```ts {{ title: './baseai/baseai.config.ts' }}
+import type {BaseAIConfig} from '@baseai/core';
+
+export const config: BaseAIConfig = {
+  "log": {
+    "isEnabled": true,
+    "logSensitiveData": false,
+    "pipe": true,
+    "pipe.completion": true,
+    "pipe.request": true,
+    "pipe.response": true,
+    "tool": false,
+    "memory": false
+  },
+  "memory": {
+    "useLocalEmbeddings": true
+  }
+};
+```		
+
+</CodeGroup>
+
+Stop the dev server if it is running and start it again.
+
+```bash 
+npx baseai@latest dev 
+```
+
+<Note>
+When you switch between Ollama and OpenAI embeddings, all your memory documents will be re-embedded using the new embeddings model. You also need to restart your dev server.
+</Note>
+
+---
+
+## Switching back to OpenAI embeddings
+
+You can switch back to OpenAI embeddings by setting `useLocalEmbeddings` flag to `false`.
+
+```bash
+npx baseai@latest config embeddings --local false
+```
+
+
+
+---

@@ -1,0 +1,113 @@
+---
+title: "Configure summarizer Pipe"
+description: "Learn how to configure the summarizer pipe."
+tags:
+    - baseai
+    - langbase
+    - learn
+    - pipe
+section: "nodejs"
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Configure summarizer Pipe
+
+### Learn how to configure the summarizer pipe
+
+---
+
+In this learn guide, you will configure the summarizer pipe you created.
+
+---
+
+## Step #1: View the summarizer pipe
+
+Navigate to your project directory and open the pipe you created. You can find it at `/baseai/pipes/summarizer.ts`.
+
+<CodeGroup exampleTitle="BaseAI Pipe & Tool" title="Summarizer agent pipe">
+
+```ts {{ title: './baseai/pipes/summarizer.ts' }}
+import { PipeI } from '@baseai/core';
+
+const buildPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'summarizer',
+	description: 'A pipe that summarizes content and makes it less wordy',
+	status: 'public',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [{ role: 'system', content: `You are a helpful AI assistant.` }],
+	variables: [],
+	memory: [],
+	tools: []
+});
+
+export default buildPipe;
+```
+
+</CodeGroup>
+
+## Step #2: Update the summarizer pipe
+
+Let's add the following system prompt to the Pipe. We will also update the pipe name from `buildPipe` to `summarizerPipe`.
+
+```txt
+You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.
+```
+
+<CodeGroup exampleTitle="BaseAI Pipe & Tool" title="Summarizer agent pipe">
+
+```ts {{ title: './baseai/pipes/summarizer.ts' }}
+import { PipeI } from '@baseai/core';
+
+const summarizerPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'summarizer',
+	description: 'A pipe that summarizes content and make it less wordy',
+	status: 'public',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{
+			role: 'system',
+			content: `You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.`
+		}
+	],
+	variables: [],
+	memory: [],
+	tools: []
+});
+
+export default summarizerPipe;
+```
+
+</CodeGroup>
+
+---
+
+_In the next learn guide, you will learn how to integrate the summarizer pipe with your Node.js project._
+
+---

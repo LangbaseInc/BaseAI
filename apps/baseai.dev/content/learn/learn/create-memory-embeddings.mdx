@@ -1,0 +1,42 @@
+---
+title: "Create memory embeddings"
+description: "Learn how to create memory embeddings using BaseAI."
+tags:
+    - baseai
+    - langbase
+    - learn
+    - memory
+section: "nodejs"
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Create memory embeddings
+
+### Learn how to create memory embeddings using BaseAI
+
+---
+
+In this learn guide, you will create memory embeddings using BaseAI.
+
+---
+
+## Generate memory embeddings
+
+In the previous learn [guide](/learn/nodejs/add-docs-to-memory), we added documents to the memory. Let's embed the memory to generate embeddings for the documents. Open the terminal and run the following command:
+
+```bash
+npx baseai@latest embed -m chat-with-docs
+```
+
+<Note>
+Please make sure to add `OPENAI_API_KEY` to `.env` file in the root of your project. This is required to generate embeddings for the documents in the memory.
+</Note>
+
+It will generate embeddings for the documents and create an index for search. Your memory is now ready to be used with a Pipe.
+
+---
+
+_In the next learn guide, we will integrate the memory in summarizer pipe._
+
+---

@@ -1,0 +1,36 @@
+---
+title: 'Embed Document'
+description: "Embed a memory document locally using BaseAI CLI."
+tags:
+    - baseai
+    - memory
+    - langbase
+    - embed documents
+section: 'Memory'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Embed a Memory Document
+
+If you add a new document to the memory or change the document, you need to embed the document to use it with the memory.
+
+
+<Note>
+Please make sure to add `OPENAI_API_KEY` to `.env` file in the root of your project. This is required to generate embeddings for the documents in the memory.
+</Note>
+
+
+---
+
+## Embed a document
+
+Pass the memory name and document name to the `embed` command using the `--memory` flag or `-m` for short and `--document` flag or `-d` for short.
+
+```bash
+baseai embed -m chat-with-docs -d document-name
+```
+
+It will generate embeddings and update the memory index. If the document is already embedded, it will update the embeddings for the document.
+
+---

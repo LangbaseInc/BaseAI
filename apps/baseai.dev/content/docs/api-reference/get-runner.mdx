@@ -1,0 +1,216 @@
+---
+title: 'getRunner'
+description: "Everything you need to know about the getRunner method."
+tags:
+    - baseai
+    - api-reference
+    - getRunner
+section: 'API reference'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# getRunner()
+
+A stream is a continuous flow of data that can be consumed piece by piece. The `getRunner()` function is a utility function that converts a readable stream in a runner. This runner can be used to run the stream and consume the data.
+
+The `getRunner()` function can be used together with `pipe.run()` [function](/docs/api-reference/pipe-run) when the stream is `true` or with the `streamText()` [function](/docs/api-reference/stream-text) to consume the stream.
+
+The BaseAI core package provides a `getRunner()` function that you can use in your app.
+
+---
+
+## API reference
+
+## `getRunner(readableStream)`
+
+<Row>
+    <Col>
+        Get a runner from a stream.
+
+        ```ts {{title: 'Function Signature'}}
+        getRunner(readableStream)
+
+        // With types.
+        getRunner(readableStream: ReadableStream)
+        ```
+
+        ### readableStream
+        <Properties>
+            <Property name="readableStream" type="ReadableStream">
+                The readable stream to get a runner from.
+            </Property>
+        </Properties>
+
+        ---
+
+        <Col>
+            ## Response events
+
+            Response events are emitted by the runner.
+
+            <Properties>
+                ### connect event
+                <Property name="connect" type="() => void">
+                    This event is emitted when the stream successfully connects and starts receiving data.
+
+                    ```ts {{ title: 'connect event' }}
+                    runner.on('connect', () => {
+                        console.log('Stream started.');
+                    });
+                    ```
+                </Property>
+            </Properties>
+
+            <Properties>
+                ### content event
+                <Property name="content" type="(content: string, contentSnapshot: string) => void">
+                    Emitted when new content is received from the stream.
+
+                    ```ts {{ title: 'content event' }}
+                    runner.on('content', (content, contentSnapshot) => {
+                        console.log(content);
+                    });
+                    ```
+
+                    <Properties>
+                        <Property name="content" type="string">
+                            The new content received in this chunk.
+                        </Property>
+
+                        <Property name="contentSnapshot" type="string">
+                            The accumulated content up to this point.
+                        </Property>
+                    </Properties>
+                </Property>
+            </Properties>
+
+            <Properties>
+                ### end event
+                <Property name="end" type="() => void">
+                    This event is emitted when the stream has completed and all data has been received.
+
+                    ```ts {{ title: 'end event' }}
+                    runner.on('end', () => {
+                        console.log('Stream ended.');
+                    });
+                    ```
+                </Property>
+            </Properties>
+
+            <Properties>
+            ### error event
+                <Property name="error" type="(error: Error) => void">
+                    This event is emitted when an error occurs during the stream.
+
+                    ```ts {{ title: 'error event' }}
+                    runner.on('error', (error) => {
+                        console.error('An error occurred:', error);
+                    });
+                    ```
+
+                    <Properties>
+                        <Property name="error" type="Error">
+                            The error object containing information about what went wrong.
+                        </Property>
+                    </Properties>
+                </Property>
+            </Properties>
+        </Col>
+    </Col>
+    <Col sticky>
+        ### Create an `agent` pipe
+
+        ```bash {{ title: 'Create a new Pipe' }}
+        npx baseai@latest pipe
+        pnpx baseai@latest pipe
+        ```
+
+        ### Add OpenAI API key to `.env` file
+
+        ```bash {{ title: '.env file' }}
+        OPENAI_API_KEY="<REPLACE-WITH-YOUR-OPENAI-KEY>"
+        ```
+
+        ### `getRunner()` example with `streamText()`
+
+        <CodeGroup exampleTitle="streamText()" title="streamText()">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, streamText, getRunner} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                const {stream} = await streamText({
+                    pipe,
+                    messages: [{role: 'user', content: 'Hello'}],
+                });
+
+                // NOTE: This is a Node.js only example.
+                // Stream works differently in browsers.
+                const runner = getRunner(stream);
+
+                // Method 1: Using event listeners
+                runner.on('connect', () => {
+                    console.log('Stream started.\n');
+                });
+
+                runner.on('content', content => {
+                    process.stdout.write(content);
+                });
+
+                runner.on('end', () => {
+                    console.log('\nStream ended.');
+                });
+
+                runner.on('error', error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant.`,
+                    }
+                ],
+                variables: [],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+
+        </CodeGroup>
+    </Col>
+</Row>
+
+---

@@ -1,0 +1,251 @@
+---
+title: "Configure weather tool"
+description: "Learn how to configure the weather tool."
+tags:
+    - baseai
+    - langbase
+    - learn
+    - tool
+section: "nodejs"
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Configure weather tool
+
+### Learn how to view and update the weather tool
+
+---
+
+In this learn guide, you will configure the weather tool you created in the previous guide.
+
+---
+
+## Step #1: View the weather tool
+
+Navigate to your project directory and open the tool you created. You can find it at `/baseai/tools/get-current-weather.ts`.
+
+<CodeGroup exampleTitle="Current weather tool" title="getCurrentWeather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import { ToolI } from '@baseai/core';
+
+export async function getCurrentWeather() {
+	// Your tool logic here
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+```ts {{ title: './baseai/pipes/summarizer.ts' }}
+import { PipeI } from '@baseai/core';
+
+const summarizerPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'summarizer',
+	description: 'A pipe that summarizes content and make it less wordy',
+	status: 'public',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{ role: 'system', content: `You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.` },
+	],
+	variables: [],
+    memory: [],
+    tools: [],
+});
+
+export default summarizerPipe;
+```
+
+```ts {{ title: 'index.ts' }}
+import 'dotenv/config';
+import {Pipe, streamText, getRunner} from '@baseai/core';
+import summarizerPipe from './baseai/pipes/summarizer';
+
+const pipe = new Pipe(summarizerPipe());
+
+const userMsg = `
+Langbase studio is your playground to build, collaborate, and deploy AI. It allows you to experiment with your pipes in real-time, with real data, store messages, version your prompts, and truly helps you take your idea from building prototypes to deployed in production with LLMOps on usage, cost, and quality.
+A complete AI developers platform.
+- Collaborate: Invite all team members to collaborate on the pipe. Build AI together.
+- Developers & Stakeholders: All your R&D team, engineering, product, GTM (marketing and sales), literally invlove every stakeholder can collaborate on the same pipe. It's like a powerful version of GitHub x Google Docs for AI. A complete AI developers platform.
+`;
+
+async function main() {
+	const {stream} = await streamText({
+		pipe,
+		messages: [{role: 'user', content: userMsg}],
+	});
+
+	const runner = getRunner(stream);
+
+	// Method 1: Using event listeners
+	runner.on('connect', () => {
+		console.log('Stream started.\n');
+	});
+
+	runner.on('content', content => {
+		process.stdout.write(content);
+	});
+
+	runner.on('end', () => {
+		console.log('\nStream ended.');
+	});
+
+	runner.on('error', error => {
+		console.error('Error:', error);
+	});
+}
+
+main();
+```
+
+</CodeGroup>
+
+The `run` key in the `getCurrentWeatherTool` object is the function that will be executed when the tool is called. You can write your logic to get the current weather for a given location in the `getCurrentWeather` function.
+
+## Step #2: Update the weather tool
+
+Let's add parameters to the `getCurrentWeather` function. The LLM will give values to these parameters when it calls the tool.
+
+I will add a static return from the `getCurrentWeather` function for now. You can replace it with your logic to get the current weather.
+
+<CodeGroup exampleTitle="Current weather tool" title="Configure the weather tool">
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+```ts {{ title: './baseai/pipes/summarizer.ts' }}
+import { PipeI } from '@baseai/core';
+
+const summarizerPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'summarizer',
+	description: 'A pipe that summarizes content and make it less wordy',
+	status: 'public',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{ role: 'system', content: `You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.` },
+	],
+	variables: [],
+    memory: [],
+    tools: [],
+});
+
+export default summarizerPipe;
+```
+
+```ts {{ title: 'index.ts' }}
+import 'dotenv/config';
+import {Pipe, streamText, getRunner} from '@baseai/core';
+import summarizerPipe from './baseai/pipes/summarizer';
+
+const pipe = new Pipe(summarizerPipe());
+
+const userMsg = `
+Langbase studio is your playground to build, collaborate, and deploy AI. It allows you to experiment with your pipes in real-time, with real data, store messages, version your prompts, and truly helps you take your idea from building prototypes to deployed in production with LLMOps on usage, cost, and quality.
+A complete AI developers platform.
+- Collaborate: Invite all team members to collaborate on the pipe. Build AI together.
+- Developers & Stakeholders: All your R&D team, engineering, product, GTM (marketing and sales), literally invlove every stakeholder can collaborate on the same pipe. It's like a powerful version of GitHub x Google Docs for AI. A complete AI developers platform.
+`;
+
+async function main() {
+	const {stream} = await streamText({
+		pipe,
+		messages: [{role: 'user', content: userMsg}],
+	});
+
+	const runner = getRunner(stream);
+
+	// Method 1: Using event listeners
+	runner.on('connect', () => {
+		console.log('Stream started.\n');
+	});
+
+	runner.on('content', content => {
+		process.stdout.write(content);
+	});
+
+	runner.on('end', () => {
+		console.log('\nStream ended.');
+	});
+
+	runner.on('error', error => {
+		console.error('Error:', error);
+	});
+}
+
+main();
+```
+
+</CodeGroup>
+
+---
+
+_In the next learn guide, we will learn how to use the weather tool in a pipe to get the current weather for a given location._
+
+---

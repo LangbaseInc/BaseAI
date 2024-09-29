@@ -1,0 +1,70 @@
+# Snapshot Releases Workflow
+
+# Purpose
+# This workflow allows you to create snapshot releases for testing changes in a pull request
+# before a full release, without entering pre-release mode.
+
+# Problem
+# Changesets enforce pre-release mode across all packages in our mono repo, blocking stable
+# releases until pre-release mode is exited.
+
+# Snapshot Releases
+# This workflow enables one-off releases from specific branches, known as snapshot releases.
+# These are published under the `snapshot` dist-tag with versions like
+# `0.4.0-b16419cd576a883e1ddde01bd2fe3f5f54bcc52a-20230913164912`, which include the
+# generated version, commit hash, and timestamp.
+
+# Creating a Snapshot Release
+# 1. Push your branch to GitHub and commit a changeset. Generate a changeset with `pnpm changeset`.
+# 2. Go to the LangbaseInc/baseai repository on GitHub.
+# 3. Navigate to Actions > Release Snapshot.
+# 4. Click "Run workflow", select your branch, and click "Run workflow".
+# Inspired by turbo repo.
+
+name: Release Snapshot
+
+on:
+    workflow_dispatch:
+
+jobs:
+    release-snapshot:
+        name: Release Snapshot
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup pnpm 8
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 8.6.9
+
+            - name: Setup Node.js 18.x
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 18.x
+
+            - name: Add npm auth token to pnpm
+              run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+              env:
+                  NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+
+            - name: Install Dependencies
+              run: pnpm i
+
+            - name: Build
+              run: pnpm clean && pnpm build
+
+            - name: Add SHORT_SHA env property with commit short sha
+              run: echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
+
+            - name: Create Snapshot Release
+              run: |
+                  pnpm changeset version --snapshot ${SHORT_SHA}
+                  pnpm clean-examples
+                  pnpm changeset publish --no-git-tag --tag snapshot
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,70 @@
+---
+title: 'Deploy'
+description: "Deploy a project using the BaseAI CLI to Langbase."
+tags:
+    - baseai
+    - auth
+    - langbase
+    - deploy
+section: 'Deployment'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Deploy 
+
+Use the `deploy` command to deploy a project using the BaseAI CLI to Langbase. Before you deploy a project, make sure you are [authenticated](/docs/deployment/authentication) with the BaseAI CLI.
+
+```bash
+baseai deploy
+```
+
+It will deploy all AI agent Pipes and Memory in the current project directory to Langbase.
+
+---
+
+## Deployment Workflow
+
+During deployment, the BaseAI CLI adjusts its behavior based on the current status of Pipes and Memory in Langbase.
+
+### Pipe Deployment
+
+The pipe deployment process covers the following cases:
+
+- If a **Pipe does not exist** in Langbase, it will create a new Pipe.
+- If a **Pipe already exists** in Langbase, it will overwrite the Pipe with the local Pipe.
+- If you are using an **ollama** model, it will be deployed with `gpt-4o-mini`.
+
+
+### Memory Deployment
+
+Memory deployment handles the following scenarios:
+
+-   If the **memory does not exist** on Langbase, it will be created.
+-   If the **memory already exists**, it will proceed as follows:
+    -   If the **documents on Langbase match the local memory**, the memory deployment will be skipped. 
+	-	If the **Langbase memory is a subset of the local memory**, only new documents will be uploaded.
+	-	If the **Langbase memory contains more documents than the local memory**, the user will be prompted to confirm an overwrite:
+	    -	If confirmed, the local memory will **overwrite** the existing memory on Langbase.
+	    -	If not confirmed, the memory deployment will be **skipped**.
+
+**Note** that in the case: "*If the documents on Langbase match the local memory, the memory deployment will be skipped.*", the check is a shallow comparison based on the document names. If you want to overwrite the memory, you can use the `overwrite` flag.
+
+---
+
+## Overwrite
+
+If you want to overwrite the existing pipes and memory on Langbase, you can use the `overwrite` flag.
+
+```bash
+baseai deploy --overwrite # or -o
+```
+---
+
+
+## Deploy BaseAI Applications
+
+
+When you deploy a project to prod that uses BaseAI, ensure that `LANGBASE_API_KEY` is set in the production environment. This key is required to authenticate with Langbase and access deployed AI agents and memory.
+
+Use appropriate [Org or User API key](https://langbase.com/docs/api-reference/api-keys) to authenticate with Langbase.

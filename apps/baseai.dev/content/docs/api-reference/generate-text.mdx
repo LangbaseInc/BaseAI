@@ -1,0 +1,571 @@
+---
+title: 'generateText()'
+description: "Everything you need to know about the generateText method."
+tags:
+    - baseai
+    - api-reference
+    - generateText
+section: 'API reference'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# generateText()
+
+You can use the `generateText()` function to generate text using pipes with any LLM. For example, it can generate text based on a user prompt like "Who is an AI Engineer?" or give it a an entire doc and ask it to summarize it.
+
+The BaseAI core package provides a `generateText()` function that you can use in your app.
+
+---
+
+## API reference
+
+## `generateText(options)`
+
+<Row>
+    <Col>
+        Generate a text completion using `generateText()` function.
+
+        ```ts {{title: 'Function Signature'}}
+        generateText(options)
+
+        // With types.
+        generateText(options: RunOptions & {pipe: Pipe})
+        ```
+
+        ## options
+        <Properties>
+            ### RunOptions
+            <Property name="options" type="RunOptions">
+                ```ts {{title: 'RunOptions Object'}}
+                interface RunOptions {
+                    messages?: Message[];
+                    variables?: Variable[];
+                    threadId?: string;
+                    rawResponse?: boolean;
+                }
+                ```
+
+                *Following are the properties of the options object.*
+            </Property>
+        </Properties>
+
+        ---
+
+        ### messages
+
+        <Properties>
+            <Property name="messages" type="Array<Message>">
+                A messages array including the following properties. Optional if variables are provided.
+
+                ```ts {{title: 'Message Object'}}
+                interface Message {
+                    role: 'user' | 'assistant' | 'system'| 'tool';
+                    content: string | null;
+                    name?: string;
+                    tool_call_id?: string;
+                    tool_calls?: ToolCall[];
+                }
+                ```
+
+                ---
+
+                <Properties>
+                    <Property name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                        The role of the author of this message.
+                    </Property>
+                    <Property name="content" type="string">
+                        The contents of the chunk message.
+                    </Property>
+                    <Property name="name" type="string">
+                        The name of the tool called by LLM
+                    </Property>
+                    <Property name="tool_call_id" type="string">
+                        The id of the tool called by LLM
+                    </Property>
+
+                    <Property name="tool_calls" type="Array<ToolCall>">
+                        The array of tools sent to LLM.
+
+                        ```ts {{title: 'ToolCall Object'}}
+                        interface ToolCall {
+                            id: string;
+                            type: 'function';
+                            function: Function;
+                        }
+                        ```
+
+                        <Property name="function" type="Function">
+                            Function definition sent to LLM.
+
+                            ```ts {{title: 'Function Object'}}
+                            export interface Function {
+                                name: string;
+                                arguments: string;
+                            }
+                            ```
+                        </Property>
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### variables
+
+        <Properties>
+            <Property name="variables" type="Array<Variable>">
+                A variables array including the `name` and `value` params. Optional if messages are provided.
+
+                ```ts {{title: 'Variable Object'}}
+                interface Variable {
+                    name: string;
+                    value: string;
+                }
+                ```
+
+                <Properties>
+                    <Property name="name" type="string">
+                        The name of the variable.
+                    </Property>
+                    <Property name="value" type="string">
+                        The value of the variable.
+                    </Property>
+                </Properties>
+            </Property>
+        </Properties>
+
+        ---
+
+        ### threadId
+
+        <Properties>
+            <Property name="threadId" type="string | undefined">
+                The ID of the thread. Enable if you want to continue the conversation in the same thread from the second message onwards. Works only with deployed pipes.
+
+                - If `threadId` is not provided, a new thread will be created. E.g. first message of a new chat will not have a threadId.
+                - After the first message, a new `threadId` will be returned.
+                - Use this `threadId` to continue the conversation in the same thread from the second message onwards.
+            </Property>
+        </Properties>
+
+        ---
+
+        ### rawResponse
+
+        <Properties>
+            <Property name="rawResponse" type="boolean | undefined">
+                Enable if you want to get complete raw LLM response.
+
+                Default: `false`
+            </Property>
+        </Properties>
+
+        ---
+
+        ## options
+
+        <Properties>
+            ### Pipe
+            <Property name="options" type="Pipe">
+               The Pipe instance to use for text generation.
+            </Property>
+        </Properties>
+    </Col>
+
+    <Col sticky>
+
+        ### Create an `agent` pipe
+
+        ```bash {{ title: 'Create a new Pipe' }}
+        npx baseai@latest pipe
+        pnpx baseai@latest pipe
+        ```
+
+        ### Add OpenAI API key to `.env` file
+
+        ```bash {{ title: '.env file' }}
+        OPENAI_API_KEY="<REPLACE-WITH-YOUR-OPENAI-KEY>"
+        ```
+
+        ### `generateText()` example
+
+        <CodeGroup exampleTitle="generateText()" title="generateText()">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, generateText} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                const response = await generateText({
+                    pipe,
+                    messages: [{role: 'user', content: 'Hello'}],
+                });
+
+                console.log(response.completion);
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant.`,
+                    }
+                ],
+                variables: [],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+
+        </CodeGroup>
+
+        ### Variables with `generateText()`
+
+        <CodeGroup exampleTitle="generateText()" title="generateText()">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, generateText} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                const response = await generateText({
+                    pipe,
+                    messages: [{role: 'user', content: 'Hello'}],
+                    variables: [{name: 'question', value: 'AI Engineer'}],
+                });
+
+                console.log(response.completion);
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant. Answer {{question}}`,
+                    }
+                ],
+                variables: [{name: 'question', value: ''}],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+        </CodeGroup>
+
+        ### Chat using `generateText()` (Deployed Pipe only)
+
+        <CodeGroup exampleTitle="generateText()" title="Chat using `generateText()`">
+
+            ```ts {{ title: 'index.ts' }}
+            import 'dotenv/config';
+            import {Pipe, generateText} from '@baseai/core';
+            import buildPipe from './baseai/pipes/agent';
+
+            const pipe = new Pipe(buildPipe());
+
+            async function main() {
+                // Message 1: Tell something to the LLM.
+                const response1 = await generateText({
+                    pipe,
+                    messages: [{role: 'user', content: 'My company is called Langbase'}],
+                });
+
+                console.log(response1.completion);
+
+                // Message 2: Ask something about the first message.
+                // Continue the conversation in the same thread by sending
+                // `threadId` from the second message onwards.
+                const response2 = await generateText({
+                    pipe,
+                    threadId: response1.threadId,
+                    messages: [{role: 'user', content: 'Tell me the name of my company?'}],
+                });
+
+                console.log(response2.completion);
+                // You'll see any LLM will know the company is `Langbase`
+                // since it's the same chat thread. This is how you can
+                // continue a conversation in the same thread.
+            }
+
+            main();
+            ```
+
+            ```ts {{ title: './baseai/pipes/agent.ts' }}
+            import { PipeI } from '@baseai/core';
+
+            const buildPipe = (): PipeI => ({
+                apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+                name: 'summarizer',
+                description: 'A pipe that summarizes content and make it less wordy',
+                status: 'public',
+                model: 'openai:gpt-4o-mini',
+                stream: true,
+                json: false,
+                store: true,
+                moderate: true,
+                top_p: 1,
+                max_tokens: 1000,
+                temperature: 0.7,
+                presence_penalty: 1,
+                frequency_penalty: 1,
+                stop: [],
+                tool_choice: 'auto',
+                parallel_tool_calls: false,
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a helpful AI assistant. Answer {{question}}`,
+                    }
+                ],
+                variables: [{name: 'question', value: ''}],
+                memory: [],
+                tools: []
+            });
+
+            export default buildPipe;
+            ```
+        </CodeGroup>
+    </Col>
+</Row>
+
+---
+
+<Row>
+    <Col>
+        ## Response
+
+        Response of `generateText()` is a `Promise<RunResponse>`.
+
+        ```ts {{title: 'RunResponse Object'}}
+        interface RunResponse {
+            completion: string;
+            threadId?: string;
+            id: string;
+            object: string;
+            created: number;
+            model: string;
+            choices: ChoiceGenerate[];
+            usage: Usage;
+            system_fingerprint: string | null;
+            rawResponse?: {
+                headers: Record<string, string>;
+            };
+        }
+        ```
+
+        <Properties>
+            <Property name="completion" type="string">
+                The generated text completion.
+            </Property>
+            <Property name="threadId" type="string">
+                The ID of the thread. Useful for a chat pipe to continue the conversation in the same thread. Optional. Available on deployed pipes only.
+            </Property>
+            <Property name="id" type="string">
+                The ID of the raw response.
+            </Property>
+            <Property name="object" type="string">
+                The object type name of the response.
+            </Property>
+            <Property name="created" type="number">
+                The timestamp of the response creation.
+            </Property>
+            <Property name="model" type="string">
+                The model used to generate the response.
+            </Property>
+            <Property name="choices" type="ChoiceGenerate[]">
+                A list of chat completion choices. Can contain more than one elements if n is greater than 1.
+
+                ```ts {{title: 'Choice Object for generateText()'}}
+                interface ChoiceGenerate {
+                    index: number;
+                    message: Message;
+                    logprobs: boolean | null;
+                    finish_reason: string;
+                }
+                ```
+            </Property>
+
+            <Sub name="index" type="number">
+                The index of the choice in the list of choices.
+            </Sub>
+            <Sub name="message" type="Message">
+                A messages array including `role` and `content` params.
+
+                ```ts {{title: 'Message Object'}}
+                interface Message {
+                    role: 'user' | 'assistant' | 'system'| 'tool';
+                    content: string | null;
+                    tool_calls?: ToolCall[];
+                }
+                ```
+
+                <Sub name="role" type="'user' | 'assistant' | 'system'| 'tool'">
+                The role of the author of this message.
+                </Sub>
+                <Sub name="content" type="string | null">
+                The contents of the chunk message. Null if a tool is called.
+                </Sub>
+
+                <Sub name="tool_calls" type="Array<ToolCall>">
+                The array of the tools called by LLM
+
+                ```ts {{title: 'ToolCall Object'}}
+                interface ToolCall {
+                    id: string;
+                    type: 'function';
+                    function: Function;
+                }
+                ```
+
+                <Sub name="id" type="string">
+                    The ID of the tool call.
+                </Sub>
+
+                <Sub name="type" type="'function'">
+                    The type of the tool. Currently, only `function` is supported.
+                </Sub>
+
+                <Sub name="function" type="Function">
+                    The function that the model called.
+
+                    ```ts {{title: 'Function Object'}}
+                    export interface Function {
+                        name: string;
+                        arguments: string;
+                    }
+                    ```
+
+                    <Sub name="name" type="string">
+                        The name of the function to call.
+                    </Sub>
+
+                    <Sub name="arguments" type="string">
+                        The arguments to call the function with, as generated by the model in JSON format.
+                    </Sub>
+                </Sub>
+                </Sub>
+            </Sub>
+            <Sub name="logprobs" type="boolean or null">
+                Log probability information for the choice. Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
+            </Sub>
+            <Sub name="finish_reason" type="string">
+                The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, length if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, `tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function. It could also be `eos` end of sequence and depends on the type of LLM, you can check their docs.
+            </Sub>
+            <Property name="usage" type="Usage">
+                The usage object including the following properties.
+
+                ```ts {{title: 'Usage Object'}}
+                interface Usage {
+                    prompt_tokens: number;
+                    completion_tokens: number;
+                    total_tokens: number;
+                }
+                ```
+
+                <Sub name="prompt_tokens" type="number">
+                    The number of tokens in the prompt (input).
+                </Sub>
+                <Sub name="completion_tokens" type="number">
+                    The number of tokens in the completion (output).
+                </Sub>
+                <Sub name="total_tokens" type="number">
+                    The total number of tokens.
+                </Sub>
+            </Property>
+            <Property name="system_fingerprint" type="string">
+                This fingerprint represents the backend configuration that the model runs with.
+            </Property>
+            <Property name="rawResponse" type="Object">
+                The different headers of the response.
+            </Property>
+        </Properties>
+    </Col>
+    <Col sticky>
+        ```json  {{ title: 'Response of generateText()' }}
+        {
+            "completion": "AI Engineer is a person who designs, builds, and maintains AI systems.",
+            "threadId": "thread_123",
+            "id": "chatcmpl-123",
+            "object": "chat.completion",
+            "created": 1720131129,
+            "model": "gpt-4o-mini",
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": "AI Engineer is a person who designs, builds, and maintains AI systems."
+                    },
+                    "logprobs": null,
+                    "finish_reason": "stop"
+                }
+            ],
+            "usage": {
+                "prompt_tokens": 28,
+                "completion_tokens": 36,
+                "total_tokens": 64
+            },
+            "system_fingerprint": "fp_123"
+        }
+        ```
+    </Col>
+</Row>
+
+---

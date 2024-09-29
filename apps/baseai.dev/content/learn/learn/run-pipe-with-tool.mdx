@@ -1,0 +1,147 @@
+---
+title: "Run Pipe with Weather Tool in Node.js"
+description: "Learn how to run a pipe with a weather tool in Node.js using BaseAI."
+tags:
+    - baseai
+    - langbase
+    - learn
+    - tool
+section: "nodejs"
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Run Pipe with Weather Tool in Node.js
+
+### Learn how to run a pipe with a weather tool in Node.js using BaseAI
+
+---
+
+In this learn guide, you will locally run the [summarizer pipe](/learn/nodejs/configure-pipe) with the weather tool.
+
+---
+
+## Step #1: Update user message
+
+Let's update the user message to the following in our summarizer pipe. Also, this time instead of streaming, let's generate text from LLM.
+
+```txt
+What's the weather in San Francisco?
+```
+
+<CodeGroup exampleTitle="Current weather tool" title="Configure the weather tool">
+
+```ts {{ title: 'index.ts' }}
+import 'dotenv/config';
+import {Pipe, generateText} from '@baseai/core';
+import summarizerPipe from './baseai/pipes/summarizer';
+
+const pipe = new Pipe(summarizerPipe());
+
+const userMsg = `What's the weather in San Francisco?`;
+
+async function main() {
+	const response = await generateText({
+		pipe,
+		messages: [{role: 'user', content: userMsg}],
+	});
+
+	console.log(response.completion);
+}
+
+main();
+```
+
+```ts {{ title: './baseai/pipes/summarizer.ts' }}
+import { PipeI } from '@baseai/core';
+import getCurrentWeatherTool from '../tools/get-current-weather';
+
+const summarizerPipe = (): PipeI => ({
+	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
+	name: 'summarizer',
+	description: 'A pipe that summarizes content and make it less wordy',
+	status: 'public',
+	model: 'openai:gpt-4o-mini',
+	stream: true,
+	json: false,
+	store: true,
+	moderate: true,
+	top_p: 1,
+	max_tokens: 1000,
+	temperature: 0.7,
+	presence_penalty: 1,
+	frequency_penalty: 1,
+	stop: [],
+	tool_choice: 'auto',
+	parallel_tool_calls: false,
+	messages: [
+		{ role: 'system', content: `You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.` },
+	],
+	variables: [],
+    memory: [],
+    tools: [getCurrentWeatherTool()]
+});
+
+export default summarizerPipe;
+```
+
+```ts {{ title: './baseai/tools/get-current-weather.ts' }}
+import {ToolI} from '@baseai/core';
+
+export async function getCurrentWeather(location: string, unit: string) {
+	return `Weather in ${location} is 72 degrees ${unit === 'celsius' ? 'Celsius' : 'Fahrenheit'}`;
+}
+
+const getCurrentWeatherTool = (): ToolI => ({
+	run: getCurrentWeather,
+	type: 'function' as const,
+	function: {
+		name: 'getCurrentWeather',
+		description: 'Get the current weather for a given location',
+		parameters: {
+			type: 'object',
+			properties: {
+				location: {
+					type: 'string',
+					description: 'The city and state, e.g. San Francisco, CA',
+				},
+				unit: {
+					type: 'string',
+					enum: ['celsius', 'fahrenheit'],
+				},
+			},
+			required: ['location'],
+		},
+	},
+});
+
+export default getCurrentWeatherTool;
+```
+
+</CodeGroup>
+
+---
+
+## Step #2: Run the pipe
+
+Run the `index.ts` file using the following command:
+
+```bash
+npx tsx index.ts
+```
+
+It will prompt the LLM model to get answers to your weather query.
+
+```txt
+The current weather in San Francisco is 72 degrees Fahrenheit.
+```
+
+When we [configured](/learn/nodejs/configure-tool#step-2-update-the-weather-tool) the weather tool, we added 72 degrees Fahrenheit as a static return of `getCurrentWeather` function. That's why we are getting this response.
+
+This all happens locally on your machine and the response should be streamed in your terminal.
+
+---
+
+_In the next learn guide, we will create a memory for our Pipe._
+
+---

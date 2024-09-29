@@ -1,0 +1,2 @@
+name="baseai"
+compatibility_flags = ['nodejs_compat_v2']

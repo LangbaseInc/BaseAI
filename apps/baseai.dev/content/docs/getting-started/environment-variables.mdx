@@ -1,0 +1,61 @@
+---
+title: 'Environment Variables'
+description: "Environment variables required to run BaseAI."
+tags:
+    - baseai
+    - environment variables
+    - langbase
+section: 'Getting Started'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Environment Variables
+
+---
+
+## Overview
+
+BaseAI uses `dotenv` package to manage environment variables. You can create `.env` file in the root of your project and add the required environment variables.
+
+<Warn>
+Please make sure to add `.env` to the `.gitignore` file of your project. This is to avoid committing your API keys to the git repository accidentally.
+</Warn>
+
+---
+
+### Environment Variables
+
+If the pipes present in your project use LLM models from any of the following providers, you will need to add their respective API keys to the `.env` file of your project.
+
+```shell
+# LOCAL ONLY.
+OPENAI_API_KEY=""     # OpenAI
+ANTHROPIC_API_KEY=""  # Anthropic
+COHERE_API_KEY=""     # Cohere
+FIREWORKS_API_KEY=""  # Fireworks
+GOOGLE_API_KEY=""     # Google
+GROQ_API_KEY=""       # Groq
+MISTRAL_API_KEY=""    # Mistral
+PERPLEXITY_API_KEY="" # Perplexity
+TOGETHER_API_KEY=""   # Together
+```
+
+Once you have added the environment variables, you will be able to run your AI `pipes` locally.
+
+<Note>
+The environment variables are only required for running the `pipes` locally. You do not need to add them when deploying your `pipes` to Langbase.
+</Note>
+
+---
+
+### Memory
+
+BaseAI uses OpenAI to generate embeddings of the documents present in the memory on your local. For this reason, you will need to add an OpenAI API key to the `.env` file of your project.
+
+```shell
+# LOCAL ONLY.
+OPENAI_API_KEY="" # OpenAI
+```
+
+---

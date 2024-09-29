@@ -1,0 +1,25 @@
+name: Feature Request
+description: Propose a new feature for BaseAI.
+labels: []
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Use this template to propose new features for BaseAI. If you need help with your project, [start a new thread in our discussions](https://github.com/LangbaseInc/baseai/discussions).
+    - type: textarea
+      attributes:
+          label: Feature Description
+          description: Describe the feature you are proposing. Include the API, framework, and AI provider.
+          placeholder: Feature description...
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Use Case
+          description: Explain how this feature would be beneficial.
+          placeholder: Use case...
+    - type: textarea
+      attributes:
+          label: Additional Context
+          description: Any additional information that might help us understand your request.
+          placeholder: Additional context...

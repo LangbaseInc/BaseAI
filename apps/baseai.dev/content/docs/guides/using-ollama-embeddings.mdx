@@ -1,0 +1,211 @@
+---
+title: 'Build RAG Using Ollama Embeddings'
+description: "Learn how to build an agentic AI pipe with tools and memory using Ollama embeddings."
+tags:
+    - baseai
+    - langbase
+    - guide
+section: 'guides'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Build RAG Using Ollama Embeddings
+
+In this guide, you will learn how to build a Chat With Docs RAG application using BaseAI pipe and memory with Ollama embeddings.
+
+
+---
+
+In this guide, you will learn how to locally:
+
+- Configure BaseAI to use Ollama embeddings
+- Build a Chat With Docs RAG application for [Pipe FAQs](https://langbase.com/docs/pipe/faqs)
+
+
+---
+
+## Step #0: Prerequisites
+
+1. **Install Ollama**: Follow the instructions in the [Ollama repository](https://github.com/ollama/ollama/blob/main/README.md) to install Ollama.
+
+2. **Download Ollama embeddings model**: We use `mxbai-embed-large` model in BaseAI.
+
+```bash
+ollama pull mxbai-embed-large
+```
+
+3. **Initialize BaseAI**: Use following command to initialize BaseAI in your project directory.
+
+```bash
+npx baseai@latest init
+```
+
+<Note>
+BaseAI uses the default Ollama local url `http://localhost:11434` to connect to the Ollama model. Make sure the Ollama model is running on this url.
+</Note>
+
+---
+
+## Step #1: Create a Memory
+
+Create a new memory using the `memory` command. It will ask you for name and description of the memory. Use `chat-with-docs` as the memory name.
+
+```bash
+baseai memory
+```
+
+It creates a memory at `baseai/memory/chat-with-docs` in your current directory. Add documents to `baseai/memory/chat-with-docs/documents` to use them in the memory.
+
+
+---
+
+## Step #2: Configure BaseAI to use Ollama embeddings
+
+Use following command to configure BaseAI to use Ollama embeddings.
+
+```bash
+npx baseai@latest config embeddings --local true
+```
+
+This command will set the `useLocalEmbeddings` flag to `true` in the BaseAI configuration file. This flag tells BaseAI to use the local Ollama embeddings model.
+
+<CodeGroup exampleTitle="BaseAI Configuration" title="Configure BaseAI to use Ollama embeddings">
+
+```ts {{ title: './baseai/baseai.config.ts' }}
+import type {BaseAIConfig} from '@baseai/core';
+
+export const config: BaseAIConfig = {
+  "log": {
+    "isEnabled": true,
+    "logSensitiveData": false,
+    "pipe": true,
+    "pipe.completion": true,
+    "pipe.request": true,
+    "pipe.response": true,
+    "tool": false,
+    "memory": false
+  },
+  "memory": {
+    "useLocalEmbeddings": true
+  }
+};
+```
+
+</CodeGroup>
+
+---
+## Step #3: Create embeddings
+
+Save [Pipe FAQs](https://langbase.com/docs/pipe/faqs) page as a `.pdf` or `.txt` and add it to the memory.
+
+Next, create embeddings for the documents using the `embed` command. It will embed the documents and create a semantic index for the memory. Pass the memory name to the `embed` command using the `--memory` flag or `-m` for short.
+
+It will use the Ollama embeddings model to generate embeddings for the documents in the memory.
+
+```bash
+baseai embed -m chat-with-docs
+```
+
+Once the embeddings are created, it will print a success message in the terminal.
+
+## Step #4: Create a Pipe and Connect Memory
+
+Let's create a [Pipe](/docs/pipe/quickstart) and connect memory to it. Use the `pipe` command to create a new pipe. In addition to the pipe name and description, it will ask you to select the memory to use.
+
+Use `chat-with-docs-rag` as the pipe name and select the memory `chat-with-docs` to connect it to the pipe.
+
+```bash
+baseai pipe
+```
+
+It will create a pipe in your current directory under `baseai/pipes/chat-with-docs-rag.ts`. It prints the path in the terminal. You can open the file and see the details.
+
+
+## Step #5: Use the Pipe
+
+In your `index.ts` file, add the following code:
+
+```ts
+import { Pipe, streamText, getRunner } from '@baseai/core';
+import chatWithDocsPipeConfig from './baseai/pipes/chat-with-docs-rag';
+
+// Instantiate the pipe
+const pipe = new Pipe(chatWithDocsPipeConfig());
+
+async function main() {
+	const {stream} = await streamText({
+		pipe,
+		messages: [{role: 'user', content: 'How to create a pipe?'}],
+	});
+
+	// Convert the stream to a stream runner.
+	const runner = getRunner(stream);
+
+	// Listen for events.
+	runner.on('connect', () => {
+		console.log('Stream started.\n');
+	});
+
+	runner.on('content', content => {
+		process.stdout.write(content);
+	});
+
+	runner.on('end', () => {
+		console.log('\nStream ended.');
+	});
+
+	runner.on('error', error => {
+		console.error('Error:', error);
+	});
+}
+
+main();
+
+```
+
+
+## Step #6: Run the dev server
+
+Use the following command to run the dev server:
+
+```bash
+npx baseai@latest dev
+```
+
+This listens to all LLM requests and runs the pipe on the LLM model. It will prompt the LLM model to get answers to your questions.
+
+
+## Step #7: Run the code
+
+Run `index.ts` file using the following command:
+
+```bash
+npx tsx index.ts
+```
+
+For the question, `How to create a pipe?`, it gives you the answer from the memory.
+
+```txt
+To create a Pipe, follow these steps:
+
+1. **Choose an LLM Model**: Select any Large Language Model (LLM) that you want to use. By default, OpenAI gpt-4o-mini is selected.
+
+2. **Set Up the Pipe Type**: Decide whether your Pipe will be of type "generate" or "chat." If it’s a generate type, you’ll focus on running generative tasks; if it’s a chat pipe, you’ll set it up for conversational interactions.
+
+3. **Configure System Prompt Instruction**: Write an initial setup or instruction for the LLM. This will configure how the model behaves and responds to prompts.
+
+4. **Add User Prompts**: Define what kind of inputs users can provide to interact with the model.
+
+5. **Include AI Prompts**: Prepare outputs that represent how the LLM should respond based on user prompts.
+
+6. **Edit Readme (Optional)**: You can add or edit a readme in your Pipe for documentation purposes by scrolling down in the Pipe interface where this option is available.
+
+7. **Run Your Pipe**:
+   - For generate type Pipes, simply run it directly.
+   - For chat Pipes, write “hello” in Playground and then run the Pipe.
+
+Make sure all API keys are properly configured before starting!
+```
+
+---

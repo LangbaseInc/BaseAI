@@ -1,0 +1,43 @@
+---
+title: 'Retrieve'
+description: "Retrieve similar chunks of information from memory using BaseAI CLI."
+tags:
+    - baseai
+    - memory
+    - langbase
+    - retrieve
+section: 'Memory'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Retrieve Memory
+
+Retrieve similar chunks of information from memory using BaseAI CLI.
+
+<Note>
+Please make sure to add `OPENAI_API_KEY` to `.env` file in the root of your project. This is required to generate embeddings for the documents in the memory.
+</Note>
+
+---
+
+## Step #0 Prerequisites
+
+Make sure you have a memory [created and embedded](/docs/memory/create).
+
+---
+
+## Step #1 Retrieve information
+
+Retrieve similar chunks of information from memory using the `retrieve` command. You need to provide the memory name and the query to retrieve the information.
+
+**Upto 20 similar chunks** of information are retrieved from the memory for the query. The output contains the information, similarity score, and the source of the information.
+
+The output is from memory created in [quickstart guide](/docs/memory/quickstart).
+
+
+```bash
+baseai retrieve -m chat-with-docs -q "Default LLM"
+```
+
+---
