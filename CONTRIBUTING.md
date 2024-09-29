@@ -2,6 +2,8 @@
 
 We welcome contributions to this project.
 
+---
+
 ## Releasing a new version
 
 ```bash
@@ -9,6 +11,29 @@ pnpm changeset
 pnpm version-packages && grlz 'new version'
 pnpm release
 ```
+## Testing locally
+
+To test the changes locally, you can run the following command:
+
+- Use an example like the Next.js one
+- Change the `package.json` to point to the local package for `baseai` and `@baseai/core` packages.
+
+```json
+{
+  "dependencies": {
+    "@baseai/core": "workspace:*"
+  },
+    "devDependencies": {
+        "baseai": "workspace:*"
+    }
+}
+```
+
+Now run in the root `pnpm clean-all && pnpm install` and then run `pnpm dev` to start the development server.
+
+By doing this, the Next.js app will use the local packages instead of the published ones.
+
+---
 
 ## Docs
 
