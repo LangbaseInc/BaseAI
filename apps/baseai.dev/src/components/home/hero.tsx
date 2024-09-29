@@ -84,7 +84,7 @@ function Content() {
 						Learn BaseAI
 					</Link>
 				</div>
-				<CopyableCommand command="npx baseai@latest init" />
+				<CopyableCommand command="npx baseai@latest" />
 			</div>
 		</div>
 	);
