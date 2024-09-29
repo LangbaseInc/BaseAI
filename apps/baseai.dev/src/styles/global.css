@@ -75,9 +75,7 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-	img {
-		display: inline-block !important;
-	}
+
 }
 
 ::selection {
