@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/baseai"><img alt="" src="https://img.shields.io/npm/v/baseai?style=for-the-badge&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLangbaseInc%2Fdocs-images%2Frefs%2Fheads%2Fmain%2Fbaseai%2Fbaseai-icon.png&logoColor=%23000&labelColor=%23000&color=%2318181B"></a>
-  <a aria-label="License" href="https://github.com/langbaseinc/baseai"><img alt="license" src="https://img.shields.io/npm/l/baseai?style=for-the-badge&logoColor=%23000&labelColor=%23000&color=%2318181B"></a>
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/baseai"><img alt="" src="https://img.shields.io/npm/v/@baseai/core?style=for-the-badge&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLangbaseInc%2Fdocs-images%2Frefs%2Fheads%2Fmain%2Fbaseai%2Fbaseai-icon.png&logoColor=%23000&labelColor=%23000&color=%2318181B"></a>
+  <a aria-label="License" href="https://github.com/langbaseinc/baseai"><img alt="license" src="https://img.shields.io/npm/l/@baseai/core?style=for-the-badge&logoColor=%23000&labelColor=%23000&color=%2318181B"></a>
 </p>
 
 ## Getting Started
