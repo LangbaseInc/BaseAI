@@ -37,4 +37,4 @@ The following are the original authors of BaseAI:
 
 ## Security
 
-If you've found a security vulnerability in BaseAI, please report it privately by emailing [security@langbase.com](mailto:security@langbase.com). Please do not open a public issue. For more details on Langbase [security](https://langbase.com/security) and how to report, visit this link.
+If you've found a security vulnerability in BaseAI, please report it privately by emailing [security@langbase.com](mailto:security@langbase.com). Please do not open a public issue. For more details on Langbase security and how to report, visit this [link](https://langbase.com/security).
