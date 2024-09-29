@@ -47,6 +47,16 @@ export const schemaMessage = z
 
 export type Message = z.infer<typeof schemaMessage>;
 
+export const VariableSchema = z.object({
+	name: z.string(),
+	value: z.string()
+});
+
+export const VariablesSchema = z.array(VariableSchema).default([]);
+
+export type VariablesI = z.infer<typeof VariablesSchema>;
+export type VariableI = z.infer<typeof VariableSchema>;
+
 interface ToolFunction {
 	name: string;
 }
@@ -89,7 +99,7 @@ export interface Pipe {
 	tool_choice: ToolChoice;
 	parallel_tool_calls: boolean;
 	messages: Message[];
-	variables: any[];
+	variables: VariablesI;
 	tools: PipeTool[];
 	memory: {
 		name: string;
@@ -126,7 +136,7 @@ export interface PipeOld {
 			opening: string;
 			safety: string;
 			messages: { role: string; content: string }[];
-			variables: any[];
+			variables: VariablesI;
 			json: string;
 			rag: string;
 		};
