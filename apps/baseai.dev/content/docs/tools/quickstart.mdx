@@ -33,15 +33,6 @@ Let's build a tool locally using BaseAI that will return the current weather for
 
 ---
 
-
-## Step #0: Initialize BaseAI
-
-Please initialize BaseAI in your project using the following command:
-
-```bash
-npx baseai@latest init
-```
-
 ## Step #1: Create a weather tool
 
 We need to create a tool now. To do it, inside your project, run the following command in the terminal:
@@ -344,7 +335,15 @@ Once you have created the `.env` file, add your OpenAI key to it.
 OPENAI_API_KEY="your-open-ai-key" # Add your OpenAI API key in .env file
 ```
 
-## Step #4: Run the code
+## Step #4 Start baseai server
+
+To run the pipe locally, you need to start the BaseAI server. Run the following command in your terminal:
+
+```bash
+npx baseai@latest dev
+```
+
+## Step #5: Run the code
 
 Run the `index.ts` file using the following command:
 
