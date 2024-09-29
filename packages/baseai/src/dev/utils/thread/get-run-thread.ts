@@ -1,19 +1,22 @@
 import { ApiError } from '@/dev/hono/errors';
 import type { Pipe } from '@/dev/routes/beta/pipes/run';
 import type { SimilarChunk } from '@/utils/memory/db/lib';
-import type { Message } from 'types/pipe';
+import type { Message, VariablesI } from 'types/pipe';
 import { dlog } from '../dlog';
 import { getPipeFewShotsMessages } from './get-few-shot-messages';
 import { getSystemPromptMessage } from './get-system-prompt';
+import { processMessages } from './process-messages';
 
 export function getRunThread({
 	pipe,
 	messages,
-	similarChunks
+	similarChunks,
+	variables
 }: {
 	pipe: Pipe;
 	messages: Message[];
 	similarChunks: SimilarChunk[] | undefined;
+	variables?: VariablesI;
 }) {
 	try {
 		const systemPromptMessage = getSystemPromptMessage({
@@ -30,7 +33,13 @@ export function getRunThread({
 			...messages
 		];
 
-		return messagesThread;
+		const { messages: messagesThreadWithVars } = processMessages({
+			pipe,
+			messages: messagesThread,
+			variables
+		});
+
+		return messagesThreadWithVars;
 	} catch (error: any) {
 		dlog('Error get-run-thread.ts:', error);
 
