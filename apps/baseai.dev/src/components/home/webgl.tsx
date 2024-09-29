@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import html2canvas from 'html2canvas';
 
 const WebGLInitializer = () => {
 	const mountRef = useRef<HTMLDivElement | null>(null);
+	const textRef = useRef<HTMLDivElement | null>(null);
 	const [mousePosition, setMousePosition] = useState<THREE.Vector2>(
 		new THREE.Vector2(0, 0)
 	);
@@ -29,7 +31,6 @@ const WebGLInitializer = () => {
 
 		// Create a background texture with text
 		const canvas = document.createElement('canvas');
-		const ctx = canvas.getContext('2d');
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
@@ -42,46 +43,114 @@ const WebGLInitializer = () => {
 		// 		? window.innerHeight * 1.25
 		// 		: window.innerHeight * 2;
 
-		const createBackgroundTexture = (width: number, height: number) => {
-			const canvas = document.createElement('canvas');
-			const ctx = canvas.getContext('2d');
-			canvas.width = width;
-			canvas.height = height;
+		// const createBackgroundTexture = (width: number, height: number) => {
+		// 	const canvas = document.createElement('canvas');
+		// 	const ctx = canvas.getContext('2d');
+		// 	canvas.width = width;
+		// 	canvas.height = height;
 
-			if (ctx) {
-				ctx.fillStyle = '#000000';
-				ctx.fillRect(0, 0, canvas.width, canvas.height);
+		// 	if (ctx) {
+		// 		ctx.fillStyle = '#000000';
+		// 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-				// Calculate font size based on screen dimensions
-				const baseFontSize = width * 0.19; // 18.5% of the smaller dimension
-				ctx.font = `bold ${baseFontSize}px Grotesk`;
+		// 		// Calculate font size based on screen dimensions
+		// 		const baseFontSize = width * 0.19; // 18.5% of the smaller dimension
+		// 		ctx.font = bold ${baseFontSize}px Grotesk;
 
-				ctx.fillStyle = '#ffffff';
-				ctx.textAlign = 'center';
-				ctx.textBaseline = 'middle';
-				ctx.fillText('BASE AI', canvas.width / 2, canvas.height / 2);
-			}
+		// 		ctx.fillStyle = '#ffffff';
+		// 		ctx.textAlign = 'center';
+		// 		ctx.textBaseline = 'middle';
+		// 		ctx.fillText('BASE AI', canvas.width / 2, canvas.height / 2);
+		// 	}
 
-			const bgTexture = new THREE.CanvasTexture(canvas);
-			bgTexture.wrapS = THREE.RepeatWrapping;
-			bgTexture.wrapT = THREE.RepeatWrapping;
-			return bgTexture;
+		// 	const bgTexture = new THREE.CanvasTexture(canvas);
+		// 	bgTexture.wrapS = THREE.RepeatWrapping;
+		// 	bgTexture.wrapT = THREE.RepeatWrapping;
+		// 	return bgTexture;
+		// };
+
+		const fontFace = new FontFace(
+			'Grotesk',
+			'url(/AlteHaasGroteskBold.ttf)'
+		);
+		document.fonts.add(fontFace);
+
+		const textDiv = document.createElement('div');
+		textDiv.style.display = 'inline-block';
+		textDiv.style.position = 'absolute';
+		textDiv.style.left = '0';
+		textDiv.style.top = '0';
+		textDiv.style.width = '100%';
+		textDiv.style.height = '100%';
+		textDiv.style.fontSize = `${window.innerWidth * 0.155}px`;
+		textDiv.style.fontWeight = 'bold';
+		textDiv.style.fontFamily = 'Grotesk, sans-serif';
+		textDiv.style.color = 'rgba(255,255,255,1)';
+		textDiv.style.display = 'flex';
+		textDiv.style.justifyContent = 'center';
+		textDiv.style.alignItems = 'center';
+		textDiv.textContent = 'BASE AI';
+		textDiv.style.zIndex = '-1';
+
+		const style = document.createElement('style');
+		style.textContent = `
+    @font-face {
+      font-family: 'Grotesk';
+      src: url('/AlteHaasGroteskBold.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  `;
+		document.head.appendChild(style);
+
+		const PIXEL_RATIO = 2;
+		const createHighResBackgroundTexture = async (
+			width: number,
+			height: number
+		) => {
+			const scale = PIXEL_RATIO;
+			textDiv.style.width = `${width}px`;
+			textDiv.style.height = `${height}px`;
+			textDiv.style.fontSize = `${width * 0.195}px`;
+
+			await document.fonts.ready;
+			document.body.appendChild(textDiv);
+
+			const canvas = await html2canvas(textDiv, {
+				backgroundColor: '#000000',
+				scale: scale,
+				width: width,
+				height: height,
+				logging: false,
+				// foreignObjectRendering: true,
+				useCORS: true
+			});
+
+			const texture = new THREE.CanvasTexture(canvas);
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			return texture;
 		};
 
-		// Initial background texture creation
-		let bgTexture = createBackgroundTexture(
-			window.innerWidth,
-			window.innerHeight
-		);
-		scene.background = bgTexture;
+		const createInitialTexture = async () => {
+			const texture = await createHighResBackgroundTexture(
+				window.innerWidth,
+				window.innerHeight
+			);
+			scene.background = texture;
+			if (material.uniforms && material.uniforms.u_background) {
+				material.uniforms.u_background.value = texture;
+			}
+		};
 
-		// Create a sphere geometry
+		createInitialTexture();
+
 		const geometry = new THREE.SphereGeometry(0.75, 256, 256);
 
 		const textureLoader = new THREE.TextureLoader();
 		const envMapSize = Math.max(window.innerWidth, window.innerHeight) * 2;
 		const envMap = textureLoader.load(
-			'./texture/panoenv6.jpg',
+			'./texture/panoenv9.jpg',
 			undefined,
 			undefined,
 			() => {
@@ -112,14 +181,14 @@ const WebGLInitializer = () => {
 						window.innerHeight
 					)
 				},
-				u_background: { value: bgTexture },
+				u_background: { value: null },
 				u_viewVector: { value: camera.position },
 				envMap: { value: envMap },
 				roughness: { value: 0.0 },
 				metalness: { value: 5 },
 				color: { value: new THREE.Color(0x3366ff) },
 				u_mouse: { value: new THREE.Vector3() },
-				u_lightDirection: { value: new THREE.Vector3(0, 1, 1) }, // Light from front
+				u_lightDirection: { value: new THREE.Vector3(0, 1, 1) } // Light from front
 			},
 			// change noise functions to perlin noise
 			vertexShader: `
@@ -286,11 +355,11 @@ void main() {
         float fresnel = pow(fresnelBase, 1.0);
 
     // Calculate distance from the center of the sphere
-    vec2 centeredPos = vec2(vViewPosition.x, vViewPosition.y) - vec2(0.0, 0.0);
+    vec2 centeredPos = vec2(vViewPosition.x / 4., vViewPosition.y) - vec2(0.0, 0.0);
     float distanceFromCenter = length(centeredPos);
 
     // Adjust reflection strength based on distance from center
-    float reflectionStrength = smoothstep(0.0, 0.0, distanceFromCenter);
+    float reflectionStrength = smoothstep(0.0, 0.5, distanceFromCenter);
 
     // Sample reflection color from both the background and envMap
     vec2 reflectedUV = reflection.xy * 1.0 * reflectionStrength;
@@ -384,18 +453,13 @@ void main() {
 	float fresnelDark = smoothstep(0.0, 1.0, fresnel);
 	float normalYDark = smoothstep(-1.0, -1.0, vNormal.y);
 	float darkHighlightStrength = fresnelDark * normalYDark;
-
-	// Base color (dark)
-	vec3 baseDarkHighlightColor = vec3(0.0, 0.0, 0.0);
-
+  
 	// Highlight color (dark)
-	vec3 darkHighlightColor = vec3(0., 0., 0.);
+	vec3 darkHighlightColor = vec3(.5, .5, .5);
 
 	// Mix base color with highlight
 	vec3 mixedDarkHighlight = mix(reflectedColor.rgb, darkHighlightColor, darkGradient);
-	finalColor = mix(finalColor, mixedDarkHighlight, darkHighlightStrength * 0.5);
-
-
+	finalColor = mix(finalColor, mixedDarkHighlight, darkHighlightStrength * 0.25);
 
  // White highlights
     float normalizedNoise = (vNoise + 1.0) * 0.5; // Normalize noise to 0-1 range
@@ -417,7 +481,7 @@ void main() {
     float whiteHighlightStrength = fresnelWhite * normalYWhite * NdotLL * stripHighlight;
 
     // Base color (dark)
-    vec3 baseDarkColor = vec3(0.25, 0.25, 0.25);
+    vec3 baseDarkColor = vec3(0.1, 0.1, 0.1);
 
     // Highlight color (white)
     vec3 whiteHighlightColor = vec3(1., 1., 1.);
@@ -536,12 +600,12 @@ void main() {
 			updateCameraPosition();
 
 			// Update background texture with new dimensions
-			bgTexture = createBackgroundTexture(width, height);
-			scene.background = bgTexture;
-
-			if (material.uniforms && material.uniforms.u_background) {
-				material.uniforms.u_background.value = bgTexture;
-			}
+			createHighResBackgroundTexture(width, height).then(texture => {
+				scene.background = texture;
+				if (material.uniforms && material.uniforms.u_background) {
+					material.uniforms.u_background.value = texture;
+				}
+			});
 		};
 
 		window.addEventListener('resize', onWindowResize);
