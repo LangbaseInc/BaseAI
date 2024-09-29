@@ -4,7 +4,7 @@ import { dlog } from '@/dev/utils/dlog';
 import { handleStreamingResponse } from '@/dev/utils/provider-handlers/streaming-response-handler';
 import { logger } from '@/utils/logger-utils';
 import { Hono } from 'hono';
-import { schemaMessage } from 'types/pipe';
+import { schemaMessage, VariablesSchema } from 'types/pipe';
 import { z } from 'zod';
 
 // Schema definitions
@@ -33,7 +33,8 @@ const PipeSchema = z.object({
 	model: ModelSchema,
 	messages: z.array(schemaMessage),
 	functions: z.array(z.unknown()).default([]),
-	memorysets: z.array(z.string().trim().min(1)).default([])
+	memorysets: z.array(z.string().trim().min(1)).default([]),
+	variables: VariablesSchema
 });
 
 export type Pipe = z.infer<typeof PipeSchema>;
@@ -42,7 +43,8 @@ const RequestBodySchema = z.object({
 	pipe: PipeSchema,
 	stream: z.boolean(),
 	messages: z.array(schemaMessage),
-	llmApiKey: z.string()
+	llmApiKey: z.string(),
+	variables: VariablesSchema.optional()
 });
 
 type RequestBody = z.infer<typeof RequestBodySchema>;

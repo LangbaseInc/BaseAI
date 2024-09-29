@@ -1,4 +1,4 @@
-import type { Pipe } from '@/dev/routes/pipes/run';
+import type { Pipe } from '@/dev/routes/beta/pipes/run';
 import type { Message } from 'types/pipe';
 
 export function getPipeFewShotsMessages(pipe: Pipe): Message[] {

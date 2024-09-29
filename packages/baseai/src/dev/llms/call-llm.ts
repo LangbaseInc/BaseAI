@@ -11,7 +11,7 @@ import {
 } from '@/dev/data/models';
 
 import { addContextFromMemory } from '@/utils/memory/lib';
-import type { Message } from 'types/pipe';
+import type { Message, VariablesI } from 'types/pipe';
 import { ApiError } from '../hono/errors';
 import type { Pipe } from '../routes/beta/pipes/run';
 import { dlog } from '../utils/dlog';
@@ -30,12 +30,14 @@ export async function callLLM({
 	pipe,
 	stream,
 	messages,
-	llmApiKey
+	llmApiKey,
+	variables
 }: {
 	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
+	variables?: VariablesI;
 }) {
 	try {
 		// Get the model provider from the pipe config.
@@ -51,7 +53,8 @@ export async function callLLM({
 		const messagesThread = getRunThread({
 			pipe,
 			messages,
-			similarChunks
+			similarChunks,
+			variables
 		});
 		messages = messagesThread;
 
