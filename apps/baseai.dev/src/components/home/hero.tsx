@@ -18,7 +18,7 @@ export default function Hero({}) {
 
 function Content() {
 	return (
-		<div className="hero-content z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-28 sm:min-h-[77.5vh] sm:w-[76vw]">
+		<div className="z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-28 sm:min-h-[77.5vh] sm:w-[76vw]">
 			<div className="helvetica flex justify-between">
 				<div className="flex items-center">
 					<div className="mr-[1.5vw] hidden h-2.5 w-2.5 rounded-full bg-white sm:block 2xl:h-[.75vw] 2xl:w-[.75vw]"></div>
@@ -35,8 +35,8 @@ function Content() {
 			</div>
 
 			<div className="flex flex-col items-center sm:items-start">
-				<div className="helvetica flex w-full flex-col-reverse items-center justify-between sm:flex-row sm:items-start">
-					<div className="text-left sm:max-w-[40%]">
+				<div className="helvetica flex w-full flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-between sm:flex-row sm:items-start">
+					<div className="text-left sm:max-w-[70%] md:max-w-[60%] lg:max-w-[40%]">
 						<div className="text-center text-sm sm:text-left 2xl:text-[1vw] 2xl:leading-[1.5vw]">
 							<strong> Base AI: </strong> The Web AI Framework.
 							<p>
@@ -46,7 +46,7 @@ function Content() {
 							</p>
 						</div>
 					</div>
-					<div className="flex h-max items-center">
+					<div className="flex h-max items-center self-none sm:self-end md:self-start">
 						<span className="mb-5 text-sm sm:mb-0 2xl:text-[1vw] 2xl:leading-[1vw]">
 							Agentic Pipes, Tools, Memory
 						</span>
@@ -54,7 +54,7 @@ function Content() {
 					</div>
 				</div>
 
-				<div className="sm:justify-left flex space-x-4">
+				<div className="sm:justify-left mt-4 flex space-x-4">
 					<Link
 						href={`/docs`}
 						className="flex items-center rounded-full bg-gray-200 px-4 py-2 text-xs text-black outline-1 outline-[#2A2A2A] transition-colors hover:bg-[#282828] hover:text-white hover:outline 2xl:px-[1vw]  2xl:py-[.65vw] 2xl:text-[.85vw] 2xl:leading-[1vw]"
@@ -84,7 +84,7 @@ function Content() {
 						Learn BaseAI
 					</Link>
 				</div>
-				<CopyableCommand command="npx baseai@latest" />
+				<CopyableCommand command="npx baseai@latest init" />
 			</div>
 		</div>
 	);
@@ -109,7 +109,7 @@ function CopyableCommand({ command }: CopyableCommandProps) {
 
 	return (
 		<div
-			className="group mb-4 mt-4 flex w-max cursor-pointer items-center justify-between font-mono text-sm transition-colors"
+			className="group mt-4 flex w-max cursor-pointer items-center justify-between font-mono text-sm transition-colors"
 			onClick={copyToClipboard}
 			role="button"
 			tabIndex={0}

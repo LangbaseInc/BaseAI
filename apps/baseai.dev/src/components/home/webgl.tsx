@@ -76,7 +76,7 @@ const WebGLInitializer = () => {
 		document.fonts.add(fontFace);
 
 		const textDiv = document.createElement('div');
-		textDiv.style.display = 'inline-block';
+		// textDiv.style.display = 'inline-block';
 		textDiv.style.position = 'absolute';
 		textDiv.style.left = '0';
 		textDiv.style.top = '0';
@@ -94,7 +94,7 @@ const WebGLInitializer = () => {
 
 		const style = document.createElement('style');
 		style.textContent = `
-    @font-face {
+   	 @font-face {
       font-family: 'Grotesk';
       src: url('/AlteHaasGroteskBold.ttf') format('truetype');
       font-weight: normal;
@@ -111,7 +111,7 @@ const WebGLInitializer = () => {
 			const scale = PIXEL_RATIO;
 			textDiv.style.width = `${width}px`;
 			textDiv.style.height = `${height}px`;
-			textDiv.style.fontSize = `${width * 0.195}px`;
+			textDiv.style.fontSize = `${width * 0.21}px`;
 
 			await document.fonts.ready;
 			document.body.appendChild(textDiv);
@@ -122,8 +122,8 @@ const WebGLInitializer = () => {
 				width: width,
 				height: height,
 				logging: false,
-				// foreignObjectRendering: true,
-				useCORS: true
+				foreignObjectRendering: true,
+				// useCORS: true
 			});
 
 			const texture = new THREE.CanvasTexture(canvas);

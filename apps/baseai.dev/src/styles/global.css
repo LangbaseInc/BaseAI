@@ -110,10 +110,20 @@
 	font-style: normal;
 }
 
-.hero-content{
+.hero-content {
 	font-family: "Grotesk";
 }
 
-.helvetica{
+.helvetica {
 	font-family: "Helvetica";
 }
+
+/* global.css */
+@tailwind base;
+@layer base {
+  img {
+    @apply inline-block;
+  }
+}
+@tailwind components;
+@tailwind utilities;
