@@ -1,5 +1,11 @@
 # baseai
 
+## 0.0.23
+
+### Patch Changes
+
+-   👌 IMPROVE: internal lingo
+
 ## 0.0.22
 
 ### Patch Changes
