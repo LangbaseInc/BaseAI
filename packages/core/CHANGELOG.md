@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.0.27
+
+### Patch Changes
+
+-   🐛 FIX: config import
+
 ## 0.0.26
 
 ### Patch Changes
