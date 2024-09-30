@@ -1,4 +1,4 @@
-import { getDocsBySlug } from "@/lib/get-docs-by-slug";
+import { getLearnBySlug } from "@/lib/get-learn-by-slug";
 import { FrontmatterT } from "@/types/markdown";
 
 export async function generateMetadata({
@@ -9,7 +9,7 @@ export async function generateMetadata({
 	let frontmatter: FrontmatterT;
 
 	if (process.env.NODE_ENV === 'production') {
-		const data = await getDocsBySlug({
+		const data = await getLearnBySlug({
 			section: 'learn',
 			slug: params.section
 		});
