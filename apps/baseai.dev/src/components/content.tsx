@@ -18,6 +18,9 @@ export default function Content({
 		Record<string, unknown>
 	>;
 }) {
+	console.log('env', process.env);
+	console.log('__NEXT_PRIVATE_ORIGIN', process.env.__NEXT_PRIVATE_ORIGIN!);
+
 	return (
 		<Wrapper>
 			{content && (
