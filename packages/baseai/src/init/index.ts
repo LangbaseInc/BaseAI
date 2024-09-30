@@ -289,11 +289,11 @@ TOGETHER_API_KEY=
 		const exists = await checkFileExists(envBaseAIExamplePath);
 		if (!exists) {
 			await fs.writeFile(envBaseAIExamplePath, envBaseAIExampleContent);
-			p.log.success('Created `.env.baseai.example` file.');
+			// p.log.success('Created `.env.baseai.example` file.');
 		} else {
-			p.log.info(
-				'`.env.baseai.example` file already exists. Skipping creation.'
-			);
+			// p.log.info(
+			// 	'`.env.baseai.example` file already exists. Skipping creation.'
+			// );
 		}
 	} catch (error) {
 		p.log.error(
