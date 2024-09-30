@@ -1,7 +1,7 @@
 import build from '@/build';
 import { OLLAMA } from '@/dev/data/models';
 import { dlog } from '@/dev/utils/dlog';
-import { cyan, green } from '@/utils/formatting';
+import { cyan, dim, green } from '@/utils/formatting';
 import { heading } from '@/utils/heading';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 import { MEMORYSETS } from '@/utils/memory/constants';
@@ -81,13 +81,17 @@ async function deploy({
 		}
 
 		await deployPipes({ spinner, pipes, pipesDir, account });
+
 		p.outro(
+			heading({ text: 'DEPLOYED', sub: 'successfully', green: true })
+		);
+
+		console.log(
 			`\n Make sure ${cyan(`LANGBASE_API_KEY`)} exists in your production environment.
-${green(`Successfully deployed:`)}
-${green(`- ${pipes?.length} pipe${pipes.length !== 1 ? 's' : ''}
-- ${tools?.length} tool${tools?.length !== 1 ? 's' : ''}
-- ${memory?.length ?? 0} memory${memory?.length !== 1 ? 'sets' : ''}`)}
-`
+${dim(`Successfully deployed:`)}
+${dim(`- ${green(pipes?.length)} pipe${pipes.length !== 1 ? 's' : ''}
+- ${green(tools?.length ?? 0)} tool${tools?.length !== 1 ? 's' : ''}
+- ${green(memory?.length ?? 0)} memory${memory?.length !== 1 ? 'sets' : ''}`)}`
 		);
 	} catch (error) {
 		handleError({
