@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: 'BaseAI - Web AI Framework',
 		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-		images: ['https://baseai.dev/api/og?title=baseai.dev'],
+		images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg'],
 		siteName: 'BaseAI'
 	},
 	twitter: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 		title: 'BaseAI - Web AI Framework',
 		creator: '@LangbaseInc',
 		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-		images: ['https://baseai.dev/api/og?title=baseai.dev']
+		images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg']
 	},
 	authors: [{ name: 'Langbase, Inc.' }],
 	robots: {
