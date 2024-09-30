@@ -24,7 +24,7 @@ function Content() {
 	return (
 		<div
 			className={cn(
-				'hero-content z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-28 sm:min-h-[77.5vh] sm:w-[76vw]'
+				'hero-content z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-24 sm:min-h-[77.5vh] sm:w-[76vw]'
 			)}
 		>
 			<div className={cn(' flex justify-between', inter.className)}>
@@ -44,7 +44,7 @@ function Content() {
 
 			<div
 				className={cn(
-					'mt-[16rem] flex flex-col items-center sm:mt-[22rem] lg:mt-[28rem] lg:mt-[28rem] 2xl:mt-[42rem]'
+					'mt-[16rem] flex flex-col items-center sm:mt-[22rem] lg:mt-[28rem] lg:mt-[28rem] 2xl:mt-[40rem]'
 				)}
 			>
 				<div
@@ -55,11 +55,17 @@ function Content() {
 				>
 					<div className="text-left lg:max-w-[60%]">
 						<div className="text-center text-sm lg:text-left 2xl:text-[1vw] 2xl:leading-[1.5vw]">
-							<span className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 lg:inline-block" />
-							<strong> Base AI </strong>{' '}
-							<span className="text-muted-foreground/90">
-								The first Web AI Framework.
-							</span>
+							<div className="flex items-center">
+								<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
+								<span className="text-sm text-muted-foreground/70 2xl:text-[1vw] 2xl:leading-[1vw]">
+									<strong className="mr-2 text-white">
+										Base AI
+									</strong>{' '}
+									<span className="text-muted-foreground/90">
+										The first Web AI Framework.
+									</span>
+								</span>
+							</div>
 							<p className="mr-4 mt-4 text-muted-foreground/90 md:max-w-[500px] lg:max-w-full">
 								The easiest way to build serverless autonomous
 								AI agents with memory. Start building
@@ -129,7 +135,8 @@ function CopyableCommand({ command }: CopyableCommandProps) {
 
 	return (
 		<div
-			className="group mx-auto mb-4 mt-4 flex w-max cursor-pointer items-center justify-center font-mono text-sm transition-colors lg:mx-0"
+			className="group my-4 flex w-full cursor-pointer items-center justify-center font-mono text-sm transition-colors lg:items-start lg:justify-start "
+			// "mx-auto mt-8 flex w-full items-center justify-center space-x-2 lg:items-start lg:justify-start"
 			onClick={copyToClipboard}
 			role="button"
 			tabIndex={0}
@@ -147,37 +154,37 @@ function CopyableCommand({ command }: CopyableCommandProps) {
 				<span className="font-mono text-muted-foreground/50 transition-colors group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw] ">
 					{command}
 				</span>
-			</div>
-			<div className="ml-2 text-muted-foreground/50 transition-colors group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw]">
-				{copied ? (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						className="h-[1em] w-[1em]"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-					>
-						<path
-							fillRule="evenodd"
-							d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-							clipRule="evenodd"
-						/>
-					</svg>
-				) : (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						className="h-[1em] w-[1em]"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-						/>
-					</svg>
-				)}
+				<div className="ml-2 text-muted-foreground/50 transition-colors group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw]">
+					{copied ? (
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-[1em] w-[1em]"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+						>
+							<path
+								fillRule="evenodd"
+								d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+								clipRule="evenodd"
+							/>
+						</svg>
+					) : (
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-[1em] w-[1em]"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+							/>
+						</svg>
+					)}
+				</div>
 			</div>
 		</div>
 	);
