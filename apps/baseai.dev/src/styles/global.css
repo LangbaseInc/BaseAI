@@ -116,25 +116,3 @@ html {
 	font-weight: normal;
 	font-style: normal;
 }
-
-.hero-content {
-	font-family: 'Grotesk';
-.hero-content {
-	font-family: "Grotesk";
-}
-
-.helvetica {
-	font-family: 'Helvetica';
-.helvetica {
-	font-family: "Helvetica";
-}
-
-/* global.css */
-@tailwind base;
-@layer base {
-  img {
-    @apply inline-block;
-  }
-}
-@tailwind components;
-@tailwind utilities;

@@ -92,16 +92,16 @@ const WebGLInitializer = () => {
 		textDiv.textContent = 'BASE AI';
 		textDiv.style.zIndex = '-1';
 
-		const style = document.createElement('style');
-		style.textContent = `
-   	 @font-face {
-      font-family: 'Grotesk';
-      src: url('/AlteHaasGroteskBold.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-  `;
-		document.head.appendChild(style);
+// 		const style = document.createElement('style');
+// 		style.textContent = `
+//    	 @font-face {
+//       font-family: 'Grotesk';
+//       src: url('/AlteHaasGroteskBold.ttf') format('truetype');
+//       font-weight: normal;
+//       font-style: normal;
+//     }
+//   `;
+// 		document.head.appendChild(style);
 
 		const PIXEL_RATIO = 2;
 		const createHighResBackgroundTexture = async (
@@ -111,7 +111,7 @@ const WebGLInitializer = () => {
 			const scale = PIXEL_RATIO;
 			textDiv.style.width = `${width}px`;
 			textDiv.style.height = `${height}px`;
-			textDiv.style.fontSize = `${width * 0.21}px`;
+			textDiv.style.fontSize = `${width * 0.209}px`;
 
 			await document.fonts.ready;
 			document.body.appendChild(textDiv);
