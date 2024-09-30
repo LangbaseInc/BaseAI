@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.9.0
+
+### Minor Changes
+
+-   📦 NEW: ready for prod
+
 ## 0.0.29
 
 ### Patch Changes
