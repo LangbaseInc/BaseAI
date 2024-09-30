@@ -1,0 +1,27 @@
+---
+import './globals.css';
+
+interface Props {
+	title: string;
+}
+
+const {title} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Langbase with an Astro App" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<title>{title}</title>
+	</head>
+	<body class="min-h-screen bg-background font-sans antialiased">
+		<div
+			class="min-h-screen bg-gray-50 flex items-center justify-center p-4"
+		>
+			<slot />
+		</div>
+	</body>
+</html>

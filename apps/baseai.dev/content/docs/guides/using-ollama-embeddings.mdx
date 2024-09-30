@@ -52,7 +52,7 @@ BaseAI uses the default Ollama local url `http://localhost:11434` to connect to 
 Create a new memory using the `memory` command. It will ask you for name and description of the memory. Use `chat-with-docs` as the memory name.
 
 ```bash
-baseai memory
+npx baseai@latest memory
 ```
 
 It creates a memory at `baseai/memory/chat-with-docs` in your current directory. Add documents to `baseai/memory/chat-with-docs/documents` to use them in the memory.
@@ -104,7 +104,7 @@ Next, create embeddings for the documents using the `embed` command. It will emb
 It will use the Ollama embeddings model to generate embeddings for the documents in the memory.
 
 ```bash
-baseai embed -m chat-with-docs
+npx baseai@latest embed -m chat-with-docs
 ```
 
 Once the embeddings are created, it will print a success message in the terminal.
@@ -116,7 +116,7 @@ Let's create a [Pipe](/docs/pipe/quickstart) and connect memory to it. Use the `
 Use `chat-with-docs-rag` as the pipe name and select the memory `chat-with-docs` to connect it to the pipe.
 
 ```bash
-baseai pipe
+npx baseai@latest pipe
 ```
 
 It will create a pipe in your current directory under `baseai/pipes/chat-with-docs-rag.ts`. It prints the path in the terminal. You can open the file and see the details.

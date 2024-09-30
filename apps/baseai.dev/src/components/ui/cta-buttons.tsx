@@ -43,7 +43,7 @@ export function CTAButtons({
 	};
 
 	return (
-		<div className={cn('not-prose mb-16 mt-12 flex gap-3', className)}>
+		<div className={cn('not-prose mb-16 mt-12 flex gap-3 flex-wrap', className)}>
 			{primary && (
 				<LinkWrapper href={primary.href}>
 					<Button

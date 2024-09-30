@@ -1,7 +1,7 @@
 {
 	"name": "baseai",
-	"description": "The Web AI Framework - BaseAI.dev",
-	"version": "0.0.21",
+	"description": "The Web AI Framework Dev - BaseAI.dev",
+	"version": "0.9.0",
 	"license": "UNLICENSED",
 	"type": "module",
 	"main": "./dist/index.js",
@@ -11,15 +11,18 @@
 		"baseai": "bin/baseai.js"
 	},
 	"author": {
-		"name": "Ahmad Awais",
-		"url": "https://langbase.com"
+		"name": "Langbase",
+		"url": "https://BaseAI.dev"
 	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/LangbaseInc/baseai.git",
 		"directory": "packages/cli"
 	},
-	"homepage": "https://langbase.com/docs",
+	"bugs": {
+		"url": "https://github.com/LangbaseInc/baseai/issues"
+	},
+	"homepage": "https://BaseAI.dev",
 	"files": [
 		"dist/**"
 	],

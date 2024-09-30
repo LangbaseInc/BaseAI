@@ -1,0 +1,38 @@
+{
+	"name": "example-astro",
+	"description": "An example Astro app using BaseAI",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"baseai": "baseai"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.3",
+		"@astrojs/node": "^8.3.4",
+		"@astrojs/react": "^3.6.2",
+		"@astrojs/tailwind": "^5.1.1",
+		"@astrojs/vercel": "^7.8.1",
+		"@baseai/core": "^0.9.0",
+		"@radix-ui/react-slot": "^1.1.0",
+		"@types/react": "^18.3.9",
+		"@types/react-dom": "^18.3.0",
+		"astro": "^4.15.9",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.1",
+		"mathjs": "^13.1.1",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"tailwind-merge": "^2.5.2",
+		"tailwindcss": "^3.4.13",
+		"tailwindcss-animate": "^1.0.7",
+		"typescript": "^5.6.2"
+	},
+	"devDependencies": {
+		"baseai": "^0.9.0"
+	}
+}

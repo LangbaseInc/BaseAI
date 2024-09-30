@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
-import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
 import { useSectionStore } from '@/components/SectionProvider';
 import { Tag } from '@/components/Tag';
-import { remToPx } from '@/lib/remToPx';
 import navigationData, { NavigationItem, navLearn } from '@/data/navigation';
+import { remToPx } from '@/lib/remToPx';
+import clsx from 'clsx';
+import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 function useInitialValue<T>(value: T, condition = true) {
 	let initialValue = useRef(value).current;
@@ -121,7 +121,7 @@ function NavLink({
 			)}
 		>
 			{hasNumber && (
-				<code className="mr-2 flex w-8 justify-end rounded-md bg-muted/60 px-2 ring-2 ring-muted opacity-50">
+				<code className="mr-2 flex w-auto justify-end rounded-md bg-muted/60 px-2 opacity-50 ring-2 ring-muted">
 					{number}
 				</code>
 			)}

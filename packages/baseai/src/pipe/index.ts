@@ -149,7 +149,7 @@ const ${pipeNameCamelCase} = (): PipeI => ({
     frequency_penalty: 1,
     stop: [],
     tool_choice: 'auto',
-    parallel_tool_calls: false,
+    parallel_tool_calls: true,
     messages: [
         { role: 'system', content: \`${pipeInfo.systemPrompt}\` },
         ${

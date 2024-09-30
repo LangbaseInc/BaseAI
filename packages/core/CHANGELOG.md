@@ -1,5 +1,59 @@
 # `langbase` SDK
 
+## 0.9.0
+
+### Minor Changes
+
+-   📦 NEW: ready for prod
+
+## 0.0.29
+
+### Patch Changes
+
+-   📖 DOC: readme
+
+## 0.0.28
+
+### Patch Changes
+
+-   👌 IMPROVE: defaults
+
+## 0.0.27
+
+### Patch Changes
+
+-   🐛 FIX: config import
+
+## 0.0.26
+
+### Patch Changes
+
+-   👌 IMPROVE: deploy summary
+
+## 0.0.25
+
+### Patch Changes
+
+-   👌 IMPROVE: deployment summary
+
+## 0.0.24
+
+### Patch Changes
+
+-   📦 NEW: deploy summary
+
+## 0.0.23
+
+### Patch Changes
+
+-   👌 IMPROVE: internal lingo
+
+## 0.0.22
+
+### Patch Changes
+
+-   📦 NEW: example env file
+
 ## 0.0.21
 
 ### Patch Changes

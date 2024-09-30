@@ -19,6 +19,10 @@ modified: 2024-09-24
 
 In this learn guide, you will configure the summarizer pipe you created.
 
+<Note sub="/learn">
+This guide is part of the /learn BaseAI course. For context, [start from the beginning](/learn) to follow along.
+</Note>
+
 ---
 
 ## Step #1: View the summarizer pipe
@@ -30,7 +34,7 @@ Navigate to your project directory and open the pipe you created. You can find i
 ```ts {{ title: './baseai/pipes/summarizer.ts' }}
 import { PipeI } from '@baseai/core';
 
-const buildPipe = (): PipeI => ({
+const pipeName = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and makes it less wordy',
@@ -54,14 +58,14 @@ const buildPipe = (): PipeI => ({
 	tools: []
 });
 
-export default buildPipe;
+export default pipeName;
 ```
 
 </CodeGroup>
 
 ## Step #2: Update the summarizer pipe
 
-Let's add the following system prompt to the Pipe. We will also update the pipe name from `buildPipe` to `summarizerPipe`.
+Let's add the following system prompt to the Pipe. We will also update the pipe name from `pipeName` to `pipeSummarizer`.
 
 ```txt
 You are a content summarizer. You will summarize content without loosing context into less wordy to the point version.
@@ -72,7 +76,7 @@ You are a content summarizer. You will summarize content without loosing context
 ```ts {{ title: './baseai/pipes/summarizer.ts' }}
 import { PipeI } from '@baseai/core';
 
-const summarizerPipe = (): PipeI => ({
+const pipeSummarizer = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and make it less wordy',
@@ -101,7 +105,7 @@ const summarizerPipe = (): PipeI => ({
 	tools: []
 });
 
-export default summarizerPipe;
+export default pipeSummarizer;
 ```
 
 </CodeGroup>

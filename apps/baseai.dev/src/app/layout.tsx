@@ -1,25 +1,27 @@
 import { Providers } from '@/app/providers';
-import { type Metadata } from 'next';
 import '@/styles/tailwind.css';
+import { type Metadata } from 'next';
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: {
-		template: 'BaseAI - The first AI framework for web',
-		default: 'BaseAI'
+		template: 'BaseAI - Web AI Framework',
+		default: 'BaseAI - Web AI Framework'
 	},
-	description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+	description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
 	openGraph: {
-		title: 'BaseAI - The first AI framework for web',
-		description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-		images: ['https://baseai.dev/api/og?title=baseai.dev'],
+		title: 'BaseAI - Web AI Framework',
+		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+		images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg'],
 		siteName: 'BaseAI'
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: 'BaseAI - The first AI framework for web',
+		title: 'BaseAI - Web AI Framework',
 		creator: '@LangbaseInc',
-		description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-		images: ['https://baseai.dev/api/og?title=baseai.dev']
+		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+		images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg']
 	},
 	authors: [{ name: 'Langbase, Inc.' }],
 	robots: {
@@ -40,10 +42,8 @@ export default async function RootLayout({
 }) {
 	return (
 		<html lang="en" className="h-full" suppressHydrationWarning>
-			<body>
-				<Providers>
-					{children}
-				</Providers>
+			<body className={`${inter.className}`}>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);

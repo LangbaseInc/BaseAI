@@ -42,26 +42,30 @@ const TableRow: React.FC<TableRowProps> = ({ product, description, href }) => (
 
 const AIPipesDescription: React.FC = () => (
 	<>
-		Your custom-built AI agent available locally and as an API. Local first, highly scalable, dynamic, and inexpensive when deployed.
-		A new LLM computing primitive called{' '}
-		<Link href="/docs/pipe/quickstart">Pipe</Link>. Pipe is the fastest way to ship your AI
-		features in production. It&apos;s like having a composable GPT anywhere.
+		Pipe is a serverless AI agent. Your custom-built AI agent available
+		locally and online as an API. Local first, highly scalable, dynamic, and
+		inexpensive when deployed. A new LLM computing primitive called{' '}
+		<Link href="/docs/pipe/quickstart">Pipe</Link>. Pipe is the fastest way
+		to ship your AI features in production. It&apos;s like having a
+		composable GPT anywhere.
 	</>
 );
 
 const AIMemoryDescription: React.FC = () => (
 	<>
-		Memory is a managed search engine available locally and as an API for developers. Our
-		long-term memory solution has the ability to acquire, process, retain,
-		and later retrieve information. It combines vector storage, RAG
-		(Retrieval-Augmented Generation), and internet access to help you build
-		powerful AI features and products.
+		Memory is a managed search engine available locally and as an API for
+		developers. Our long-term memory solution has the ability to acquire,
+		process, retain, and later retrieve information. It combines vector
+		storage, RAG (Retrieval-Augmented Generation), and internet access to
+		help you build powerful AI features and products.
 	</>
 );
 
 const LangbaseStudioDescription: React.FC = () => (
 	<>
-		Agentic AI tools that seamlessly work together with AI pipes. Extend the model capabilities of AI Pipes and AI Memory. Connect multiple AI pipes together via tools. Build truly composable AI agents with memory (RAG).
+		Agentic AI tools that seamlessly work together with AI pipes. Extend the
+		model capabilities of AI Pipes and AI Memory. Connect multiple AI pipes
+		together via tools. Build truly composable AI agents with memory (RAG).
 	</>
 );
 
@@ -82,7 +86,7 @@ export const ProductsTable: React.FC = () => {
 						href="/docs/memory/quickstart"
 					/>
 					<TableRow
-						product={{ main: 'Tools' }}
+						product={{ main: 'AI Tools', sub: 'Self-healing' }}
 						description={<LangbaseStudioDescription />}
 						href="/docs/tools/quickstart"
 					/>

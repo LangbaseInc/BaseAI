@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {getRunner, getTextContent, Pipe} from '@baseai/core';
 import pipeSummary from '../baseai/pipes/summary';
 

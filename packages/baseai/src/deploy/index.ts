@@ -1,6 +1,7 @@
 import build from '@/build';
 import { OLLAMA } from '@/dev/data/models';
 import { dlog } from '@/dev/utils/dlog';
+import { cyan, dim, dimItalic, green } from '@/utils/formatting';
 import { heading } from '@/utils/heading';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 import { MEMORYSETS } from '@/utils/memory/constants';
@@ -45,7 +46,12 @@ async function deploy({
 
 		const pipesDir = path.join(buildDir, 'pipes');
 		const pipes = await readPipesDirectory({ spinner, pipesDir });
-		if (!pipes) return;
+		if (!pipes) {
+			p.outro(
+				`No pipes found. Skipping deployment. \nAdd a pipe by running: ${cyan(`npx baseai@latest pipe`)} command`
+			);
+			process.exit(1);
+		}
 
 		const memoryDir = path.join(buildDir, 'memory');
 		const memory = await readMemoryDirectory({
@@ -53,8 +59,16 @@ async function deploy({
 			memoryDir
 		});
 
+		const toolsDir = path.join(buildDir, 'tools');
+		const tools = await readToolsDirectory({ spinner, toolsDir });
+
 		const account = await retrieveAuthentication({ spinner });
-		if (!account) return;
+		if (!account) {
+			p.outro(
+				`No account found. Skipping deployment. \n Run: ${cyan('npx baseai@latest auth')}`
+			);
+			process.exit(1);
+		}
 
 		if (memory && memory.length > 0) {
 			await deployMemories({
@@ -67,6 +81,23 @@ async function deploy({
 		}
 
 		await deployPipes({ spinner, pipes, pipesDir, account });
+
+		p.outro(
+			heading({ text: 'DEPLOYED', sub: 'successfully', green: true })
+		);
+
+		p.log.warning(
+			dimItalic(
+				`Make sure ${cyan(`LANGBASE_API_KEY`)} exists in your production environment.`
+			)
+		);
+
+		p.log.info(
+			`${dim(`Successfully deployed:`)}
+${dim(`- ${green(pipes?.length)} pipe${pipes.length !== 1 ? 's' : ''}
+- ${green(tools?.length ?? 0)} tool${tools?.length !== 1 ? 's' : ''}
+- ${green(memory?.length ?? 0)} memory${memory?.length !== 1 ? 'sets' : ''}`)}`
+		);
 	} catch (error) {
 		handleError({
 			spinner,
@@ -95,6 +126,29 @@ async function readPipesDirectory({
 		return pipes;
 	} catch (error) {
 		handleDirectoryReadError({ spinner, dir: pipesDir, error });
+		return null;
+	}
+}
+
+async function readToolsDirectory({
+	spinner,
+	toolsDir
+}: {
+	spinner: Spinner;
+	toolsDir: string;
+}): Promise<string[] | null> {
+	spinner.start('Reading tools directory');
+	try {
+		const files = await fs.readdir(toolsDir);
+		// Filter out non-json files
+		const tools = files.filter(file => path.extname(file) === '.json');
+
+		spinner.stop(
+			`Found ${tools.length} tool${tools.length !== 1 ? 's' : ''}`
+		);
+		return tools;
+	} catch (error) {
+		handleDirectoryReadError({ spinner, dir: toolsDir, error });
 		return null;
 	}
 }

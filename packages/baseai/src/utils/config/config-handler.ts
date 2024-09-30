@@ -14,8 +14,8 @@ export const defaultConfig: BaseAIConfig = {
 		'pipe.completion': true,
 		'pipe.request': true,
 		'pipe.response': true,
-		tool: false,
-		memory: false
+		tool: true,
+		memory: true
 	},
 	memory: {
 		useLocalEmbeddings: false

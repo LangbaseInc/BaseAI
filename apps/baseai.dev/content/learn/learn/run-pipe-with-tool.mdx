@@ -15,6 +15,10 @@ modified: 2024-09-24
 
 ### Learn how to run a pipe with a weather tool in Node.js using BaseAI
 
+<Note sub="/learn">
+This guide is part of the /learn BaseAI course. For context, [start from the beginning](/learn) to follow along.
+</Note>
+
 ---
 
 In this learn guide, you will locally run the [summarizer pipe](/learn/nodejs/configure-pipe) with the weather tool.
@@ -34,9 +38,9 @@ What's the weather in San Francisco?
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
 import {Pipe, generateText} from '@baseai/core';
-import summarizerPipe from './baseai/pipes/summarizer';
+import pipeSummarizer from './baseai/pipes/summarizer';
 
-const pipe = new Pipe(summarizerPipe());
+const pipe = new Pipe(pipeSummarizer());
 
 const userMsg = `What's the weather in San Francisco?`;
 
@@ -56,7 +60,7 @@ main();
 import { PipeI } from '@baseai/core';
 import getCurrentWeatherTool from '../tools/get-current-weather';
 
-const summarizerPipe = (): PipeI => ({
+const pipeSummarizer = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and make it less wordy',
@@ -82,7 +86,7 @@ const summarizerPipe = (): PipeI => ({
     tools: [getCurrentWeatherTool()]
 });
 
-export default summarizerPipe;
+export default pipeSummarizer;
 ```
 
 ```ts {{ title: './baseai/tools/get-current-weather.ts' }}

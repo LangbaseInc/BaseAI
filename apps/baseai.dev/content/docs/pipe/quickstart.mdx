@@ -71,11 +71,10 @@ Enter this prompt in the terminal. It will create a pipe in your current directo
 
 Your pipe is created successfully at `/baseai/pipes/ai-title-generator.ts`. Open the file, it will look like this:
 
-```ts
-// baseai/pipes/ai-title-generator.ts
+```ts {{ title: 'baseai/pipes/ai-title-generator.ts' }}
 import {PipeI} from '@baseai/core';
 
-const buildPipe = (): PipeI => ({
+const pipeAiTitleGenerator = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'ai-title-generator',
 	description: 'Pipe to create title ideas with AI',
@@ -92,7 +91,7 @@ const buildPipe = (): PipeI => ({
 	frequency_penalty: 1,
 	stop: [],
 	tool_choice: 'auto',
-	parallel_tool_calls: false,
+	parallel_tool_calls: true,
 	messages: [
 		{
 			role: 'system',
@@ -104,69 +103,51 @@ const buildPipe = (): PipeI => ({
 	tools: [],
 });
 
-export default buildPipe;
+export default pipeAiTitleGenerator;
 ```
 
 In the file, you can see the configuration of the pipe. You can modify the configuration as per your requirements. For instance, you can change the model, temperature, max_tokens, etc.
 
-It is called `buildPipe` by default. You can change the name of the function as per your requirements. Let's name it `titleGeneratorPipeConfig`.
 
-```ts
-// baseai/pipes/ai-title-generator.ts
-import {PipeI} from '@baseai/core';
-
-export const titleGeneratorPipeConfig = (): PipeI => ({
-	... // Configuration
-});
-
-export default titleGeneratorPipeConfig;
-```
 
 ## Step #4: Use the Pipe
 
-Now that you have created the pipe, let's see it in action. Create a `index.ts` file in your project directory.
+Now that you have created the pipe, let's see it in action.
 
-```bash
-# Create a new file index.ts
+Create a `index.ts` file in your project directory.
+
+```bash {{ title: '$ run in terminal' }}
 touch index.ts
 ```
 
 We will use the `Pipe` primitive from `@baseai/core` to run the pipe. Add the following code to `index.ts` file:
 
-```ts
-import { Pipe, getRunner } from '@baseai/core';
-import { titleGeneratorPipeConfig } from './baseai/pipes/ai-title-generator';
+```ts {{ title: 'index.ts' }}
+import {Pipe} from '@baseai/core';
+import { pipeAiTitleGenerator } from './baseai/pipes/ai-title-generator';
 
-// Instantiate the pipe
-const pipe = new Pipe({
-	...titleGeneratorPipeConfig(),
-});
+const pipe = new Pipe(pipeAiTitleGenerator());
 
-// Demo user message
-const userMsg = 'Generate 5 blog title ideas for an article about Large Language Models';
+async function main() {
+	const userMsg = 'Generate 5 blog title ideas for an article about Large Language Models';
 
-// Run the pipe in streaming mode
-(async () => {
-	{
-		// Run Stream
-		const {stream} = await pipe.run({
-			messages: [{role: 'user', content: userMsg}],
-			stream: true,
-			rawResponse: true,
-		});
+	const response = await pipe.run({
+		messages: [
+			{
+				role: 'user',
+				content: userMsg,
+			},
+		],
+	});
+	console.log('response: ', response);
+}
 
-		const runner = getRunner(stream);
-
-		runner.on('error', error => {
-			console.error('Error:', error);
-		});
-
-		runner.on('content', content => {
-			process.stdout.write(content);
-		});
-	}
-})();
+main();
 ```
+
+This will generate and print several title ideas for the given topic.
+
+Or to run in streaming mode, check the [API reference](/docs/api-reference/pipe-run) for the `run` method.
 
 We have added a demo user message to generate 5 blog title ideas for an article about LLMs. You can change this user message as per your requirements.
 

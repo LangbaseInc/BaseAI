@@ -1,0 +1,402 @@
+---
+title: "Build a Next.js App with BaseAI"
+description: "Learn how to build a Next.js app with BaseAI"
+tags:
+    - nextjs
+    - baseai
+    - langbase
+    - guide
+section: 'guides'
+published: 2024-09-30
+modified: 2024-09-30
+---
+
+# Build a Next.js App with BaseAI
+
+This guide covers building AI features in a Next.js app using BaseAI, focusing on text summarization with the BaseAI pipe.
+
+---
+
+## Next.js with BaseAI Example
+
+We also have pre-built a Next.js app with BaseAI for you to get started quickly. You can refer to the following resources to understand how to build a Next.js app with BaseAI.
+
+- [Next.js with BaseAI](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs)
+- [Example of using BaseAI](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs/app/demo)
+- [BaseAI based React components](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs/components)
+- [API Route handlers for pipes](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs/app/api/langbase/pipes)
+
+
+### AI Agent Pipe: Run
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/pipe-run.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run/route.ts)
+
+### AI Agent Pipe: Stream
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/pipe-stream.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-stream/route.ts)
+
+### `usePipe()`: Chat
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/chat-simple.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-stream/route.ts)
+
+### `usePipe()`: Chat Advanced
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/chat-advanced.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-stream/route.ts)
+
+### AI Agent Pipes: Tool Calling
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/pipe-run-with-tool.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-tool/route.ts)
+
+### AI Agent Pipes: Composable Pipe Run
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/pipe-run-pipes-as-tools.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-pipes-as-tools/route.ts)
+
+### AI Agent Pipes: Memory
+
+- [React Component](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/components/pipe-run-with-memory.tsx)
+- [API Route Handler](https://github.com/LangbaseInc/baseai/blob/main/examples/nextjs/app/api/langbase/pipes/run-memory/route.ts)
+
+---
+
+## Step #1: Install Next.js
+
+First, you need to install Next.js in your project directory.
+
+```bash
+npx create-next-app@latest nextjs-baseai-app
+```
+
+Also setup tailwind in your Next.js app. You can use the setup from the [Next.js with BaseAI example](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs).
+
+---
+
+## Step #2: Install BaseAI
+
+Next, you need to install BaseAI in your project directory.
+
+```bash
+npx baseai@latest init
+```
+---
+
+## Step #3: Create a Summary Pipe
+
+Create a new pipe using the `pipe` command. Use `summary` as the pipe name and for system prompt use `You are a helpful AI assistant. Make everything Less wordy.`.
+
+```bash
+npx baseai@latest pipe
+```
+
+It creates a pipe at `baseai/pipes/summary.ts` in your current directory.
+
+---
+
+## Step #4: Set Environment Variables
+
+Use following command to create a `.env` file in your project directory.
+
+```bash
+cp .env.baseai.example .env
+```
+
+Set the `OPENAI_API_KEY` in the `.env` file.
+
+## Step #5: Add API Route Handler
+
+Create a new API route handler `app/api/langbase/pipes/run/route.ts` to use the pipe.
+
+<CodeGroup exampleTitle="API Route Handler" title="API Route Handler for Pipe Run">
+```ts {{ title: 'app/api/langbase/pipes/run/route.ts' }}
+import {Pipe} from '@baseai/core';
+import {NextRequest} from 'next/server';
+import pipeSummary from '../../../../../baseai/pipes/summary';
+
+export async function POST(req: NextRequest) {
+	const runOptions = await req.json();
+
+	// 1. Initiate the Pipe.
+	const pipe = new Pipe(pipeSummary());
+
+	// 2. Run the pipe
+	const result = await pipe.run(runOptions);
+
+	// 3. Return the response stringified.
+	return new Response(JSON.stringify(result));
+}
+
+```
+</CodeGroup>
+
+
+## Step #6: Add React Component
+
+Add following to your Next.js app to run the pipe.
+
+- Pipe run **page** at `app/pipe-run/page.tsx`
+- Pipe run **component** at `components/pipe-run.tsx` — This component will run the pipe.
+- UI **Button** component at `components/ui/button.tsx`
+- UI **Input** component at `components/ui/input.tsx`
+
+Install the required dependencies.
+
+```bash
+npm install @radix-ui/react-slot class-variance-authority clsx tailwind-merge
+```
+
+<CodeGroup exampleTitle="React Component" title="React Component for Pipe Run">
+```tsx {{ title: 'app/pipe-run/page.tsx' }}
+import PipeRunExample from '@/components/pipe-run';
+
+export default function Page() {
+	return (
+		<div className="w-full max-w-md">
+
+			<h1 className="text-2xl font-light text-gray-800 mb-1 text-center">
+				⌘ Langbase AI Agent Pipe: Run
+			</h1>
+
+			<p className="text-muted-foreground text-base font-light mb-20 text-center">
+				Run a pipe to generate a text completion
+			</p>
+
+			<PipeRunExample />
+		</div>
+	);
+}
+```
+
+```tsx {{ title: 'components/pipe-run.tsx' }}
+'use client';
+
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {useState} from 'react';
+
+export default function PipeRunExample() {
+	const [prompt, setPrompt] = useState('Who are you?');
+	const [completion, setCompletion] = useState('');
+	const [loading, setLoading] = useState(false);
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+		if (!prompt.trim()) return;
+
+		setLoading(true);
+		try {
+			const response = await fetch('/api/langbase/pipes/run', {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				// Send prompt as an LLM message.
+				body: JSON.stringify({
+					messages: [{role: 'user', content: prompt}],
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			// Parse the JSON response.
+			const data = await response.json();
+			setCompletion(data.completion);
+		} catch (error) {
+			console.error('Error:', error);
+			setCompletion('An error occurred while generating the completion.');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="bg-neutral-200 rounded-md p-2 flex flex-col gap-2 w-full">
+			<form
+				onSubmit={handleSubmit}
+				className="flex flex-col w-full items-center gap-2"
+			>
+				<Input
+					type="text"
+					placeholder="Enter prompt message here"
+					value={prompt}
+					onChange={e => setPrompt(e.target.value)}
+					required
+				/>
+
+				<Button type="submit" className="w-full" disabled={loading}>
+					{loading ? 'AI is thinking...' : 'Ask AI'}
+				</Button>
+			</form>
+
+			{!loading && completion && (
+				<p className="mt-4">
+					<strong>AI:</strong> {completion}
+				</p>
+			)}
+		</div>
+	);
+}
+```
+
+```tsx {{ title: 'components/ui/button.tsx' }}
+import * as React from 'react';
+import {Slot} from '@radix-ui/react-slot';
+import {cva, type VariantProps} from 'class-variance-authority';
+
+import {cn} from '@/lib/utils';
+
+const buttonVariants = cva(
+	'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+	{
+		variants: {
+			variant: {
+				default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+				destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+				outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+				ghost: 'hover:bg-accent hover:text-accent-foreground',
+				link: 'text-primary underline-offset-4 hover:underline',
+			},
+			size: {
+				default: 'h-10 px-4 py-2',
+				sm: 'h-9 rounded-md px-3',
+				lg: 'h-11 rounded-md px-8',
+				icon: 'h-10 w-10',
+			},
+		},
+		defaultVariants: {
+			variant: 'default',
+			size: 'default',
+		},
+	},
+);
+
+export interface ButtonProps
+	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+		VariantProps<typeof buttonVariants> {
+	asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+	({className, variant, size, asChild = false, ...props}, ref) => {
+		const Comp = asChild ? Slot : 'button';
+		return <Comp className={cn(buttonVariants({variant, size, className}))} ref={ref} {...props} />;
+	},
+);
+Button.displayName = 'Button';
+
+export {Button, buttonVariants};
+```
+
+```tsx {{ title: 'components/ui/input.tsx' }}
+import * as React from 'react';
+
+import {cn} from '@/lib/utils';
+
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({className, type, ...props}, ref) => {
+	return (
+		<input
+			type={type}
+			className={cn(
+				'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+				className,
+			)}
+			ref={ref}
+			{...props}
+		/>
+	);
+});
+Input.displayName = 'Input';
+
+export {Input};
+```
+
+```tsx {{ title: 'lib/utils.ts' }}
+import {type ClassValue, clsx} from 'clsx';
+import {twMerge} from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
+```
+
+</CodeGroup>
+
+Refer to [Next.js with BaseAI](https://github.com/LangbaseInc/baseai/tree/main/examples/nextjs) codebase for more details.
+
+
+---
+
+## Step #9: Add environment variables
+
+To be able to run and later deploy your Next.js app, you need to add your Langbase and LLM provider keys. Add the following environment variables to your `.env` file at the root of your app.
+
+```bash
+# !! SERVER SIDE ONLY !!
+# Keep all your API keys secret — use only on the server side.
+
+# TODO: ADD: Both in your production and local env files.
+# Langbase API key for your User or Org account.
+# How to get this API key https://langbase.com/docs/api-reference/api-keys
+LANGBASE_API_KEY=
+
+# TODO: ADD: LOCAL ONLY. Add only to local env files.
+# Following keys are needed for local pipe runs. Add the providers you are using.
+# For Langbase, please add the keys in your LLM keysets on Langbase Studio.
+# Read more: Langbase LLM Keysets https://langbase.com/docs/features/keysets
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+COHERE_API_KEY=
+FIREWORKS_API_KEY=
+GOOGLE_API_KEY=
+GROQ_API_KEY=
+MISTRAL_API_KEY=
+PERPLEXITY_API_KEY=
+TOGETHER_API_KEY=
+```
+
+`LANGBASE_API_KEY` is the user or org API key that you authenticated with. You can obtain your [User/Org API Key](https://langbase.com/docs/api-reference/api-keys) from the Langbase dashboard.
+
+---
+
+## Step #8: Run the Next.js BaseAI App
+
+Run BaseAI dev server and start the Next.js app.
+
+```bash
+# Terminal 1
+npx baseai@latest dev # Start BaseAI dev server
+
+# Terminal 2
+npm run dev # Start Next.js app
+```
+
+Open [http://localhost:3000/pipe-run](http://localhost:3000/pipe-run) to see the pipe run page.
+
+Write a prompt message and click on the `Ask AI` button to generate the completion. The AI response will be displayed below the button. This all happens locally on your machine.
+
+---
+
+## Step #9: Deploy BaseAI project on Langbase
+
+To deploy the project on Langbase, you need to authenticate with your Langbase account.
+
+```bash
+npx baseai@latest auth
+```
+
+After authentication, you can deploy the project using the following command. When you deploy, you need to add keys for providers like OpenAI, Google, etc., in [Langbase Keysets](https://langbase.com/docs/features/keysets).
+
+```bash
+npx baseai@latest deploy
+```
+
+This will deploy your project on Langbase and you can access it as a serverless highly scalable API. Check the [BaseAI `deploy` documentation](https://baseai.dev/docs/deployment/deploy) for more details.
+
+---

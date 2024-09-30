@@ -65,7 +65,7 @@ Open the newly created pipe file. You'll see the basic configuration. Now, updat
 // baseai/pipes/ollama-pipe.ts
 import {PipeI} from '@baseai/core';
 
-const buildPipe = (): PipeI => ({
+const pipeName = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!,
 	name: 'ollama-pipe',
 	description: 'Pipe running an Ollama model.'
@@ -91,7 +91,7 @@ const buildPipe = (): PipeI => ({
 	tools: [],
 });
 
-export default buildPipe;
+export default pipeName;
 ```
 
 Here, the model is set to `ollama:tinyllama`, but you can replace it with another Ollama model as needed. Here is the list of available [Ollama models](https://ollama.com/library).
@@ -108,11 +108,11 @@ In `index.ts`, add the following code to run your pipe:
 
 ```ts
 import { Pipe, getRunner } from '@baseai/core';
-import { buildPipe } from './baseai/pipes/ollama-pipe';
+import { pipeName } from './baseai/pipes/ollama-pipe';
 
 // Instantiate the pipe
 const pipe = new Pipe({
-	...buildPipe(),
+	...pipeName(),
 });
 
 // Demo user message

@@ -19,6 +19,10 @@ modified: 2024-09-24
 
 In this learn guide, you will configure the weather tool you created in the previous guide.
 
+<Note sub="/learn">
+This guide is part of the /learn BaseAI course. For context, [start from the beginning](/learn) to follow along.
+</Note>
+
 ---
 
 ## Step #1: View the weather tool
@@ -50,7 +54,7 @@ export default getCurrentWeatherTool;
 ```ts {{ title: './baseai/pipes/summarizer.ts' }}
 import { PipeI } from '@baseai/core';
 
-const summarizerPipe = (): PipeI => ({
+const pipeSummarizer = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and make it less wordy',
@@ -76,15 +80,15 @@ const summarizerPipe = (): PipeI => ({
     tools: [],
 });
 
-export default summarizerPipe;
+export default pipeSummarizer;
 ```
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
 import {Pipe, streamText, getRunner} from '@baseai/core';
-import summarizerPipe from './baseai/pipes/summarizer';
+import pipeSummarizer from './baseai/pipes/summarizer';
 
-const pipe = new Pipe(summarizerPipe());
+const pipe = new Pipe(pipeSummarizer());
 
 const userMsg = `
 Langbase studio is your playground to build, collaborate, and deploy AI. It allows you to experiment with your pipes in real-time, with real data, store messages, version your prompts, and truly helps you take your idea from building prototypes to deployed in production with LLMOps on usage, cost, and quality.
@@ -170,7 +174,7 @@ export default getCurrentWeatherTool;
 ```ts {{ title: './baseai/pipes/summarizer.ts' }}
 import { PipeI } from '@baseai/core';
 
-const summarizerPipe = (): PipeI => ({
+const pipeSummarizer = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and make it less wordy',
@@ -196,15 +200,15 @@ const summarizerPipe = (): PipeI => ({
     tools: [],
 });
 
-export default summarizerPipe;
+export default pipeSummarizer;
 ```
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
 import {Pipe, streamText, getRunner} from '@baseai/core';
-import summarizerPipe from './baseai/pipes/summarizer';
+import pipeSummarizer from './baseai/pipes/summarizer';
 
-const pipe = new Pipe(summarizerPipe());
+const pipe = new Pipe(pipeSummarizer());
 
 const userMsg = `
 Langbase studio is your playground to build, collaborate, and deploy AI. It allows you to experiment with your pipes in real-time, with real data, store messages, version your prompts, and truly helps you take your idea from building prototypes to deployed in production with LLMOps on usage, cost, and quality.
