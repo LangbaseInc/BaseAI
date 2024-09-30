@@ -17,6 +17,8 @@
 
 BaseAI is the AI framework for building declarative and composable AI-powered LLM products. It allows you to locally develop AI agents integrated with tools and memory (RAG). Visit our [learn](https://baseai.dev/learn) guide to get started with BaseAI.
 
+★ Star this repository to support our open-source work.
+
 ## Documentation
 
 Visit [baseai.dev/docs](https://baseai.dev/docs) for the full documentation.
