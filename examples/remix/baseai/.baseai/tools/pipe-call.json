@@ -1,1 +1,0 @@
-{"type":"function","function":{"name":"runSummaryPipe","description":"Call a pipe that can summarize text.","parameters":{"type":"object","required":["prompt"],"properties":{"prompt":{"type":"string","description":"User input to summarize"}}}}}

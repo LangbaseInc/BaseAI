@@ -229,7 +229,7 @@ function displayOutro({ calledAsCommand }: { calledAsCommand: boolean }): void {
 
 async function updateGitignore(): Promise<void> {
 	const gitignorePath = path.join(process.cwd(), '.gitignore');
-	const gitignoreEntry = '# baseai\n/.baseai/\n';
+	const gitignoreEntry = '# baseai\n**/.baseai/\n';
 
 	try {
 		let gitignoreContent = '';
@@ -253,6 +253,51 @@ async function updateGitignore(): Promise<void> {
 	} catch (error) {
 		p.log.error(
 			`Error updating .gitignore: ${error instanceof Error ? error.message : String(error)}`
+		);
+	}
+}
+
+async function createEnvBaseAIExample(): Promise<void> {
+	const envBaseAIExamplePath = path.join(
+		process.cwd(),
+		'.env.baseai.example'
+	);
+	const envBaseAIExampleContent = `# !! SERVER SIDE ONLY !!
+# Keep all your API keys secret — use only on the server side.
+
+# TODO: ADD: Both in your production and local env files.
+# Langbase API key for your User or Org account.
+# How to get this API key https://langbase.com/docs/api-reference/api-keys
+LANGBASE_API_KEY=
+
+# TODO: ADD: LOCAL ONLY. Add only to local env files.
+# Following keys are needed for local pipe runs. For providers you are using.
+# For Langbase, please add the key to your LLM keysets.
+# Read more: Langbase LLM Keysets https://langbase.com/docs/features/keysets
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+COHERE_API_KEY=
+FIREWORKS_API_KEY=
+GOOGLE_API_KEY=
+GROQ_API_KEY=
+MISTRAL_API_KEY=
+PERPLEXITY_API_KEY=
+TOGETHER_API_KEY=
+`;
+
+	try {
+		const exists = await checkFileExists(envBaseAIExamplePath);
+		if (!exists) {
+			await fs.writeFile(envBaseAIExamplePath, envBaseAIExampleContent);
+			p.log.success('Created `.env.baseai.example` file.');
+		} else {
+			p.log.info(
+				'`.env.baseai.example` file already exists. Skipping creation.'
+			);
+		}
+	} catch (error) {
+		p.log.error(
+			`Error creating .env.baseai.example: ${error instanceof Error ? error.message : String(error)}`
 		);
 	}
 }
@@ -306,6 +351,7 @@ export async function init({
 		await createConfigFile();
 		await updatePackageJsonScript();
 		await updateGitignore();
+		await createEnvBaseAIExample();
 
 		displayOutro({ calledAsCommand });
 	} catch (error: any) {
