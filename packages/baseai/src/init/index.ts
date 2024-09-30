@@ -1,4 +1,5 @@
 import { defaultConfig } from '@/utils/config/config-handler';
+import { cyan, dimItalic } from '@/utils/formatting';
 import { heading } from '@/utils/heading';
 import { formatCode } from '@/utils/ts-format-code';
 import { detect } from '@antfu/ni';
@@ -164,7 +165,7 @@ export async function createConfigFile(): Promise<void> {
 	const exists = await checkFileExists(configPath);
 	if (!exists) {
 		const configContent = `
-import type {BaseAIConfig} from 'baseai/types/config';
+import type {BaseAIConfig} from 'baseai';
 
 export const config: BaseAIConfig = ${JSON.stringify(defaultConfig, null, 2)};
 `;
@@ -222,6 +223,11 @@ async function updatePackageJsonScript(): Promise<void> {
 function displayOutro({ calledAsCommand }: { calledAsCommand: boolean }): void {
 	if (calledAsCommand) {
 		p.outro('All good. BaseAI setup completed successfully!');
+		p.log.warning(
+			dimItalic(
+				`Make sure to set environment variables like mentioned in the ${cyan(`.env.baseai.example`)} file added to your project root.`
+			)
+		);
 	} else {
 		console.log();
 	}
