@@ -9,6 +9,7 @@
 	"updateInternalDependencies": "patch",
 	"ignore": [
 		"baseai.dev",
+		"example-astro",
 		"example-nextjs",
 		"example-nodejs",
 		"example-remix",
