@@ -41,7 +41,7 @@ If you've found a security vulnerability in BaseAI, please report it privately b
 
 Learn more by clicking and browsing our [website][bai], [docs][baid], and a free [/learn AI course][bail] on building AI agents, with agentic tools, and agentic memory.
 
-![baseai.dev](https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg)
+[![baseai.dev](https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg)][bai]
 
 [bai]: https://baseai.dev
 [baid]: https://baseai.dev/docs
