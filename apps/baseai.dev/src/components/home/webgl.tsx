@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 const WebGLInitializer = () => {
 	const mountRef = useRef<HTMLDivElement | null>(null);
@@ -119,7 +118,7 @@ const WebGLInitializer = () => {
 				metalness: { value: 5 },
 				color: { value: new THREE.Color(0x3366ff) },
 				u_mouse: { value: new THREE.Vector3() },
-				u_lightDirection: { value: new THREE.Vector3(0, 1, 1) }, // Light from front
+				u_lightDirection: { value: new THREE.Vector3(0, 1, 1) } // Light from front
 			},
 			// change noise functions to perlin noise
 			vertexShader: `

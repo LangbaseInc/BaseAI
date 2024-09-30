@@ -1,9 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+import cn from 'mxcn';
+import { Inter } from 'next/font/google';
 import { useState } from 'react';
 import '../../styles/global.css';
+import { Anchor } from '../ui/anchor';
+import { IconDocs } from '../ui/iconists/icon-docs';
 import WebGLInitializer from './webgl';
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Hero({}) {
 	return (
@@ -18,73 +22,89 @@ export default function Hero({}) {
 
 function Content() {
 	return (
-		<div className="hero-content z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-28 sm:min-h-[77.5vh] sm:w-[76vw]">
-			<div className="helvetica flex justify-between">
+		<div
+			className={cn(
+				'hero-content z-10 mt-10 flex min-h-[65vh] w-[90vw] flex-col justify-between p-6 text-white sm:mt-28 sm:min-h-[77.5vh] sm:w-[76vw]'
+			)}
+		>
+			<div className={cn(' flex justify-between', inter.className)}>
 				<div className="flex items-center">
-					<div className="mr-[1.5vw] hidden h-2.5 w-2.5 rounded-full bg-white sm:block 2xl:h-[.75vw] 2xl:w-[.75vw]"></div>
-					<span className="text-sm 2xl:text-[1vw] 2xl:leading-[1vw]">
-						Deploy Serverless
+					<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
+					<span className="text-sm text-muted-foreground/70 2xl:text-[1vw] 2xl:leading-[1vw]">
+						dev local-first
 					</span>
 				</div>
 				<div className="flex items-center">
-					<span className="text-sm 2xl:text-[1vw] 2xl:leading-[1vw]">
-						Develop Local-first
+					<span className="text-sm text-muted-foreground/70 2xl:text-[1vw] 2xl:leading-[1vw]">
+						deploy serverless
 					</span>
-					<div className="ml-[1.5vw] hidden h-2.5 w-2.5 rounded-full bg-white sm:block 2xl:h-[.75vw] 2xl:w-[.75vw]"></div>
+					<div className="ml-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
 				</div>
 			</div>
 
-			<div className="flex flex-col items-center sm:items-start">
-				<div className="helvetica flex w-full flex-col-reverse items-center justify-between sm:flex-row sm:items-start">
-					<div className="text-left sm:max-w-[40%]">
-						<div className="text-center text-sm sm:text-left 2xl:text-[1vw] 2xl:leading-[1.5vw]">
-							<strong> Base AI: </strong> The Web AI Framework.
-							<p>
-								Built for developers who want to build
-								AI-powered web applications. Local-first,
-								agentic pipes, tools, and memory.
+			<div
+				className={cn(
+					'mt-[16rem] flex flex-col items-center sm:mt-[22rem] lg:mt-[28rem] lg:mt-[28rem] 2xl:mt-[42rem]'
+				)}
+			>
+				<div
+					className={cn(
+						'flex w-full flex-col-reverse items-center justify-between lg:flex-row lg:items-start',
+						inter.className
+					)}
+				>
+					<div className="text-left lg:max-w-[60%]">
+						<div className="text-center text-sm lg:text-left 2xl:text-[1vw] 2xl:leading-[1.5vw]">
+							<span className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 lg:inline-block" />
+							<strong> Base AI </strong>{' '}
+							<span className="text-muted-foreground/90">
+								The first Web AI Framework.
+							</span>
+							<p className="mr-4 mt-4 text-muted-foreground/90 md:max-w-[500px] lg:max-w-full">
+								The easiest way to build serverless autonomous
+								AI agents with memory. Start building
+								local-first, agentic pipes, tools, and memory.
+								Deploy serverless with one command.
 							</p>
 						</div>
 					</div>
 					<div className="flex h-max items-center">
-						<span className="mb-5 text-sm sm:mb-0 2xl:text-[1vw] 2xl:leading-[1vw]">
-							Agentic Pipes, Tools, Memory
+						<span className="mb-5 text-sm text-muted-foreground/70 lg:mb-0 2xl:text-[1vw] 2xl:leading-[1vw]">
+							agentic{' '}
+							<span className="text-muted-foreground/20">(</span>{' '}
+							pipes{' '}
+							<span className="text-muted-foreground/20">|</span>{' '}
+							tools{' '}
+							<span className="text-muted-foreground/20">|</span>{' '}
+							memory{' '}
+							<span className="text-muted-foreground/20">)</span>
 						</span>
-						<div className="ml-[1.5vw] hidden h-2.5 w-2.5 rounded-full bg-white sm:block 2xl:h-[.75vw] 2xl:w-[.75vw]"></div>
+						<div className="ml-4 hidden size-4 rounded-full bg-muted-foreground/70 lg:block"></div>
 					</div>
 				</div>
 
-				<div className="sm:justify-left flex space-x-4">
-					<Link
+				<div
+					className={cn(
+						'mx-auto mt-8 flex w-full items-center justify-center space-x-2 lg:items-start lg:justify-start'
+					)}
+				>
+					<Anchor
+						variant={'default'}
 						href={`/docs`}
-						className="flex items-center rounded-full bg-gray-200 px-4 py-2 text-xs text-black outline-1 outline-[#2A2A2A] transition-colors hover:bg-[#282828] hover:text-white hover:outline 2xl:px-[1vw]  2xl:py-[.65vw] 2xl:text-[.85vw] 2xl:leading-[1vw]"
-						aria-label="Visit Github"
+						aria-label="Get Started"
 					>
-						Get Started
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="ml-2 h-4 w-4"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-							/>
-						</svg>
-					</Link>
-					<Link
+						<IconDocs className="size-4" />
+						<span className={inter.className}>Get Started</span>
+					</Anchor>
+					<Anchor
+						variant={'secondary'}
 						href={`/learn`}
-						className="hover:bg-black-200 rounded-full bg-[#0E0E0E] px-4 py-2 text-xs text-white outline outline-1 outline-[#2A2A2A] transition-colors hover:bg-[#282828] 2xl:px-[1vw] 2xl:py-[.65vw] 2xl:text-[.85vw] 2xl:leading-[1vw]"
-						aria-label="Learn BaseAi"
+						aria-label="Learn BaseAI"
 					>
 						Learn BaseAI
-					</Link>
+					</Anchor>
 				</div>
-				<CopyableCommand command="npx baseai@latest" />
+				<CopyableCommand command="npx baseai@latest init" />
 			</div>
 		</div>
 	);
@@ -109,22 +129,26 @@ function CopyableCommand({ command }: CopyableCommandProps) {
 
 	return (
 		<div
-			className="group mb-4 mt-4 flex w-max cursor-pointer items-center justify-between font-mono text-sm transition-colors"
+			className="group mx-auto mb-4 mt-4 flex w-max cursor-pointer items-center justify-center font-mono text-sm transition-colors lg:mx-0"
 			onClick={copyToClipboard}
 			role="button"
 			tabIndex={0}
 			onKeyDown={e => e.key === 'Enter' && copyToClipboard()}
 			aria-label={`Copy command: ${command}`}
 		>
-			<div className="flex items-center space-x-2">
-				<span className="text-gray-400 sm:text-sm 2xl:text-[1vw] 2xl:leading-[1.5vw]">
-					~
+			<div className="group flex items-center space-x-2 transition-colors group-hover:text-indigo-400">
+				<span className="text-muted-foreground/50 group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw]">
+					<span className="xtext-indigo-400">⌘</span>
+					<span className="group-hover:text-muted-foreground/50">
+						{' '}
+						~
+					</span>
 				</span>
-				<span className="font-mono text-gray-300 sm:text-sm 2xl:text-[1vw] 2xl:leading-[1.5vw]">
+				<span className="font-mono text-muted-foreground/50 transition-colors group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw] ">
 					{command}
 				</span>
 			</div>
-			<div className="ml-2 text-gray-400 transition-colors group-hover:text-gray-300 sm:text-sm 2xl:text-[1vw] 2xl:leading-[1.5vw]">
+			<div className="ml-2 text-muted-foreground/50 transition-colors group-hover:text-indigo-400 sm:text-sm 2xl:leading-[1.5vw]">
 				{copied ? (
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

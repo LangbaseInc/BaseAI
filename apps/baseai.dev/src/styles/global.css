@@ -69,6 +69,9 @@
 	* {
 		@apply border-border;
 	}
+	html {
+		font-family: var(--font-inter);
+	}
 	body {
 		@apply bg-background text-foreground;
 	}
@@ -99,21 +102,25 @@
 	}
 }
 
+html {
+	font-family: var(--font-inter);
+}
+
 .prose table {
 	@apply w-full whitespace-normal;
 }
 
 @font-face {
-	font-family: "Grotesk";
-	src: url("/AlteHaasGroteskBold.ttf") format("truetype");
+	font-family: 'Grotesk';
+	src: url('/AlteHaasGroteskBold.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
 
-.hero-content{
-	font-family: "Grotesk";
+.hero-content {
+	font-family: 'Grotesk';
 }
 
-.helvetica{
-	font-family: "Helvetica";
+.helvetica {
+	font-family: 'Helvetica';
 }
