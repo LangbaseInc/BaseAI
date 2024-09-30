@@ -22,10 +22,10 @@ Make sure you have an account on [Langbase](https://langbase.com).
 
 ## Step #1 Authenticate with Langbase
 
-Use the `baseai auth` command to authenticate with Langbase.
+To authenticate with Langbase, run this:
 
 ```bash
-baseai auth
+npx baseai@latest auth
 ```
 
 It will ask your permission to open a browser window to authenticate with Langbase. Make sure you are logged in to your Langbase account.
@@ -46,5 +46,7 @@ will generate an API key for you.
 ## Step #3 Paste API Key
 
 Copy that API key and paste it in the terminal.
+
+This will save your API key in your local `.env` as `LANGBASE_API_KEY` file. And in the OS config file of BaseAI.
 
 That's it! You are now authenticated with Langbase. You can now deploy your AI agents and memory to Langbase.

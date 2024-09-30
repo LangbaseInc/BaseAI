@@ -29,9 +29,8 @@ The `baseai` folder is present at the root of your application/project. This fol
 
 This file contains all the default configurations of BaseAI that are used by the CLI during the development of your application. You can modify these configurations as per your requirements.
 
-```ts
-// baseai/baseai.config.ts
-import type {BaseAIConfig} from '@baseai/core';
+```ts {{title: "baseai.config.ts"}}
+import type {BaseAIConfig} from 'baseai';
 
 export const config: BaseAIConfig = {
   "log": {

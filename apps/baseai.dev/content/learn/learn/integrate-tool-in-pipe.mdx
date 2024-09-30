@@ -15,6 +15,10 @@ modified: 2024-09-24
 
 ### Learn how to integrate the weather tool in the pipe using baseai
 
+<Note sub="/learn">
+This guide is part of the /learn BaseAI course. For context, [start from the beginning](/learn) to follow along.
+</Note>
+
 ---
 
 In this learn guide, we will integrate the weather tool into the [summarizer](/learn/nodejs/configure-pipe) pipe.
@@ -31,7 +35,7 @@ Open the pipe file present at `/baseai/pipes/summarizer.ts` and import the weath
 import { PipeI } from '@baseai/core';
 import getCurrentWeatherTool from '../tools/get-current-weather';
 
-const summarizerPipe = (): PipeI => ({
+const pipeSummarizer = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'summarizer',
 	description: 'A pipe that summarizes content and make it less wordy',
@@ -57,7 +61,7 @@ const summarizerPipe = (): PipeI => ({
     tools: [getCurrentWeatherTool()]
 });
 
-export default summarizerPipe;
+export default pipeSummarizer;
 ```
 
 ```ts {{ title: './baseai/tools/get-current-weather.ts' }}
@@ -96,9 +100,9 @@ export default getCurrentWeatherTool;
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
 import {Pipe, streamText, getRunner} from '@baseai/core';
-import summarizerPipe from './baseai/pipes/summarizer';
+import pipeSummarizer from './baseai/pipes/summarizer';
 
-const pipe = new Pipe(summarizerPipe());
+const pipe = new Pipe(pipeSummarizer());
 
 const userMsg = `
 Langbase studio is your playground to build, collaborate, and deploy AI. It allows you to experiment with your pipes in real-time, with real data, store messages, version your prompts, and truly helps you take your idea from building prototypes to deployed in production with LLMOps on usage, cost, and quality.

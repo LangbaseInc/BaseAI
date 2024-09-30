@@ -11,12 +11,12 @@ published: 2024-09-24
 modified: 2024-09-24
 ---
 
-# Deploy 
+# Deploy
 
 Use the `deploy` command to deploy a project using the BaseAI CLI to Langbase. Before you deploy a project, make sure you are [authenticated](/docs/deployment/authentication) with the BaseAI CLI.
 
 ```bash
-baseai deploy
+npx baseai@latest deploy
 ```
 
 It will deploy all AI agent Pipes and Memory in the current project directory to Langbase.
@@ -42,7 +42,7 @@ Memory deployment handles the following scenarios:
 
 -   If the **memory does not exist** on Langbase, it will be created.
 -   If the **memory already exists**, it will proceed as follows:
-    -   If the **documents on Langbase match the local memory**, the memory deployment will be skipped. 
+    -   If the **documents on Langbase match the local memory**, the memory deployment will be skipped.
 	-	If the **Langbase memory is a subset of the local memory**, only new documents will be uploaded.
 	-	If the **Langbase memory contains more documents than the local memory**, the user will be prompted to confirm an overwrite:
 	    -	If confirmed, the local memory will **overwrite** the existing memory on Langbase.

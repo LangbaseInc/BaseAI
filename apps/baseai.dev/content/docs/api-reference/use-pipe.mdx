@@ -468,7 +468,7 @@ The BaseAI core package provides a `usePipe()` hook that you can use in your app
             ```
 
             ```ts {{ title: 'route.ts' }}
-            import buildPipe from '@/baseai/pipes/agent';
+            import pipeName from '@/baseai/pipes/agent';
             import {Pipe} from '@baseai/core';
             import {NextRequest} from 'next/server';
 
@@ -476,7 +476,7 @@ The BaseAI core package provides a `usePipe()` hook that you can use in your app
                 const runOptions = await req.json();
 
                 // 1. Initiate the Pipe.
-                const pipe = new Pipe(buildPipe());
+                const pipe = new Pipe(pipeName());
 
                 // 2. Run the Pipe.
                 const {stream, threadId} = await pipe.run(runOptions);
@@ -494,7 +494,7 @@ The BaseAI core package provides a `usePipe()` hook that you can use in your app
             ```ts {{ title: './baseai/pipes/agent.ts' }}
             import { PipeI } from '@baseai/core';
 
-            const buildPipe = (): PipeI => ({
+            const pipeName = (): PipeI => ({
                 apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
                 name: 'summarizer',
                 description: 'A pipe that summarizes content and make it less wordy',
@@ -523,7 +523,7 @@ The BaseAI core package provides a `usePipe()` hook that you can use in your app
                 tools: []
             });
 
-            export default buildPipe;
+            export default pipeName;
             ```
 
         </CodeGroup>

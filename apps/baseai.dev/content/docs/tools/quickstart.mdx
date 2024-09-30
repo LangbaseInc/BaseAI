@@ -136,7 +136,7 @@ Your pipe is created successfully at `/baseai/pipes/weather-agent.ts`. Open the 
 import {PipeI} from '@baseai/core';
 import getCurrentWeatherTool from '../tools/get-current-weather';
 
-const buildPipe = (): PipeI => ({
+const pipeName = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'weather-agent',
 	description: '',
@@ -168,7 +168,7 @@ const buildPipe = (): PipeI => ({
 	tools: [getCurrentWeatherTool()],
 });
 
-export default buildPipe;
+export default pipeName;
 ```
 
 ```ts {{ title: './baseai/tools/get-current-weather.ts' }}
@@ -205,7 +205,7 @@ export default getCurrentWeatherTool;
 ```
 </CodeGroup>
 
-As you can see in the `buildPipe` function, we have added the `getCurrentWeatherTool` to the `tools` array. This will allow the pipe to use the tool to get the current weather for a given location. I have also turn off the stream.
+As you can see in the `pipeName` function, we have added the `getCurrentWeatherTool` to the `tools` array. This will allow the pipe to use the tool to get the current weather for a given location. I have also turn off the stream.
 
 ## Step #5: Integrate the pipe with your app
 
@@ -226,9 +226,9 @@ Add the following code to `index.ts` file:
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
 import {Pipe, generateText} from '@baseai/core';
-import summarizerPipe from './baseai/pipes/summarizer';
+import pipeSummarizer from './baseai/pipes/summarizer';
 
-const pipe = new Pipe(summarizerPipe());
+const pipe = new Pipe(pipeSummarizer());
 
 const userMsg = `What's the weather in San Francisco?`;
 
@@ -248,7 +248,7 @@ main();
 import {PipeI} from '@baseai/core';
 import getCurrentWeatherTool from '../tools/get-current-weather';
 
-const buildPipe = (): PipeI => ({
+const pipeName = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	name: 'weather-agent',
 	description: '',
@@ -280,7 +280,7 @@ const buildPipe = (): PipeI => ({
 	tools: [getCurrentWeatherTool()],
 });
 
-export default buildPipe;
+export default pipeName;
 ```
 
 ```ts {{ title: './baseai/tools/get-current-weather.ts' }}

@@ -24,6 +24,26 @@ const navigationData: NavigationItem[] = [
 				href: '/docs'
 			},
 			{
+				title: 'Start with Learn',
+				href: '/learn'
+			},
+			{
+				title: '1. Create an AI Pipe',
+				href: '/learn/create-pipe'
+			},
+			{
+				title: '2. Create an AI Memory',
+				href: '/learn/create-memory'
+			},
+			{
+				title: '3. Create an AI Tool',
+				href: '/learn/create-tool'
+			},
+			{
+				title: '4. Deploy AI RAG',
+				href: '/learn/deploy-rag-on-langbase'
+			},
+			{
 				title: 'Composable AI',
 				href: '/docs/composable-ai'
 			},
@@ -33,6 +53,7 @@ const navigationData: NavigationItem[] = [
 			}
 		]
 	},
+
 	{
 		title: 'Getting Started',
 		links: [
@@ -171,14 +192,14 @@ const navigationData: NavigationItem[] = [
 				title: 'getRunner()',
 				href: '/docs/api-reference/get-runner'
 			},
-			{
-				title: 'generateText()',
-				href: '/docs/api-reference/generate-text'
-			},
-			{
-				title: 'streamText()',
-				href: '/docs/api-reference/stream-text'
-			},
+			// {
+			// 	title: 'generateText()',
+			// 	href: '/docs/api-reference/generate-text'
+			// },
+			// {
+			// 	title: 'streamText()',
+			// 	href: '/docs/api-reference/stream-text'
+			// },
 			{
 				title: 'usePipe()',
 				href: '/docs/api-reference/use-pipe'
@@ -287,6 +308,15 @@ export const navLearn: NavigationItem[] = [
 			{
 				title: 'Deploy pipe, tool, and memory',
 				href: '/learn/deploy-rag-on-langbase'
+			}
+		]
+	},
+	{
+		title: 'Documentation',
+		links: [
+			{
+				title: 'Read the docs',
+				href: '/docs'
 			}
 		]
 	}

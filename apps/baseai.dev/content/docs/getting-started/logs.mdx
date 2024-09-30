@@ -40,7 +40,9 @@ By default, all logs are enabled. You can customize the logging system by modify
 
 Here is the default configuration of the logging system in BaseAI:
 
-```ts
+```ts {{title: "baseai.config.ts"}}
+import type {BaseAIConfig} from 'baseai';
+
 export const defaultConfig: BaseAIConfig = {
 	log: {
 		// Enable or disable logging

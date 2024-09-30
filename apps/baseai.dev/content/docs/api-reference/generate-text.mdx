@@ -196,9 +196,9 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: 'index.ts' }}
             import 'dotenv/config';
             import {Pipe, generateText} from '@baseai/core';
-            import buildPipe from './baseai/pipes/agent';
+            import pipeName from './baseai/pipes/agent';
 
-            const pipe = new Pipe(buildPipe());
+            const pipe = new Pipe(pipeName());
 
             async function main() {
                 const response = await generateText({
@@ -215,7 +215,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: './baseai/pipes/agent.ts' }}
             import { PipeI } from '@baseai/core';
 
-            const buildPipe = (): PipeI => ({
+            const pipeName = (): PipeI => ({
                 apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
                 name: 'summarizer',
                 description: 'A pipe that summarizes content and make it less wordy',
@@ -244,7 +244,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
                 tools: []
             });
 
-            export default buildPipe;
+            export default pipeName;
             ```
 
         </CodeGroup>
@@ -256,9 +256,9 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: 'index.ts' }}
             import 'dotenv/config';
             import {Pipe, generateText} from '@baseai/core';
-            import buildPipe from './baseai/pipes/agent';
+            import pipeName from './baseai/pipes/agent';
 
-            const pipe = new Pipe(buildPipe());
+            const pipe = new Pipe(pipeName());
 
             async function main() {
                 const response = await generateText({
@@ -276,7 +276,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: './baseai/pipes/agent.ts' }}
             import { PipeI } from '@baseai/core';
 
-            const buildPipe = (): PipeI => ({
+            const pipeName = (): PipeI => ({
                 apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
                 name: 'summarizer',
                 description: 'A pipe that summarizes content and make it less wordy',
@@ -305,7 +305,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
                 tools: []
             });
 
-            export default buildPipe;
+            export default pipeName;
             ```
         </CodeGroup>
 
@@ -316,9 +316,9 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: 'index.ts' }}
             import 'dotenv/config';
             import {Pipe, generateText} from '@baseai/core';
-            import buildPipe from './baseai/pipes/agent';
+            import pipeName from './baseai/pipes/agent';
 
-            const pipe = new Pipe(buildPipe());
+            const pipe = new Pipe(pipeName());
 
             async function main() {
                 // Message 1: Tell something to the LLM.
@@ -350,7 +350,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
             ```ts {{ title: './baseai/pipes/agent.ts' }}
             import { PipeI } from '@baseai/core';
 
-            const buildPipe = (): PipeI => ({
+            const pipeName = (): PipeI => ({
                 apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
                 name: 'summarizer',
                 description: 'A pipe that summarizes content and make it less wordy',
@@ -379,7 +379,7 @@ The BaseAI core package provides a `generateText()` function that you can use in
                 tools: []
             });
 
-            export default buildPipe;
+            export default pipeName;
             ```
         </CodeGroup>
     </Col>

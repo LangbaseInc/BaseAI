@@ -12,9 +12,9 @@ import {
 } from '@/components/MobileNavigation';
 import { MobileSearch, Search } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { IconDocs } from './ui/iconists/icon-docs';
 import BaseAILogo from './baseai-logo';
 import { Anchor } from './ui/anchor';
+import { IconDocs } from './ui/iconists/icon-docs';
 
 /**
  * Retrieves the section title based on the provided pathname.
@@ -63,12 +63,26 @@ function HeaderLinks() {
 	const pathname = usePathname();
 	const isLearnPath = pathname.startsWith('/learn');
 	const href = isLearnPath ? '/docs' : '/learn';
-	const text = isLearnPath ? 'Read docs' : 'Learn';
+	const text = isLearnPath ? 'Docs' : 'Learn';
 
 	return (
-		<Anchor href={href} className="w-28 font-semibold" variant={'outline'}>
-			{text}
-		</Anchor>
+		<>
+			<Anchor
+				href={'https://github.com/LangbaseInc/baseai'}
+				target="_blank"
+				className="hidden w-auto font-semibold lg:flex "
+				variant={'ghost'}
+			>
+				★ BaseAI
+			</Anchor>
+			<Anchor
+				href={href}
+				className="w-28 font-semibold"
+				variant={'default'}
+			>
+				{text}
+			</Anchor>
+		</>
 	);
 }
 
