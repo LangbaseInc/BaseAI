@@ -16,10 +16,10 @@ npx baseai dev
 npm run dev
 
 # You should see several examples you can try out in the browser
-# Check the following folders
-# - examples/nextjs/app/api/langbase/pipes (API Route handlers for pipes)
-# - examples/nextjs/app/demo (examples of using the BaseAI)
-# - examples/nextjs/components/ (BaseAI based react components)
+# Check the following directories inside `examples/nextjs/` directory
+# - /app/api/langbase/pipes (API Route handlers for pipes)
+# - /app/demo (examples of using the BaseAI)
+# - /components/ (BaseAI based react components)
 ```
 
 For more questions, please reach out to us on our new [Discord community](https://langbase.com/discord) or [𝕏/Twitter](https://twitter.com/langbaseinc).
