@@ -335,7 +335,7 @@ Refer to [Next.js with BaseAI](https://github.com/LangbaseInc/baseai/tree/main/e
 
 ## Step #9: Add environment variables
 
-To be able to run and later deploy your Next.js app, you need to add providers and Langbase API keys.
+To be able to run and later deploy your Next.js app, you need to add your Langbase and LLM provider keys. Add the following environment variables to your `.env` file at the root of your app.
 
 ```bash
 # !! SERVER SIDE ONLY !!
@@ -347,8 +347,8 @@ To be able to run and later deploy your Next.js app, you need to add providers a
 LANGBASE_API_KEY=
 
 # TODO: ADD: LOCAL ONLY. Add only to local env files.
-# Following keys are needed for local pipe runs. For providers you are using.
-# For Langbase, please add the key to your LLM keysets.
+# Following keys are needed for local pipe runs. Add the providers you are using.
+# For Langbase, please add the keys in your LLM keysets on Langbase Studio.
 # Read more: Langbase LLM Keysets https://langbase.com/docs/features/keysets
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
@@ -370,7 +370,10 @@ TOGETHER_API_KEY=
 Run BaseAI dev server and start the Next.js app.
 
 ```bash
+# Terminal 1
 npx baseai@latest dev # Start BaseAI dev server
+
+# Terminal 2
 npm run dev # Start Next.js app
 ```
 
