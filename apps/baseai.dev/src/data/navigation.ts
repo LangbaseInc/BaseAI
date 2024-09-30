@@ -210,12 +210,16 @@ const navigationData: NavigationItem[] = [
 		title: 'Guides',
 		links: [
 			{
+				title: 'Using Ollama Models',
+				href: '/docs/guides/using-ollama-models'
+			},
+			{
 				title: 'RAG with Ollama Embeddings',
 				href: '/docs/guides/using-ollama-embeddings'
 			},
 			{
-				title: 'Using Ollama Models',
-				href: '/docs/guides/using-ollama-models'
+				title: 'Build Next.js App with BaseAI',
+				href: '/docs/guides/nextjs-with-baseai'
 			}
 		]
 	}
