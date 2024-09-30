@@ -15,7 +15,7 @@
 
 ## Getting Started
 
-BaseAI is the AI framework for building declarative and composable AI-powered LLM products. It allows you to locally develop AI agents integrated with tools and memory (RAG). Visit our [learn](https://baseai.dev/learn) guide to get started with BaseAI.
+BaseAI is the AI framework for building declarative and composable AI-powered LLM products. It allows you to develop AI agent pipes on your local machine with integrated agentic tools and memory (RAG). Visit our [learn](https://baseai.dev/learn) guide to get started with BaseAI.
 
 ## Documentation
 
@@ -38,3 +38,11 @@ The following are the original authors of BaseAI:
 ## Security
 
 If you've found a security vulnerability in BaseAI, please report it privately by emailing [security@langbase.com](mailto:security@langbase.com). Please do not open a public issue. For more details on Langbase security and how to report, visit this [link](https://langbase.com/security).
+
+Learn more by clicking and browsing our [website][bai], [docs][baid], and a free [/learn AI course][bail] on building AI agents, with agentic tools, and agentic memory.
+
+![baseai.dev](https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg)
+
+[bai]: https://baseai.dev
+[baid]: https://baseai.dev/docs
+[bail]: https://baseai.dev/learn
