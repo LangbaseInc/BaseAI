@@ -5,6 +5,9 @@ BaseAI Remix example.
 Please read the [documentation](https://baseai.dev/docs) for more information.
 
 ```sh
+# Install the dependencies
+npm install
+
 # Make sure to copy .env.baseai.example file and
 # create .env file and add all the API keys in it
 cp .env.baseai.example .env

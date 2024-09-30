@@ -5,8 +5,12 @@ BaseAI Node.js examples.
 Please read the [documentation](https://baseai.dev/docs) for more information.
 
 ```sh
-# Make sure to copy .env.example file and create .env file and add all the API keys in it
-cp .env.example .env
+# Install the dependencies
+npm install
+
+# Make sure to copy .env.baseai.example file and
+# create .env file and add all the API keys in it
+cp .env.baseai.example .env
 
 # Run the local baseai dev server to test the examples (uses localhost:9000 port)
 npx baseai dev

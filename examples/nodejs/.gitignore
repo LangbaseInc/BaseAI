@@ -73,3 +73,5 @@ assets/img/.DS_Store
 
 # Next.js
 .next
+# baseai
+/.baseai/
