@@ -18,6 +18,8 @@ export default function Content({
 		Record<string, unknown>
 	>;
 }) {
+
+
 	return (
 		<Wrapper>
 			{content && (
