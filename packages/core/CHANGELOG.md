@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.0.24
+
+### Patch Changes
+
+-   📦 NEW: deploy summary
+
 ## 0.0.23
 
 ### Patch Changes
