@@ -297,7 +297,7 @@ TOGETHER_API_KEY=
 		}
 	} catch (error) {
 		p.log.error(
-			`Error creating .env.baseai.example: ${error instanceof Error ? error.message : String(error)}`
+			`Error creating .env.baseai.example: Check the example env file here https://github.com/LangbaseInc/baseai/blob/main/.env.baseai.example\n Error: ${error instanceof Error ? error.message : String(error)}`
 		);
 	}
 }
