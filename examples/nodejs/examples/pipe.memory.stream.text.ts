@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {getRunner, Pipe, streamText} from '@baseai/core';
 import chatWithDocs from '../baseai/pipes/chat-with-docs';
 
