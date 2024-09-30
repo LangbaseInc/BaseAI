@@ -4,9 +4,6 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export async function generateMetadata() {
-
-	const isProd = process.env.CF_PAGES_URL! === 'https://baseai.dev' ? true : false;
-
 	return {
 		title: {
 			template: 'BaseAI - The first Web AI Framework',
@@ -28,11 +25,11 @@ export async function generateMetadata() {
 		},
 		authors: [{ name: 'Langbase, Inc.' }],
 		robots: {
-			index: isProd ? true : false,
-			follow: isProd ? true : false,
+			index: true,
+			follow: true,
 			googleBot: {
-				index: isProd ? true : false,
-				follow: isProd ? true : false,
+				index: true,
+				follow: true,
 			}
 		},
 		keywords: 'BaseAI, Web AI framework',
