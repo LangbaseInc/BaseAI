@@ -55,7 +55,7 @@ function Content() {
 				>
 					<div className="text-left lg:max-w-[60%]">
 						<div className="text-center text-sm lg:text-left 2xl:text-[1vw] 2xl:leading-[1.5vw]">
-							<div className="flex items-center">
+							<div className="flex items-center justify-center lg:justify-start">
 								<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
 								<span className="text-sm text-muted-foreground/70 2xl:text-[1vw] 2xl:leading-[1vw]">
 									<strong className="mr-2 text-white">
