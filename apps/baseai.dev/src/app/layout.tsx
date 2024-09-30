@@ -32,7 +32,10 @@ export const metadata: Metadata = {
 			follow: true
 		}
 	},
-	keywords: 'BaseAI, Web AI framework'
+	keywords: 'BaseAI, Web AI framework',
+	alternates: {
+		canonical: 'https://baseai.dev'
+	}
 };
 
 export default async function RootLayout({
