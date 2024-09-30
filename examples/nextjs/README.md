@@ -1,20 +1,25 @@
-# ⌘ Langbase SDK Next.js Example
+# BaseAI Next.js Example
 
--   [Next.js Example](https://github.com/LangbaseInc/langbase-sdk/tree/main/examples/nextjs)
-    -   TypeScript code
-    -   [React component](https://github.com/LangbaseInc/langbase-sdk/tree/main/examples/nextjs/components/langbase) to display the response
-    -   [API Route handlers](https://github.com/LangbaseInc/langbase-sdk/tree/main/examples/nextjs/app/api/langbase/pipe) to send requests to ⌘ Langbase
+BaseAI Next.js example.
 
-First, run the development server:
+Please read the [documentation](https://baseai.dev/docs) for more information.
 
-```bash
+```sh
+# Make sure to copy .env.baseai.example file and
+# create .env file and add all the API keys in it
+cp .env.baseai.example .env
+
+# Run the local baseai dev server to test the examples (uses localhost:9000 port)
+npx baseai dev
+
+# Run Nextjs locally
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# You should see several examples you can try out in the browser
+# Check the following folders
+# - examples/nextjs/app/api/langbase/pipes (API Route handlers for pipes)
+# - examples/nextjs/app/demo (examples of using the BaseAI)
+# - examples/nextjs/components/ (BaseAI based react components)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For more questions, please reach out to us on our new [Discord community](https://langbase.com/discord) or [𝕏/Twitter](https://twitter.com/langbaseinc).

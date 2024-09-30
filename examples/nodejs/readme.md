@@ -1,6 +1,8 @@
-# Node.js Examples
+# BaseAI Node.js Examples
 
-BaseAI Node.js examples for the Pipe API.
+BaseAI Node.js examples.
+
+Please read the [documentation](https://baseai.dev/docs) for more information.
 
 ```sh
 # Make sure to copy .env.example file and create .env file and add all the API keys in it
@@ -19,3 +21,5 @@ npm run pipe.run.stream.loop
 npm run pipe.generate.text
 npm run pipe.stream.text
 ```
+
+For more questions, please reach out to us on our new [Discord community](https://langbase.com/discord) or [𝕏/Twitter](https://twitter.com/langbaseinc).
