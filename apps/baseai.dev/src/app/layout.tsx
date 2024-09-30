@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 		template: 'BaseAI - Web AI Framework',
 		default: 'BaseAI - Web AI Framework'
 	},
-	description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+	description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
 	openGraph: {
 		title: 'BaseAI - Web AI Framework',
-		description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
 		images: ['https://baseai.dev/api/og?title=baseai.dev'],
 		siteName: 'BaseAI'
 	},
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 		card: 'summary_large_image',
 		title: 'BaseAI - Web AI Framework',
 		creator: '@LangbaseInc',
-		description: `BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
+		description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
 		images: ['https://baseai.dev/api/og?title=baseai.dev']
 	},
 	authors: [{ name: 'Langbase, Inc.' }],
