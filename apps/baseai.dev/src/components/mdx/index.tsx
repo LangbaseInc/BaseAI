@@ -1,3 +1,4 @@
+import { Code, CodeGroup, Pre } from '@/components/Code';
 import { CodeExamples } from '@/components/CodeExamples';
 import { Heading as HeadingComp } from '@/components/Heading';
 import Image from '@/components/Img';
@@ -10,18 +11,18 @@ import { Properties } from '@/components/mdx/Properties';
 import { Property } from '@/components/mdx/Property';
 import { Row } from '@/components/mdx/Row';
 import { Spoiler } from '@/components/mdx/spoiler';
+import { SpoilerAdvanced } from '@/components/mdx/spoiler-advanced';
 import { Sub } from '@/components/mdx/sub-property';
 import { Warn } from '@/components/mdx/Warn';
 import { Wrapper } from '@/components/mdx/Wrapper';
 import { ProductsTable } from '@/components/table-products';
-import Link from 'next/link';
-import { Button } from '../Button';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import BaseAILogo from '../baseai-logo';
+import { Button } from '../Button';
+import { Guides } from '../Guides';
 import { CTAButtons } from '../ui/cta-buttons';
 import { IconInfoCircle } from '../ui/icons/info';
-import { Code, CodeGroup, Pre } from '@/components/Code';
-import { Guides } from '../Guides';
-import BaseAILogo from '../baseai-logo';
 
 export const MarkdownComponents = () => {
 	return {
@@ -57,7 +58,12 @@ export const MarkdownComponents = () => {
 			);
 		},
 		table: (props: any) => {
-			return <table className="overflow-x-auto whitespace-nowrap" {...props} />;
+			return (
+				<table
+					className="overflow-x-auto whitespace-nowrap"
+					{...props}
+				/>
+			);
 		},
 		h2: (props: any) => {
 			return <HeadingComp level={2} {...props} />;
@@ -97,6 +103,9 @@ export const MarkdownComponents = () => {
 		},
 		Spoiler: (props: any) => {
 			return <Spoiler {...props} />;
+		},
+		SpoilerAdvanced: (props: any) => {
+			return <SpoilerAdvanced {...props} />;
 		},
 		Sub: (props: any) => {
 			return <Sub {...props} />;
