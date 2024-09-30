@@ -1,5 +1,11 @@
 # baseai
 
+## 0.0.28
+
+### Patch Changes
+
+-   👌 IMPROVE: defaults
+
 ## 0.0.27
 
 ### Patch Changes
