@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {Pipe} from '@baseai/core';
 import pipeSummary from '../baseai/pipes/summary';
 
