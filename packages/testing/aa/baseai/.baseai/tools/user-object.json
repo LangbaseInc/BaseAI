@@ -1,1 +1,0 @@
-{"type":"function","function":{"name":"userObject","description":"convert text to user objection","parameters":{"type":"object","properties":{"name":{"type":"string","description":"Name of the user"}},"required":["name"]}}}

@@ -7,5 +7,11 @@
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": ["baseai.dev", "example-nextjs", "example-nodejs", "testing"]
+	"ignore": [
+		"baseai.dev",
+		"example-nextjs",
+		"example-nodejs",
+		"example-remix",
+		"testing"
+	]
 }
