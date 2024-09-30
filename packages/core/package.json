@@ -93,13 +93,17 @@
 			"optional": true
 		}
 	},
-	"homepage": "https://langbase.com/docs",
+	"homepage": "https://BaseAI.dev",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/LangbaseInc/langbase-sdk.git"
+		"url": "git+https://github.com/LangbaseInc/baseai.git"
 	},
 	"bugs": {
-		"url": "https://github.com/LangbaseInc/langbase-sdk/issues"
+		"url": "https://github.com/LangbaseInc/baseai/issues"
+	},
+	"author": {
+		"name": "Langbase",
+		"url": "https://BaseAI.dev"
 	},
 	"keywords": [
 		"ai",
