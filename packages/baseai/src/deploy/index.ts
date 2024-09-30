@@ -1,7 +1,7 @@
 import build from '@/build';
 import { OLLAMA } from '@/dev/data/models';
 import { dlog } from '@/dev/utils/dlog';
-import { cyan, dim, green } from '@/utils/formatting';
+import { cyan, dim, dimItalic, green } from '@/utils/formatting';
 import { heading } from '@/utils/heading';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 import { MEMORYSETS } from '@/utils/memory/constants';
@@ -86,9 +86,14 @@ async function deploy({
 			heading({ text: 'DEPLOYED', sub: 'successfully', green: true })
 		);
 
-		console.log(
-			`\n Make sure ${cyan(`LANGBASE_API_KEY`)} exists in your production environment.
-${dim(`Successfully deployed:`)}
+		p.log.warning(
+			dimItalic(
+				`Make sure ${cyan(`LANGBASE_API_KEY`)} exists in your production environment.`
+			)
+		);
+
+		p.log.info(
+			`${dim(`Successfully deployed:`)}
 ${dim(`- ${green(pipes?.length)} pipe${pipes.length !== 1 ? 's' : ''}
 - ${green(tools?.length ?? 0)} tool${tools?.length !== 1 ? 's' : ''}
 - ${green(memory?.length ?? 0)} memory${memory?.length !== 1 ? 'sets' : ''}`)}`
