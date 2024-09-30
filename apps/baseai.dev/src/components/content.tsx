@@ -18,8 +18,11 @@ export default function Content({
 		Record<string, unknown>
 	>;
 }) {
-	console.log('env', process.env);
-	console.log('__NEXT_PRIVATE_ORIGIN', process.env.__NEXT_PRIVATE_ORIGIN!);
+	const domain = process.env.CF_PAGES_URL || 'http://localhost:test';
+	const branch = process.env.CF_PAGES_BRANCH || 'developmenttest';
+
+	console.log(`Current domain: ${domain}`);
+	console.log(`Current branch: ${branch}`);
 
 	return (
 		<Wrapper>
