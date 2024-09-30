@@ -1,5 +1,11 @@
 # baseai
 
+## 0.0.29
+
+### Patch Changes
+
+-   📖 DOC: readme
+
 ## 0.0.28
 
 ### Patch Changes
