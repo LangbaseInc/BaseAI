@@ -39,12 +39,17 @@ The following commands are available in the CLI:
 | `auth` | Starts the authentication process of BaseAI with Langbase |
 | `build` | Builds `pipes`, `memory` and `tools` for deployment to Langbase |
 | `deploy` | Deploys your BaseAI application to Langbase |
+| `help` | Help command to check the available commands/flags |
 
+---
+<Note>
+Since `baseai` is installed locally in your project you can run all these commands using `npm run baseai <command> [flag]` or similary with `pnpm`, `bun`, or `yarn`.
+</Note>
 ---
 
 ### `help` command
 
-`baseai help` provides information about the available commands, flags and their usage.
+`help` provides information about the available commands, flags and their usage.
 
 ```bash
 npx baseai@latest help
@@ -54,7 +59,7 @@ npx baseai@latest help
 
 ### `dev` command
 
-`baseai dev` starts the local server of BaseAI in development mode. This command is used for testing `pipes`, `memory` and `tools` of your application locally before deploying them to Langbase.
+`baseai dev` starts the local server of BaseAI in development mode. When working locally always have the local dev server running. It runs the server locally on `https://localhost:9000`. Your  `pipes`, `memory` and `tools` might also show logs in the console.
 
 ```bash
 npx baseai@latest dev
