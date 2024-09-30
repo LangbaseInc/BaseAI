@@ -44,7 +44,7 @@ importers:
         version: 2.1.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1(canvas@2.11.2))(terser@5.34.1)
+        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1)
 
   apps/baseai.dev:
     dependencies:
@@ -644,7 +644,7 @@ importers:
         version: 5.6.2
       vitest:
         specifier: 1.6.0
-        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1(canvas@2.11.2))(terser@5.34.1)
+        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1)
 
   packages/core:
     dependencies:
@@ -702,7 +702,7 @@ importers:
         version: 5.6.2
       vitest:
         specifier: 1.6.0
-        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1(canvas@2.11.2))(terser@5.34.1)
+        version: 1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1)
 
   packages/testing:
     dependencies:
@@ -3694,9 +3694,6 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  base-64@1.0.0:
-    resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
-
   base64-arraybuffer@1.0.2:
     resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
     engines: {node: '>= 0.6.0'}
@@ -5620,14 +5617,9 @@ packages:
     resolution: {integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==}
     engines: {node: '>=18'}
 
-  html-escaper@3.0.3:
-    resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
-
-  html-void-elements@3.0.0:
-    resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
-
-  http-cache-semantics@4.1.1:
-    resolution: {integrity: sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==}
+  html2canvas@1.4.1:
+    resolution: {integrity: sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==}
+    engines: {node: '>=8.0.0'}
 
   http-errors@1.4.0:
     resolution: {integrity: sha512-oLjPqve1tuOl5aRhv8GK5eHpqP1C9fb+Ol+XTLjKfLltE44zdDbEdjPSbU7Ch5rSNsVFqZn97SrMmZLdu1/YMw==}
@@ -12795,8 +12787,6 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  base-64@1.0.0: {}
-
   base64-arraybuffer@1.0.2: {}
 
   base64-js@1.5.1: {}
@@ -15229,11 +15219,10 @@ snapshots:
     dependencies:
       whatwg-encoding: 3.1.1
 
-  html-escaper@3.0.3: {}
-
-  html-void-elements@3.0.0: {}
-
-  http-cache-semantics@4.1.1: {}
+  html2canvas@1.4.1:
+    dependencies:
+      css-line-break: 2.1.0
+      text-segmentation: 1.0.3
 
   http-errors@1.4.0:
     dependencies:
@@ -19307,11 +19296,7 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.34.1
 
-  vitefu@1.0.2(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1)):
-    optionalDependencies:
-      vite: 5.4.8(@types/node@22.7.4)(terser@5.34.1)
-
-  vitest@1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1(canvas@2.11.2))(terser@5.34.1):
+  vitest@1.6.0(@edge-runtime/vm@4.0.3)(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1):
     dependencies:
       '@vitest/expect': 1.6.0
       '@vitest/runner': 1.6.0

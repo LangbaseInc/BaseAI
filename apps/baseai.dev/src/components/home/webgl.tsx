@@ -2,15 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import html2canvas from 'html2canvas';
 
 const WebGLInitializer = () => {
 	const mountRef = useRef<HTMLDivElement | null>(null);
-	const textRef = useRef<HTMLDivElement | null>(null);
-	const [mousePosition, setMousePosition] = useState<THREE.Vector2>(
-		new THREE.Vector2(0, 0)
-	);
 
 	useEffect(() => {
 		const scene = new THREE.Scene();
@@ -29,45 +24,10 @@ const WebGLInitializer = () => {
 			mountRef.current.appendChild(renderer.domElement);
 		}
 
-		// Create a background texture with text
 		const canvas = document.createElement('canvas');
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
-		// canvas.width =
-		// 	window.innerWidth >= window.innerHeight
-		// 		? window.innerWidth
-		// 		: window.innerHeight; // Set canvas width based on window dimensions.
-		// canvas.height =
-		// 	window.innerHeight <= window.innerWidth
-		// 		? window.innerHeight * 1.25
-		// 		: window.innerHeight * 2;
-
-		// const createBackgroundTexture = (width: number, height: number) => {
-		// 	const canvas = document.createElement('canvas');
-		// 	const ctx = canvas.getContext('2d');
-		// 	canvas.width = width;
-		// 	canvas.height = height;
-
-		// 	if (ctx) {
-		// 		ctx.fillStyle = '#000000';
-		// 		ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-		// 		// Calculate font size based on screen dimensions
-		// 		const baseFontSize = width * 0.19; // 18.5% of the smaller dimension
-		// 		ctx.font = bold ${baseFontSize}px Grotesk;
-
-		// 		ctx.fillStyle = '#ffffff';
-		// 		ctx.textAlign = 'center';
-		// 		ctx.textBaseline = 'middle';
-		// 		ctx.fillText('BASE AI', canvas.width / 2, canvas.height / 2);
-		// 	}
-
-		// 	const bgTexture = new THREE.CanvasTexture(canvas);
-		// 	bgTexture.wrapS = THREE.RepeatWrapping;
-		// 	bgTexture.wrapT = THREE.RepeatWrapping;
-		// 	return bgTexture;
-		// };
 
 		const fontFace = new FontFace(
 			'Grotesk',
@@ -76,7 +36,6 @@ const WebGLInitializer = () => {
 		document.fonts.add(fontFace);
 
 		const textDiv = document.createElement('div');
-		// textDiv.style.display = 'inline-block';
 		textDiv.style.position = 'absolute';
 		textDiv.style.left = '0';
 		textDiv.style.top = '0';
@@ -91,17 +50,6 @@ const WebGLInitializer = () => {
 		textDiv.style.alignItems = 'center';
 		textDiv.textContent = 'BASE AI';
 		textDiv.style.zIndex = '-1';
-
-// 		const style = document.createElement('style');
-// 		style.textContent = `
-//    	 @font-face {
-//       font-family: 'Grotesk';
-//       src: url('/AlteHaasGroteskBold.ttf') format('truetype');
-//       font-weight: normal;
-//       font-style: normal;
-//     }
-//   `;
-// 		document.head.appendChild(style);
 
 		const PIXEL_RATIO = 2;
 		const createHighResBackgroundTexture = async (
@@ -489,15 +437,6 @@ const WebGLInitializer = () => {
 		const raycaster = new THREE.Raycaster();
 		const mouse = new THREE.Vector2();
 
-		// Mouse move event handler
-		const onMouseMove = (event: MouseEvent) => {
-			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-			setMousePosition(new THREE.Vector2(mouse.x, mouse.y));
-		};
-
-		window.addEventListener('mousemove', onMouseMove);
-
 		// Animation loop
 		const animate = () => {
 			requestAnimationFrame(animate);
@@ -546,13 +485,18 @@ const WebGLInitializer = () => {
 					material.uniforms.u_background.value = texture;
 				}
 			});
+			createHighResBackgroundTexture(width, height).then(texture => {
+				scene.background = texture;
+				if (material.uniforms && material.uniforms.u_background) {
+					material.uniforms.u_background.value = texture;
+				}
+			});
 		};
 
 		window.addEventListener('resize', onWindowResize);
 
 		return () => {
 			window.removeEventListener('resize', onWindowResize);
-			window.removeEventListener('mousemove', onMouseMove);
 			if (mountRef.current) {
 				mountRef.current.removeChild(renderer.domElement);
 			}
