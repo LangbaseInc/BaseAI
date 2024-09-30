@@ -1,5 +1,11 @@
 # baseai
 
+## 0.0.25
+
+### Patch Changes
+
+-   👌 IMPROVE: deployment summary
+
 ## 0.0.24
 
 ### Patch Changes
