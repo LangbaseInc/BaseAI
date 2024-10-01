@@ -233,9 +233,8 @@ function displayOutro({ calledAsCommand }: { calledAsCommand: boolean }): void {
 	}
 }
 
-async function updateGitignore(): Promise<void> {
+async function updateGitignore(gitignoreEntry: string): Promise<void> {
 	const gitignorePath = path.join(process.cwd(), '.gitignore');
-	const gitignoreEntry = '# baseai\n**/.baseai/\n\n# Env file\n.env\n';
 
 	try {
 		let gitignoreContent = '';
@@ -356,7 +355,8 @@ export async function init({
 		await createBaseAIDirectories();
 		await createConfigFile();
 		await updatePackageJsonScript();
-		await updateGitignore();
+		await updateGitignore('# baseai\n**/.baseai/\n');
+		await updateGitignore('# env file\n.env\n');
 		await createEnvBaseAIExample();
 
 		displayOutro({ calledAsCommand });
