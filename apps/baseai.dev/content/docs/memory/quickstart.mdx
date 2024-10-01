@@ -84,16 +84,16 @@ In your `src/index.ts` file, add the following code:
 
 
 ```ts
-import { Pipe, streamText, getRunner } from '@baseai/core';
+import { Pipe, getRunner } from '@baseai/core';
 import chatWithDocsPipeConfig from './baseai/pipes/chat-with-docs-rag';
 
 // Instantiate the pipe
 const pipe = new Pipe(chatWithDocsPipeConfig());
 
 async function main() {
-	const {stream} = await streamText({
-		pipe,
+	const {stream} = await pipe.run({
 		messages: [{role: 'user', content: 'How to create a pipe?'}],
+		stream: true
 	});
 
 	// Convert the stream to a stream runner.

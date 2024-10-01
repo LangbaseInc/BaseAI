@@ -1,13 +1,13 @@
 import 'dotenv/config';
-import {getRunner, Pipe, streamText} from '@baseai/core';
+import {getRunner, Pipe} from '@baseai/core';
 import chatWithDocs from '../baseai/pipes/chat-with-docs';
 
 const pipe = new Pipe(chatWithDocs());
 
 async function main() {
-	const {stream, threadId, rawResponse} = await streamText({
-		pipe,
+	const {stream, threadId, rawResponse} = await pipe.run({
 		messages: [{role: 'user', content: 'What is the default model used?'}],
+		stream: true,
 	});
 
 	// Convert the stream to a stream runner.

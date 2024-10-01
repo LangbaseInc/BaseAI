@@ -192,14 +192,6 @@ const navigationData: NavigationItem[] = [
 				title: 'getRunner()',
 				href: '/docs/api-reference/get-runner'
 			},
-			// {
-			// 	title: 'generateText()',
-			// 	href: '/docs/api-reference/generate-text'
-			// },
-			// {
-			// 	title: 'streamText()',
-			// 	href: '/docs/api-reference/stream-text'
-			// },
 			{
 				title: 'usePipe()',
 				href: '/docs/api-reference/use-pipe'

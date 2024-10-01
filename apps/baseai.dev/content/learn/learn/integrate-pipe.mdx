@@ -47,7 +47,7 @@ Add the following code to `index.ts` file:
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
-import { Pipe, streamText, getRunner } from '@baseai/core';
+import { Pipe, getRunner } from '@baseai/core';
 import pipeSummarizer from './baseai/pipes/summarizer';
 
 const pipe = new Pipe(pipeSummarizer());
@@ -60,9 +60,9 @@ A complete AI developers platform.
 `;
 
 async function main() {
-	const { stream } = await streamText({
-		pipe,
-		messages: [{ role: 'user', content: userMsg }]
+	const { stream } = await pipe.run({
+		messages: [{ role: 'user', content: userMsg }],
+		stream: true
 	});
 
 	const runner = getRunner(stream);
@@ -125,7 +125,7 @@ export default pipeSummarizer;
 
 </CodeGroup>
 
-We have added a user message to the pipe. We will use this message to test the pipe. We will also use the `streamText` method to stream the text on the terminal.
+We have added a user message to the pipe. We will use this message to test the pipe. We will also use the `pipe.run` method with `stream: true` to stream the text in the terminal.
 
 ## Step #3: Add OpenAI API key in env
 
