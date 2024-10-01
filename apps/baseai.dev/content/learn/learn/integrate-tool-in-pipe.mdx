@@ -99,7 +99,7 @@ export default getCurrentWeatherTool;
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
-import {Pipe, streamText, getRunner} from '@baseai/core';
+import {Pipe, getRunner} from '@baseai/core';
 import pipeSummarizer from './baseai/pipes/summarizer';
 
 const pipe = new Pipe(pipeSummarizer());
@@ -112,9 +112,9 @@ A complete AI developers platform.
 `;
 
 async function main() {
-	const {stream} = await streamText({
-		pipe,
+	const {stream} = await pipe.run({
 		messages: [{role: 'user', content: userMsg}],
+		stream: true
 	});
 
 	const runner = getRunner(stream);
