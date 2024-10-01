@@ -235,7 +235,7 @@ function displayOutro({ calledAsCommand }: { calledAsCommand: boolean }): void {
 
 async function updateGitignore(): Promise<void> {
 	const gitignorePath = path.join(process.cwd(), '.gitignore');
-	const gitignoreEntry = '# baseai\n**/.baseai/\n';
+	const gitignoreEntry = '# baseai\n**/.baseai/\n\n# Env file\n.env\n';
 
 	try {
 		let gitignoreContent = '';
