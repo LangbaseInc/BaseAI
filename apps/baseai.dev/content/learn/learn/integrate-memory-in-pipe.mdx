@@ -68,7 +68,7 @@ export default pipeSummarizer;
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
-import {Pipe, generateText} from '@baseai/core';
+import {Pipe} from '@baseai/core';
 import pipeSummarizer from './baseai/pipes/summarizer';
 
 const pipe = new Pipe(pipeSummarizer());
@@ -76,9 +76,9 @@ const pipe = new Pipe(pipeSummarizer());
 const userMsg = `What's the weather in San Francisco?`;
 
 async function main() {
-	const response = await generateText({
-		pipe,
+	const response = await pipe.run({
 		messages: [{role: 'user', content: userMsg}],
+		stream: false,
 	});
 
 	console.log(response.completion);

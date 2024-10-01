@@ -14,7 +14,7 @@ modified: 2024-09-24
 
 A stream is a continuous flow of data that can be consumed piece by piece. The `getRunner()` function is a utility function that converts a readable stream in a runner. This runner can be used to run the stream and consume the data.
 
-The `getRunner()` function can be used together with `pipe.run()` [function](/docs/api-reference/pipe-run) when the stream is `true` or with the `streamText()` [function](/docs/api-reference/stream-text) to consume the stream.
+The `getRunner()` function can be used together with `pipe.run()` [function](/docs/api-reference/pipe-run) when the stream is `true` to consume the stream.
 
 The BaseAI core package provides a `getRunner()` function that you can use in your app.
 
@@ -123,6 +123,7 @@ The BaseAI core package provides a `getRunner()` function that you can use in yo
 
         ```bash {{ title: 'Create a new Pipe' }}
         npx baseai@latest pipe
+        # OR
         pnpm dlx baseai@latest pipe
         ```
 
@@ -132,21 +133,21 @@ The BaseAI core package provides a `getRunner()` function that you can use in yo
         OPENAI_API_KEY="<REPLACE-WITH-YOUR-OPENAI-KEY>"
         ```
 
-        ### `getRunner()` example with `streamText()`
+        ### `getRunner()` example with `pipe.run()`
 
-        <CodeGroup exampleTitle="streamText()" title="streamText()">
+        <CodeGroup exampleTitle="pipe.run()" title="pipe.run()">
 
             ```ts {{ title: 'index.ts' }}
             import 'dotenv/config';
-            import {Pipe, streamText, getRunner} from '@baseai/core';
+            import {Pipe, getRunner} from '@baseai/core';
             import pipeName from './baseai/pipes/agent';
 
             const pipe = new Pipe(pipeName());
 
             async function main() {
-                const {stream} = await streamText({
-                    pipe,
+                const {stream} = await pipe.run({
                     messages: [{role: 'user', content: 'Hello'}],
+                    stream: true
                 });
 
                 // NOTE: This is a Node.js only example.

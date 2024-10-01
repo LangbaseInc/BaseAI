@@ -38,7 +38,7 @@ How to create a pipe?
 
 ```ts {{ title: 'index.ts' }}
 import 'dotenv/config';
-import {Pipe, generateText} from '@baseai/core';
+import {Pipe} from '@baseai/core';
 import pipeSummarizer from './baseai/pipes/summarizer';
 
 const pipe = new Pipe(pipeSummarizer());
@@ -46,9 +46,9 @@ const pipe = new Pipe(pipeSummarizer());
 const userMsg = `How to create a pipe?`;
 
 async function main() {
-	const response = await generateText({
-		pipe,
+	const response = await pipe.run({
 		messages: [{role: 'user', content: userMsg}],
+		stream: false,
 	});
 
 	console.log(response.completion);
