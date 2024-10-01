@@ -235,7 +235,7 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
         OPENAI_API_KEY="<REPLACE-WITH-YOUR-OPENAI-KEY>"
         ```
 
-        ### `pipe.run()` generate example
+        ### `pipe.run()` non-stream example
 
         <CodeGroup exampleTitle="pipe.run()" title="pipe.run()">
 
@@ -562,7 +562,7 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
             <Property name="choices" type="ChoiceGenerate[]">
                 A list of chat completion choices. Can contain more than one elements if n is greater than 1.
 
-                ```ts {{title: 'Choice Object for generateText()'}}
+                ```ts {{title: 'Choice Object for pipe.run() with stream off'}}
                 interface ChoiceGenerate {
                     index: number;
                     message: Message;
@@ -671,7 +671,7 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
 
         ### RunResponseStream Object
 
-        Response of `streamText()` is a `Promise<RunResponseStream>`.
+        Response of `pipe.run()` with `stream: true` is a `Promise<RunResponseStream>`.
 
         ```ts {{title: 'RunResponseStream Object'}}
         interface RunResponseStream {
@@ -691,10 +691,10 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
                 The different headers of the response.
             </Property>
             <Property name="stream" type="ReadableStream">
-                Stream is a StreamText object with a streamed sequence of StreamChunk objects.
+                Stream is an object with a streamed sequence of StreamChunk objects.
 
                 ```ts {{title: 'StreamResponse Object'}}
-                type StreamText = ReadableStream<StreamChunk>;
+                type StreamResponse = ReadableStream<StreamChunk>;
                 ```
 
                 ### StreamChunk
@@ -734,7 +734,7 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
                         <Property name="choices" type="ChoiceStream[]">
                             A list of chat completion choices. Can contain more than one elements if n is greater than 1.
 
-                        ```js {{title: 'Choice Object for streamText()'}}
+                        ```js {{title: 'Choice Object for pipe.run() with stream true'}}
                         interface ChoiceStream {
                             index: number;
                             delta: Delta;
@@ -848,14 +848,13 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
         ```
 
         ```js  {{ title: 'RunResponseStream of pipe.run() with stream true' }}
-        // Response of a streamText() call is a Promise<StreamResponse>.
         {
             "threadId": "string-uuid-123",
-            "stream": StreamText // example of streamed chunks below.
+            "stream": StreamResponse // example of streamed chunks below.
         }
         ```
 
-        ```json {{ title: 'StreamText has stream chunks' }}
+        ```json {{ title: 'StreamResponse has stream chunks' }}
         // A stream chunk looks like this …
         {
             "id": "chatcmpl-123",
