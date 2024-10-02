@@ -264,6 +264,8 @@ export class Pipe {
 	private async isLocalServerRunning(): Promise<Boolean> {
 		// TODO: Remove hard-coded port number when configurable support is added.
 		const portInUse = await isPortInUse(9000);
+
+		// Port not in use. BaseAI dev server is not running.
 		if (!portInUse) {
 			console.warn(
 				`\nBaseAI dev server is not running. Please run 'npx baseai@latest dev' to start the server.`,
@@ -271,18 +273,20 @@ export class Pipe {
 			return false;
 		}
 
-		// Port in use. Check if BaseAI dev server is running on port.
-		const response = (await this.request.get({
-			endpoint: '/',
-		})) as unknown as {
-			success: boolean;
-		};
+		const endpoint = getApiUrl();
 
-		// Port in use but not by BaseAI dev server
-		if (!response.success) {
-			console.warn(
-				`\nPort 9000 is in use. Please stop the process running on port 9000 and run 'npx baseai@latest dev' to start the server.`,
-			);
+		// Port in use. Check if BaseAI dev server is running on port.
+		const response = await fetch(endpoint);
+		const portWarning = `\nPort 9000 is already in use. Terminate the process running on it and run 'npx baseai@latest dev' to start the dev server.`;
+
+		if (!response.ok) {
+			console.warn(portWarning);
+			return false;
+		}
+
+		const res = (await response.json()) as unknown as {success: boolean};
+		if (!res.success) {
+			console.warn(portWarning);
 			return false;
 		}
 
