@@ -39,3 +39,5 @@ next-env.d.ts
 /.baseai/
 # baseai
 **/.baseai/
+# env file
+.env

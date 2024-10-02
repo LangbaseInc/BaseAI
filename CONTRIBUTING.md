@@ -11,6 +11,7 @@ pnpm changeset
 pnpm version-packages 
 grlz 'new version'
 pnpm release
+pnpm update-examples
 ```
 ## Testing locally
 
