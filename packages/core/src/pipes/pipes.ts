@@ -4,6 +4,7 @@ import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
+import {isLocalServerRunning} from 'src/utils/local-server-running';
 
 // Type Definitions
 export type Role = 'user' | 'assistant' | 'system' | 'tool';
@@ -260,41 +261,6 @@ export class Pipe {
 		return currentResponse;
 	}
 
-	private async isLocalServerRunning(): Promise<Boolean> {
-		try {
-			const endpoint = getApiUrl();
-
-			const response = await fetch(endpoint, {
-				mode: 'no-cors',
-				cache: 'no-cache', // Prevents caching of the request
-			});
-
-			const portUseError = `\nPort 9000 is already in use. \nTerminate the process running on it. \nRun 'npx baseai@latest dev' in an new terminal to start the dev server.\n`;
-
-			if (!response.ok) {
-				console.error(portUseError);
-				return false;
-			}
-
-			const res = (await response.json()) as unknown as {
-				success: boolean;
-			};
-
-			if (!res.success) {
-				console.error(portUseError);
-				return false;
-			}
-
-			return true;
-		} catch (error) {
-			// Port is not in use and BaseAI dev server is not running
-			console.error(
-				`\nBaseAI dev server is not running. \nPlease run 'npx baseai@latest dev' in a new teriminal to start dev server.\n`,
-			);
-			return false;
-		}
-	}
-
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
 		const prodOptions = {
 			endpoint,
@@ -314,7 +280,7 @@ export class Pipe {
 
 		const isProdEnv = isProd();
 		if (!isProdEnv) {
-			const isServerRunning = await this.isLocalServerRunning();
+			const isServerRunning = await isLocalServerRunning();
 			if (!isServerRunning) return {} as T;
 		}
 
