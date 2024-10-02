@@ -494,7 +494,7 @@ export function MobileSearch() {
 	let { buttonProps, dialogProps } = useSearchProps();
 
 	return (
-		<div className="contents lg:hidden">
+		<div className="contents md:hidden">
 			<button
 				type="button"
 				className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 ui-not-focus-visible:outline-none lg:hidden dark:hover:bg-white/5"
