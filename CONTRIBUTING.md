@@ -8,7 +8,8 @@ We welcome contributions to this project.
 
 ```bash
 pnpm changeset
-pnpm version-packages && grlz 'new version'
+pnpm version-packages 
+grlz 'new version'
 pnpm release
 ```
 ## Testing locally

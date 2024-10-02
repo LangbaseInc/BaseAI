@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.1
+
+### Patch Changes
+
+-   📦 NEW: Create db if does not exist for memory
+
 ## 0.9.0
 
 ### Minor Changes
