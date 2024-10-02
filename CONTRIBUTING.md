@@ -8,7 +8,7 @@ We welcome contributions to this project.
 
 ```bash
 pnpm changeset
-pnpm version-packages 
+pnpm version-packages
 grlz 'new version'
 pnpm release
 pnpm update-examples

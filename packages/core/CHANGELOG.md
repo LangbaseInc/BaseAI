@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.9.2
+
+### Patch Changes
+
+-   👌 IMPROVE: Error handling check if BaseAI dev is running
+
 ## 0.9.1
 
 ### Patch Changes
