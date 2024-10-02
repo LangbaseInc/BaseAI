@@ -4,6 +4,7 @@ import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
+import {isLocalServerRunning} from 'src/utils/local-server-running';
 
 // Type Definitions
 export type Role = 'user' | 'assistant' | 'system' | 'tool';
@@ -192,6 +193,10 @@ export class Pipe {
 		let response = await this.createRequest<
 			RunResponse | RunResponseStream
 		>(endpoint, body);
+		if (Object.entries(response).length === 0) {
+			return {} as RunResponse | RunResponseStream;
+		}
+
 		console.log('pipe.run.response');
 		console.dir(response, {depth: null, colors: true});
 
@@ -272,7 +277,14 @@ export class Pipe {
 				llmApiKey: getLLMApiKey(this.pipe.model.provider),
 			},
 		};
-		return this.request.post<T>(isProd() ? prodOptions : localOptions);
+
+		const isProdEnv = isProd();
+		if (!isProdEnv) {
+			const isServerRunning = await isLocalServerRunning();
+			if (!isServerRunning) return {} as T;
+		}
+
+		return this.request.post<T>(isProdEnv ? prodOptions : localOptions);
 	}
 }
 

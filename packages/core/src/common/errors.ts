@@ -108,9 +108,6 @@ export class APIConnectionError extends APIError {
 
 	constructor({message, cause}: {message?: string; cause?: Error}) {
 		super(undefined, undefined, message || 'Connection error.', undefined);
-		console.warn(
-			`\nPlease check if BaseAI dev server is running. If not, run 'npx baseai dev' in the root directory.\n`,
-		);
 		if (cause) (this as Error).cause = cause;
 	}
 }
