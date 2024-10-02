@@ -264,28 +264,30 @@ export class Pipe {
 		try {
 			const endpoint = getApiUrl();
 
-			// Port in use. Check if BaseAI dev server is running on port.
 			const response = await fetch(endpoint, {
 				mode: 'no-cors',
 				cache: 'no-cache', // Prevents caching of the request
 			});
-			const portWarning = `\nPort 9000 is already in use. Terminate the process running on it and run 'npx baseai@latest dev' to start the dev server.\n`;
+
+			const portUseError = `\nPort 9000 is already in use. Terminate the process running on it and run 'npx baseai@latest dev' in an new terminal to start the dev server.\n`;
 
 			if (!response.ok) {
-				console.error(portWarning);
+				console.error(portUseError);
 				return false;
 			}
 
 			const res = (await response.json()) as unknown as {
 				success: boolean;
 			};
+
 			if (!res.success) {
-				console.error(portWarning);
+				console.error(portUseError);
 				return false;
 			}
 
 			return true;
 		} catch (error) {
+			// Port is not in use and BaseAI dev server is not running
 			console.error(
 				`\nBaseAI dev server is not running. Please run 'npx baseai@latest dev' in a new teriminal to start dev server.\n`,
 			);
