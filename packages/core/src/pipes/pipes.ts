@@ -4,6 +4,7 @@ import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
+import {isPortInUse} from 'src/utils/port-in-use';
 
 // Type Definitions
 export type Role = 'user' | 'assistant' | 'system' | 'tool';
@@ -192,6 +193,10 @@ export class Pipe {
 		let response = await this.createRequest<
 			RunResponse | RunResponseStream
 		>(endpoint, body);
+		if (Object.entries(response).length === 0) {
+			return {} as RunResponse | RunResponseStream;
+		}
+
 		console.log('pipe.run.response');
 		console.dir(response, {depth: null, colors: true});
 
@@ -256,6 +261,34 @@ export class Pipe {
 		return currentResponse;
 	}
 
+	private async isLocalServerRunning(): Promise<Boolean> {
+		// TODO: Remove hard-coded port number when configurable support is added.
+		const portInUse = await isPortInUse(9000);
+		if (!portInUse) {
+			console.warn(
+				`\nBaseAI dev server is not running. Please run 'npx baseai@latest dev' to start the server.`,
+			);
+			return false;
+		}
+
+		// Port in use. Check if BaseAI dev server is running on port.
+		const response = (await this.request.get({
+			endpoint: '/',
+		})) as unknown as {
+			success: boolean;
+		};
+
+		// Port in use but not by BaseAI dev server
+		if (!response.success) {
+			console.warn(
+				`\nPort 9000 is in use. Please stop the process running on port 9000 and run 'npx baseai@latest dev' to start the server.`,
+			);
+			return false;
+		}
+
+		return true;
+	}
+
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
 		const prodOptions = {
 			endpoint,
@@ -272,7 +305,14 @@ export class Pipe {
 				llmApiKey: getLLMApiKey(this.pipe.model.provider),
 			},
 		};
-		return this.request.post<T>(isProd() ? prodOptions : localOptions);
+
+		const isProdEnv = isProd();
+		if (!isProdEnv) {
+			const isServerRunning = await this.isLocalServerRunning();
+			if (!isServerRunning) return {} as T;
+		}
+
+		return this.request.post<T>(isProdEnv ? prodOptions : localOptions);
 	}
 }
 
