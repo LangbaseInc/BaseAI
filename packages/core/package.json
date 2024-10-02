@@ -33,7 +33,6 @@
 	},
 	"dependencies": {
 		"openai": "^4.63.0",
-		"tcp-port-used": "^1.0.2",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
@@ -44,7 +43,6 @@
 		"@testing-library/react": "^16.0.1",
 		"@types/node": "^22.6.1",
 		"@types/react": "^18.3.9",
-		"@types/tcp-port-used": "^1.0.4",
 		"@vitejs/plugin-react": "^4.3.1",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",

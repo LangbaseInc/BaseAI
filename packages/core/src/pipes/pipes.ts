@@ -4,7 +4,6 @@ import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
-import {isPortInUse} from 'src/utils/port-in-use';
 
 // Type Definitions
 export type Role = 'user' | 'assistant' | 'system' | 'tool';
@@ -262,35 +261,36 @@ export class Pipe {
 	}
 
 	private async isLocalServerRunning(): Promise<Boolean> {
-		// TODO: Remove hard-coded port number when configurable support is added.
-		const portInUse = await isPortInUse(9000);
+		try {
+			const endpoint = getApiUrl();
 
-		// Port not in use. BaseAI dev server is not running.
-		if (!portInUse) {
-			console.warn(
-				`\nBaseAI dev server is not running. Please run 'npx baseai@latest dev' to start the server.`,
+			// Port in use. Check if BaseAI dev server is running on port.
+			const response = await fetch(endpoint, {
+				mode: 'no-cors',
+				cache: 'no-cache', // Prevents caching of the request
+			});
+			const portWarning = `\nPort 9000 is already in use. Terminate the process running on it and run 'npx baseai@latest dev' to start the dev server.\n`;
+
+			if (!response.ok) {
+				console.error(portWarning);
+				return false;
+			}
+
+			const res = (await response.json()) as unknown as {
+				success: boolean;
+			};
+			if (!res.success) {
+				console.error(portWarning);
+				return false;
+			}
+
+			return true;
+		} catch (error) {
+			console.error(
+				`\nBaseAI dev server is not running. Please run 'npx baseai@latest dev' in a new teriminal to start dev server.\n`,
 			);
 			return false;
 		}
-
-		const endpoint = getApiUrl();
-
-		// Port in use. Check if BaseAI dev server is running on port.
-		const response = await fetch(endpoint);
-		const portWarning = `\nPort 9000 is already in use. Terminate the process running on it and run 'npx baseai@latest dev' to start the dev server.`;
-
-		if (!response.ok) {
-			console.warn(portWarning);
-			return false;
-		}
-
-		const res = (await response.json()) as unknown as {success: boolean};
-		if (!res.success) {
-			console.warn(portWarning);
-			return false;
-		}
-
-		return true;
 	}
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
