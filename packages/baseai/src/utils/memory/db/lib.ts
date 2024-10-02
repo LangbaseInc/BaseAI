@@ -49,15 +49,32 @@ export interface SimilarChunk extends Omit<MemoryChunk, 'embedding'> {
 // Create a new database
 // basePath. The path to
 export async function createDb(memoryName: string): Promise<Low<Schema>> {
-	const dbFilePath = path.join(
-		process.cwd(),
-		'.baseai',
-		'db',
-		`${memoryName}.json`
-	);
+	const baseDir = path.join(process.cwd(), '.baseai', 'db');
+	const dbFilePath = path.join(baseDir, `${memoryName}.json`);
+
+	// Ensure the directory exists
+	await fs.mkdir(baseDir, { recursive: true });
+
+	// Check if the file exists, if not, create it with default data
+	try {
+		await fs.access(dbFilePath);
+	} catch (error) {
+		// File doesn't exist, create it with default data
+		await fs.writeFile(dbFilePath, JSON.stringify(defaultData, null, 2));
+	}
+
 	const adapter = new JSONFile<Schema>(dbFilePath);
 	const db = new Low(adapter, defaultData);
-	await db.write();
+
+	// Read the existing data or initialize with default
+	await db.read();
+
+	// If the file was empty or invalid JSON, write the default data
+	if (db.data === null) {
+		db.data = defaultData;
+		await db.write();
+	}
+
 	return db;
 }
 
@@ -90,6 +107,9 @@ export async function loadDb(memoryName: string) {
 		await fs.access(memoryDbPath);
 		return await readDb(memoryDbPath);
 	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+			return await createDb(memoryName);
+		}
 		throw error;
 	}
 }
