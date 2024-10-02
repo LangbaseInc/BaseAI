@@ -1,5 +1,12 @@
 # baseai
 
+## 0.9.3
+
+### Patch Changes
+
+-   👌 IMPROVE: Error message
+-   2a71155: 👌 IMPROVE: Error message
+
 ## 0.9.2
 
 ### Patch Changes
