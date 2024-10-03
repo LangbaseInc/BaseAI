@@ -36,10 +36,16 @@ export function compareDocumentLists({
 		!localDocs.some(doc => prodSet.has(doc)) &&
 		!prodDocs.some(doc => localSet.has(doc));
 
+	// Case 5: Local doc is missing in prod
+	const isLocalDocumentMissingInProd = localDocs.some(
+		doc => !prodSet.has(doc)
+	);
+
 	return {
 		areListsSame,
 		isProdSubsetOfLocal,
 		isProdSupersetOfLocal,
-		areMutuallyExclusive
+		areMutuallyExclusive,
+		isLocalDocumentMissingInProd
 	};
 }

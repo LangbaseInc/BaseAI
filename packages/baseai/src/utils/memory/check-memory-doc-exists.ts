@@ -39,7 +39,7 @@ export const isMemoryDocExist = async ({
 	await checkMemoryExists(validMemoryName);
 
 	// 2- Load memory data.
-	spinner.start('Processing docs...');
+	spinner.start('Loading docs...');
 	const memoryFiles = await loadMemoryFiles(validMemoryName);
 
 	if (memoryFiles.length === 0) {

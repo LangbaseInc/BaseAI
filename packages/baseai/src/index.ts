@@ -85,15 +85,11 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 	}
 
 	// Deploy single document
-	if (
-		command('deploy') &&
-		flag('memory') &&
-		flag('document') &&
-		flag('overwrite')
-	) {
+	if (command('deploy') && flag('memory') && flag('document')) {
 		await deploySingleDocument({
 			memoryName: flags.memory,
-			documentName: flags.document
+			documentName: flags.document,
+			overwrite: flags.overwrite
 		});
 	}
 
@@ -105,7 +101,7 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 		await createMemory();
 	}
 
-	if (command('embed') && flag('document')) {
+	if (command('embed') && flag('document') && flag('memory')) {
 		await embedDoc({
 			memoryName: flags.memory,
 			documentName: flags.document,

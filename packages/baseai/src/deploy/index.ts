@@ -602,16 +602,18 @@ export async function uploadDocumentsToMemory({
 	}
 }
 
-async function handleExistingMemoryDeploy({
+export async function handleExistingMemoryDeploy({
 	memory,
 	account,
 	documents,
-	overwrite
+	overwrite,
+	runProdSuperSetOfLocal = true
 }: {
 	memory: MemoryI;
 	account: Account;
 	documents: MemoryDocumentI[];
 	overwrite: boolean;
+	runProdSuperSetOfLocal?: boolean;
 }) {
 	p.log.info(`Fetching "${memory.name}" memory documents.`);
 
@@ -629,7 +631,8 @@ async function handleExistingMemoryDeploy({
 		areListsSame,
 		isProdSubsetOfLocal,
 		isProdSupersetOfLocal,
-		areMutuallyExclusive
+		areMutuallyExclusive,
+		isLocalDocumentMissingInProd
 	} = compareDocumentLists({
 		localDocs,
 		prodDocs
@@ -637,7 +640,7 @@ async function handleExistingMemoryDeploy({
 
 	if (overwrite) {
 		await overwriteMemory({ memory, documents, account });
-		return;
+		return true;
 	}
 
 	// If the lists are the same, do nothing and skip.
@@ -645,29 +648,33 @@ async function handleExistingMemoryDeploy({
 		p.log.info(
 			`Documents in local and prod are the same. Skipping deployment for memory: "${memory.name}".`
 		);
-		return;
+		return true;
 	}
 
 	// If prod is a subset of local, upload the missing documents.
-	if (isProdSubsetOfLocal) {
-		return await uploadMissingDocumentsToMemory({
+	if (isProdSubsetOfLocal || isLocalDocumentMissingInProd) {
+		await uploadMissingDocumentsToMemory({
 			memory,
 			localDocs,
 			prodDocs,
 			documents,
 			account
 		});
+		return true;
 	}
 
 	// If prod is a superset of local, show the diff and ask user if they want to overwrite.
 	if (isProdSupersetOfLocal || areMutuallyExclusive) {
-		return await handleProdSupersetOfLocal({
+		if (!runProdSuperSetOfLocal) return false;
+
+		await handleProdSupersetOfLocal({
 			memory,
 			localDocs,
 			prodDocs,
 			documents,
 			account
 		});
+		return true;
 	}
 }
 

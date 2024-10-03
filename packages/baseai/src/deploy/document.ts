@@ -5,6 +5,7 @@ import * as p from '@clack/prompts';
 import {
 	handleDeploymentError,
 	handleError,
+	handleExistingMemoryDeploy,
 	handleInvalidConfig,
 	retrieveAuthentication,
 	uploadDocumentsToMemory,
@@ -20,12 +21,14 @@ type Spinner = ReturnType<typeof p.spinner>;
 
 export async function deploySingleDocument({
 	memoryName,
-	documentName
+	documentName,
+	overwrite
 }: {
 	memoryName: string;
 	documentName: string;
+	overwrite: boolean;
 }) {
-	p.intro(heading({ text: 'DEPLOY', sub: 'Deploy a single document' }));
+	p.intro(heading({ text: 'DEPLOY', sub: 'Deploy a document' }));
 
 	const spinner = p.spinner();
 	try {
@@ -35,7 +38,7 @@ export async function deploySingleDocument({
 			documentName
 		});
 
-		spinner.stop();
+		spinner.stop('Loaded docs');
 
 		await buildSingleMemory({ memoryName: validMemoryName });
 		const buildDir = path.join(process.cwd(), '.baseai');
@@ -53,6 +56,7 @@ export async function deploySingleDocument({
 			account,
 			spinner,
 			memoryDir,
+			overwrite,
 			memoryName: validMemoryName,
 			documentName: validDocumentName
 		});
@@ -70,17 +74,19 @@ export async function deploySingleDocument({
 }
 
 async function deployDocument({
+	account,
 	spinner,
+	overwrite,
 	memoryDir,
 	memoryName,
-	documentName,
-	account
+	documentName
 }: {
-	memoryDir: string;
+	account: Account;
 	spinner: Spinner;
+	memoryDir: string;
+	overwrite: boolean;
 	memoryName: string;
 	documentName: string;
-	account: Account;
 }) {
 	const memoryPath = path.join(memoryDir, `${memoryName}.json`);
 	spinner.start(`Processing memory: ${documentName}`);
@@ -108,11 +114,31 @@ async function deployDocument({
 		spinner.stop(`Processed ${documentName} of memory: ${memoryName}`);
 
 		try {
-			await uploadDocumentsToMemory({
-				documents: [document],
-				name: memoryObject.name,
-				account
-			});
+			if (overwrite) {
+				await uploadDocumentsToMemory({
+					account,
+					documents: [document],
+					name: memoryObject.name
+				});
+			}
+
+			if (!overwrite) {
+				const hasDeployed = await handleExistingMemoryDeploy({
+					account,
+					overwrite,
+					memory: memoryObject,
+					documents: [document],
+					runProdSuperSetOfLocal: false
+				});
+
+				if (!hasDeployed) {
+					p.log.warning(`Document already exists in prod memory.`);
+					p.log.info(
+						`Please run "npx baseai deploy ${memoryObject.name} -d ${document.name} -o" to overwrite the document.`
+					);
+					process.exit(1);
+				}
+			}
 		} catch (error) {
 			dlog('Error in upsertMemory:', error);
 			handleDeploymentError({
