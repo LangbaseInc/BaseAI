@@ -69,38 +69,38 @@ export const buildSingleMemory = async ({
 	const outputPath = path.join(process.cwd(), '.baseai', 'memory');
 
 	try {
-		await fs.access(outputPath);
-	} catch (error) {
-		// Create the memory directory if it doesn't exist
-		await fs.mkdir(outputPath, { recursive: true });
-	}
-
-	try {
 		await fs.access(sourcePath);
 	} catch (error) {
 		p.log.info('No memory directory found. Skipping memory build.');
 		return;
 	}
 
-	const memorySourcePath = path.join(sourcePath, memoryName);
-	await fs.mkdir(memorySourcePath, { recursive: true });
+	try {
+		await fs.access(outputPath);
+	} catch (error) {
+		// Create the build memory directory if it doesn't exist
+		await fs.mkdir(outputPath, { recursive: true });
+	}
 
-	const files = await fs.readdir(memorySourcePath);
+	const memoryPath = path.join(sourcePath, memoryName);
+
+	// Get all files in the memory directory
+	const files = await fs.readdir(memoryPath);
 	const indexFile = files.find(file => file === 'index.ts');
 
+	// If no index.ts file is found, no memory entry file exists. Skip the build.
 	if (!indexFile) {
 		p.log.info('MEMORY: No index.ts file found. Skipping memory build.');
 		process.exit(1);
 	}
 
-	const inputFile = path.join(memorySourcePath, indexFile);
+	const inputFile = path.join(memoryPath, indexFile);
 	const outputFile = path.join(outputPath, `${memoryName}.json`);
 
 	const s = p.spinner();
 	s.start('Building memory');
 
 	const builtMemories: string[] = [];
-
 	try {
 		const { stdout } = await execAsync(
 			`npx tsx -e "import memoryConfig from '${inputFile}'; console.log(JSON.stringify(memoryConfig()))"`
@@ -108,6 +108,7 @@ export const buildSingleMemory = async ({
 
 		await fs.writeFile(outputFile, stdout);
 		s.message(`Compiled ${memoryName}`);
+
 		builtMemories.push(memoryName);
 	} catch (error) {
 		s.stop(`Error compiling ${memoryName}: ${error}`);
