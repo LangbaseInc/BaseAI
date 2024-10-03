@@ -89,7 +89,6 @@ async function deployDocument({
 	documentName: string;
 }) {
 	const memoryPath = path.join(memoryDir, `${memoryName}.json`);
-	spinner.start(`Processing memory: ${documentName}`);
 	try {
 		const memoryContent = await fs.readFile(memoryPath, 'utf-8');
 		const memoryObject = JSON.parse(memoryContent);
