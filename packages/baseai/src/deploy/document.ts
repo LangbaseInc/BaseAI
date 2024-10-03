@@ -146,6 +146,7 @@ async function deployDocument({
 				error,
 				type: 'memory'
 			});
+			process.exit(1);
 		}
 	} catch (error) {
 		handleDeploymentError({
@@ -154,6 +155,6 @@ async function deployDocument({
 			error,
 			type: 'memory'
 		});
-		throw error;
+		process.exit(1);
 	}
 }
