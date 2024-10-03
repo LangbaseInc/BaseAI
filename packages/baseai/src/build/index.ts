@@ -57,6 +57,59 @@ const buildTools = async () => {
 	listBuiltItems('Tools', builtTools, icons.tool);
 };
 
+export const buildSingleMemory = async ({
+	memoryName
+}: {
+	memoryName: string;
+}) => {
+	console.log('');
+	p.intro(heading({ text: 'MEMORY', sub: '', dim: true }));
+
+	const sourcePath = path.join(process.cwd(), 'baseai', 'memory');
+	const outputPath = path.join(process.cwd(), '.baseai', 'memory');
+
+	try {
+		await fs.access(sourcePath);
+	} catch (error) {
+		p.log.info('No memory directory found. Skipping memory build.');
+		return;
+	}
+
+	const memorySourcePath = path.join(sourcePath, memoryName);
+	await fs.mkdir(memorySourcePath, { recursive: true });
+
+	const files = await fs.readdir(memorySourcePath);
+	const indexFile = files.find(file => file === 'index.ts');
+
+	if (!indexFile) {
+		p.log.info('MEMORY: No index.ts file found. Skipping memory build.');
+		process.exit(1);
+	}
+
+	const inputFile = path.join(memorySourcePath, indexFile);
+	const outputFile = path.join(outputPath, `${memoryName}.json`);
+
+	const s = p.spinner();
+	s.start('Building memory');
+
+	const builtMemories: string[] = [];
+
+	try {
+		const { stdout } = await execAsync(
+			`npx tsx -e "import memoryConfig from '${inputFile}'; console.log(JSON.stringify(memoryConfig()))"`
+		);
+
+		await fs.writeFile(outputFile, stdout);
+		s.message(`Compiled ${memoryName}`);
+		builtMemories.push(memoryName);
+	} catch (error) {
+		s.stop(`Error compiling ${memoryName}: ${error}`);
+	}
+
+	s.stop('Build complete');
+	listBuiltItems('Memories', builtMemories, icons.memory);
+};
+
 const buildMemory = async () => {
 	console.log('');
 	p.intro(heading({ text: 'MEMORY', sub: '', dim: true }));
