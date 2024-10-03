@@ -69,6 +69,13 @@ export const buildSingleMemory = async ({
 	const outputPath = path.join(process.cwd(), '.baseai', 'memory');
 
 	try {
+		await fs.access(outputPath);
+	} catch (error) {
+		// Create the memory directory if it doesn't exist
+		await fs.mkdir(outputPath, { recursive: true });
+	}
+
+	try {
 		await fs.access(sourcePath);
 	} catch (error) {
 		p.log.info('No memory directory found. Skipping memory build.');
