@@ -19,7 +19,7 @@ import type { MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
 import { getStoredAuth } from './../auth/index';
 
-interface Account {
+export interface Account {
 	login: string;
 	apiKey: string;
 }
@@ -153,7 +153,7 @@ async function readToolsDirectory({
 	}
 }
 
-async function retrieveAuthentication({
+export async function retrieveAuthentication({
 	spinner
 }: {
 	spinner: Spinner;
@@ -316,7 +316,7 @@ async function updateExistingPipe({
 	return (await updateResponse.json()) as PipeOld;
 }
 
-function handleError({
+export function handleError({
 	spinner,
 	message,
 	error
@@ -366,7 +366,7 @@ function handleAuthError({
 	p.log.error(`Error retrieving stored auth: ${(error as Error).message}`);
 }
 
-function handleInvalidConfig({
+export function handleInvalidConfig({
 	spinner,
 	name,
 	type
@@ -379,7 +379,7 @@ function handleInvalidConfig({
 	p.log.error(`Invalid ${type} configuration`);
 }
 
-function handleDeploymentError({
+export function handleDeploymentError({
 	spinner,
 	error,
 	name,
@@ -407,7 +407,7 @@ function handleFileProcessingError({
 	p.log.error(`File processing error: ${(error as Error).message}`);
 }
 
-async function readMemoryDirectory({
+export async function readMemoryDirectory({
 	spinner,
 	memoryDir
 }: {
@@ -449,7 +449,7 @@ async function deployMemories({
 	}
 }
 
-async function deployMemory({
+export async function deployMemory({
 	spinner,
 	memoryName,
 	memoryDir,
@@ -511,7 +511,7 @@ async function deployMemory({
 	}
 }
 
-async function upsertMemory({
+export async function upsertMemory({
 	memory,
 	documents,
 	account,
@@ -573,7 +573,7 @@ async function upsertMemory({
 	}
 }
 
-async function uploadDocumentsToMemory({
+export async function uploadDocumentsToMemory({
 	documents,
 	name,
 	account
@@ -597,7 +597,6 @@ async function uploadDocumentsToMemory({
 
 			p.log.message(`Uploaded document: ${doc.name}`);
 		} catch (error) {
-			console.error('Error in uploadDocumentToMemory:', error);
 			throw error;
 		}
 	}
@@ -868,7 +867,7 @@ async function uploadDocument(signedUrl: string, document: Blob) {
 	}
 }
 
-function getMemoryApiUrls({
+export function getMemoryApiUrls({
 	account,
 	memoryName
 }: {

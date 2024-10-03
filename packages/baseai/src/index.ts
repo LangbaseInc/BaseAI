@@ -91,7 +91,10 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 		flag('document') &&
 		flag('overwrite')
 	) {
-		await deploySingleDocument();
+		await deploySingleDocument({
+			memoryName: flags.memory,
+			documentName: flags.document
+		});
 	}
 
 	if (command('memory') && flag('list')) {
