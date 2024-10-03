@@ -75,3 +75,7 @@ assets/img/.DS_Store
 .next
 # baseai
 /.baseai/
+# baseai
+**/.baseai/
+# env file
+.env
