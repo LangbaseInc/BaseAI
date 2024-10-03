@@ -85,7 +85,7 @@ function addRagPromptWithAugmentedContext({
 
 	// If there is no rag prompt, use the default rag prompt.
 	const hasRagPrompt = ragMsg !== '';
-	const ragPrompt = hasRagPrompt || defaultRagPrompt;
+	const ragPrompt = hasRagPrompt ? ragMsg : defaultRagPrompt;
 
 	const contextContent = `"""CONTEXT:\n ${memoryContext}"""`;
 	const ragPromptWithAugmentedContext = `"""${ragPrompt}""" \n\n ${contextContent}`;

@@ -3,6 +3,7 @@ import { z } from 'zod';
 export interface MemoryI {
 	name: string;
 	description?: string;
+	config?: MemoryConfigI;
 }
 
 export const memoryNameSchema = z
@@ -20,3 +21,27 @@ export const memoryDocSchema = z.object({
 	memoryName: memoryNameSchema,
 	documentName: docNameSchema
 });
+
+export const memoryConfigSchema = z.object({
+	useGitRepo: z.boolean(),
+	dirToTrack: z
+		.string()
+		.trim()
+		.min(1, 'Directory to track must not be empty'),
+	extToTrack: z.union([
+		z.tuple([z.literal('*')]),
+		z
+			.array(
+				z
+					.string()
+					.trim()
+					.regex(
+						/^\.\w+$/,
+						'File extension must start with a dot followed by alphanumeric characters'
+					)
+			)
+			.min(1, 'At least one file extension must be specified')
+	])
+});
+
+export type MemoryConfigI = z.infer<typeof memoryConfigSchema>;
