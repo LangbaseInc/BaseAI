@@ -4,7 +4,7 @@ import path from 'path';
 /**
  * Get changed files between two Git commits
  * @param {Object} options - The options for the function
- * @param {string} options.oldCommit - The old already deployed commit (default: 'HEAD~1')
+ * @param {string} options.oldCommit - The old already deployed commit
  * @param {string} options.latestCommit - The latest commit to deploy (default: 'HEAD')
  * @param {string} options.repoPath - The path to the Git repository (default: process.cwd())
  * @param {string[]} options.extensions - Array of file extensions to filter (default: all files)
@@ -12,29 +12,26 @@ import path from 'path';
  * @returns {Promise<string[]>} - Array of changed file paths
  */
 export async function getChangedFilesBetweenCommits({
-	oldCommit = 'HEAD~1',
+	oldCommit,
 	latestCommit = 'HEAD',
+	dirToTrack,
 	extensions = []
 }: {
 	oldCommit: string;
 	latestCommit: string;
-
+	dirToTrack: string;
 	extensions: string[];
 }): Promise<string[]> {
 	try {
 		// Validate inputs
-		if (typeof oldCommit !== 'string' || typeof latestCommit !== 'string') {
+		if (oldCommit !== '' || latestCommit !== '') {
 			throw new Error('Invalid commit references');
 		}
 
 		const repoPath = process.cwd();
 
-		// Construct the Git command
-		let command = `git diff --name-only ${oldCommit} ${latestCommit}`;
-
-		// if (includeUntracked) {
-		// 	command += ' && git ls-files --others --exclude-standard';
-		// }
+		// Construct the Git command to get changed files in the specific directory
+		let command = `git diff --name-only ${oldCommit} ${latestCommit} -- ${dirToTrack}`;
 
 		// Execute the Git command
 		const result = execSync(command, {
