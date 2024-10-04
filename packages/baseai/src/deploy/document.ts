@@ -1,4 +1,4 @@
-import { buildSingleMemory } from '@/build';
+import { buildMemory } from '@/build';
 import { heading } from '@/utils/heading';
 import { isMemoryDocExist } from '@/utils/memory/check-memory-doc-exists';
 import * as p from '@clack/prompts';
@@ -40,7 +40,7 @@ export async function deploySingleDocument({
 
 		spinner.stop('Loaded docs');
 
-		await buildSingleMemory({ memoryName: validMemoryName });
+		await buildMemory({ memoryName: validMemoryName });
 		const buildDir = path.join(process.cwd(), '.baseai');
 		const memoryDir = path.join(buildDir, 'memory');
 
