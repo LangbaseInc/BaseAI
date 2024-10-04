@@ -19,10 +19,7 @@ import color from 'picocolors';
 import type { MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
 import { getStoredAuth } from './../auth/index';
-import { execSync } from 'child_process';
-import loadMemoryConfig from '@/utils/memory/load-memory-config';
-import { getChangedFilesBetweenCommits } from '@/utils/memory/git-sync/get-changed-files-between-commits';
-import { saveDeployedCommitHashInMemoryConfig } from '@/utils/memory/git-sync/save-deployed-commit-in-config';
+import { handleGitSyncMemories } from '@/utils/memory/git-sync/handle-git-sync-memories';
 
 export interface Account {
 	login: string;
@@ -111,52 +108,6 @@ ${dim(`- ${green(pipes?.length)} pipe${pipes.length !== 1 ? 's' : ''}
 			message: 'An unexpected error occurred',
 			error
 		});
-	}
-}
-
-async function handleGitSyncMemories(memories: string[]): Promise<void> {
-	for (const memoryName of memories) {
-		const config = await loadMemoryConfig(memoryName);
-		if (config && config.useGitRepo) {
-			// Check for uncommitted changes
-			try {
-				execSync('git diff-index --quiet HEAD --');
-			} catch (error) {
-				p.log.error(
-					`There are uncommitted changes in the Git repository for deploying git-synced memory "${memoryName}".`
-				);
-				p.log.info(
-					'Please commit these changes before deploying. Deployment aborted.'
-				);
-				process.exit(1);
-			}
-			// Todo handle all files deploy on first deployment
-
-			// Get changed files and update deployedCommitHash
-			const changedFiles = await getChangedFilesBetweenCommits({
-				oldCommit: config.deployedCommitHash || 'HEAD~1',
-				latestCommit: 'HEAD',
-				extensions: config.extToTrack
-			});
-
-			if (changedFiles.length > 0) {
-				p.log.info(`Changed files for memory "${memoryName}":`);
-				changedFiles.forEach(file => p.log.message(file));
-			} else {
-				p.log.info(
-					`No changes detected for memory "${memoryName}" since last deployment.`
-				);
-			}
-
-			// Update deployedCommitHash in memory config
-			const currentCommitHash = execSync('git rev-parse HEAD')
-				.toString()
-				.trim();
-			await saveDeployedCommitHashInMemoryConfig({
-				memoryName,
-				deployedCommitHash: currentCommitHash
-			});
-		}
 	}
 }
 
