@@ -8,4 +8,5 @@ interface MemoryConfig {
 	useGitRepo: boolean;
 	dirToTrack: string;
 	extToTrack: string[];
+	deployedCommitHash?: string;
 }

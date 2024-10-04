@@ -41,7 +41,8 @@ export const memoryConfigSchema = z.object({
 					)
 			)
 			.min(1, 'At least one file extension must be specified')
-	])
+	]),
+	deployedCommitHash: z.string().optional()
 });
 
 export type MemoryConfigI = z.infer<typeof memoryConfigSchema>;
