@@ -176,8 +176,12 @@ const navigationData: NavigationItem[] = [
 				href: '/docs/deployment/authentication'
 			},
 			{
-				title: 'Deploy',
+				title: 'Deploy All',
 				href: '/docs/deployment/deploy'
+			},
+			{
+				title: 'Deploy Document',
+				href: '/docs/deployment/document'
 			}
 		]
 	},
