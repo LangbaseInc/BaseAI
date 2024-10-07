@@ -156,7 +156,7 @@ export const useMobileNavigationStore = create<{
 	toggle: () => set(state => ({ isOpen: !state.isOpen }))
 }));
 
-export function MobileNavigation() {
+export function MobileNavigation(props: any) {
 	let isInsideMobileNavigation = useIsInsideMobileNavigation();
 	let { isOpen, toggle, close } = useMobileNavigationStore();
 	let ToggleIcon = isOpen ? XIcon : MenuIcon;
