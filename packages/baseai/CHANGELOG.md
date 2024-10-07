@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.4
+
+### Patch Changes
+
+-   🐛 FIX: Google & fireworks model errors
+
 ## 0.9.3
 
 ### Patch Changes
