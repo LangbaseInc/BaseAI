@@ -101,7 +101,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<GithubIcon className="size-4 text-white/75" />
+				<GithubIcon className="size-4 dark:text-white/75 text-black/75" />
 			</Link>
 			<Link
 				className="hidden md:block"
@@ -109,7 +109,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<DiscordIcon className="size-4 text-white/75" />
+				<DiscordIcon className="size-4 dark:text-white/75 text-black/75" />
 			</Link>
 			<Link
 				className="hidden md:block"
@@ -117,7 +117,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<TwitterIcon className="size-4 text-white/75" />
+				<TwitterIcon className="size-4 dark:text-white/75 text-black/75" />
 			</Link>
 		</>
 	);
@@ -159,20 +159,28 @@ export const Header = forwardRef<
 			<div className="hidden md:block">
 				<h2 className="flex items-center text-2xl font-bold leading-7 text-foreground sm:truncate sm:text-2xl sm:tracking-tight">
 					<IconDocs
-						className="mr-4 h-7 w-7 text-muted-foreground/50"
+						className="mr-4 hidden h-7 w-7 text-muted-foreground/50 lg:block"
 						aria-hidden="true"
 					/>
+					<div className="mr-5 hidden sm:block lg:hidden">
+						<MobileNavigation />
+					</div>
 					{currentTitle}
 				</h2>
 			</div>
-			<div className="flex w-full justify-between md:w-[70%] md:justify-end  md:space-x-6">
+			<div className="flex w-full justify-between md:w-[60%] md:justify-end  md:space-x-6">
 				<Search />
-				<div className="flex items-center gap-5 lg:hidden">
-					<MobileNavigation />
+				<div className="hidden md:flex xl:hidden flex justify-center items-center">
+					<MobileSearch />
+				</div>
+				<div className="flex items-center gap-5 md:hidden">
+					<div className="block md:hidden">
+						<MobileNavigation />
+					</div>
 					<Link
 						href="/"
 						aria-label="Home"
-						className="font-bold text-black dark:text-white"
+						className="hidden font-bold text-black lg:block dark:text-white"
 					>
 						<BaseAILogo width="30%" />
 					</Link>
@@ -180,7 +188,9 @@ export const Header = forwardRef<
 				<div className="flex items-center justify-end gap-5">
 					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
 					<div className="flex items-center gap-4">
-						<MobileSearch />
+						<div className="md:hidden">
+							<MobileSearch />
+						</div>
 						<HeaderLinks />
 					</div>
 					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15"></div>
