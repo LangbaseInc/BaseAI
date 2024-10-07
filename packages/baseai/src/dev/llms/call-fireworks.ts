@@ -53,7 +53,7 @@ function buildModelParams(
 ): ModelParams {
 	// Create model strings for Fireworks AI
 	const modelString =
-		pipe.config.model.name === 'yi-large'
+		pipe.model.name === 'yi-large'
 			? 'accounts/yi-01-ai/models/yi-large'
 			: `accounts/fireworks/models/${pipe.config.model.name}`;
 	return {
