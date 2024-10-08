@@ -42,7 +42,6 @@ export const GoogleChatCompleteConfig: ProviderConfig = {
 		param: 'contents',
 		default: '',
 		transform: (params: ModelParams) => {
-			let lastRole: 'user' | 'model' | undefined;
 			const messages: { role: string; parts: { text: string }[] }[] = [];
 
 			params.messages?.forEach((message: ProviderMessage) => {
@@ -72,19 +71,7 @@ export const GoogleChatCompleteConfig: ProviderConfig = {
 					});
 				}
 
-				// @NOTE: This takes care of the "Please ensure that multiturn requests alternate between user and model."
-				// error that occurs when we have multiple user messages in a row.
-				const shouldAppendEmptyModeChat =
-					lastRole === 'user' &&
-					role === 'user' &&
-					!params.model?.includes('vision');
-
-				if (shouldAppendEmptyModeChat) {
-					messages.push({ role: 'model', parts: [{ text: '' }] });
-				}
-
 				messages.push({ role, parts });
-				lastRole = role;
 			});
 			return messages;
 		}

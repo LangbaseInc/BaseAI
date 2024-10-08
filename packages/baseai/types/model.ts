@@ -49,6 +49,7 @@ export type GroqModels =
 export type GoogleModels =
 	| 'google:gemini-1.5-pro-latest'
 	| 'google:gemini-1.5-flash-latest'
+	| 'google:gemini-1.5-flash-8b-latest'
 	| 'google:gemini-pro';
 
 export type CohereModels = 'cohere:command-r' | 'cohere:command-r-plus';
