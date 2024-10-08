@@ -385,15 +385,15 @@ importers:
   examples/nodejs:
     dependencies:
       '@baseai/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+        specifier: ^0.9.4
+        version: 0.9.4(react@18.3.1)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
     devDependencies:
       baseai:
-        specifier: workspace:*
-        version: link:../../packages/baseai
+        specifier: ^0.9.4
+        version: 0.9.4(@types/node@22.7.4)(typescript@5.6.2)
       tsx:
         specifier: ^4.19.0
         version: 4.19.1
