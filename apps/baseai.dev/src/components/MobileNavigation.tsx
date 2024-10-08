@@ -67,6 +67,20 @@ function MobileNavigationDialog({
 		}
 	}, [pathname, searchParams, close, initialPathname, initialSearchParams]);
 
+	useEffect(() => {
+		const removeInertFromTopDiv = () => {
+			const topDiv = document.querySelector('div');
+
+			if (topDiv?.hasAttribute('inert')) {
+				topDiv.removeAttribute('inert');
+			}
+		};
+
+		const timer = setTimeout(removeInertFromTopDiv, 50);
+
+		return () => clearTimeout(timer);
+	}, [isOpen]);
+
 	function onClickDialog(event: React.MouseEvent<HTMLDivElement>) {
 		if (!(event.target instanceof HTMLElement)) {
 			return;
@@ -89,7 +103,7 @@ function MobileNavigationDialog({
 			<Dialog
 				onClickCapture={onClickDialog}
 				onClose={close}
-				className="fixed inset-0 z-50 lg:hidden"
+				className="fixed inset-0 z-10 lg:hidden"
 			>
 				<Transition.Child
 					as={Fragment}
@@ -100,7 +114,7 @@ function MobileNavigationDialog({
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 				>
-				<div className="fixed inset-0 top-14 md:top-28 bg-zinc-400/20 backdrop-blur-sm dark:bg-black/40" />
+					<div className="fixed inset-0 top-14 bg-zinc-400/20 backdrop-blur-sm md:top-28 dark:bg-black/40" />
 				</Transition.Child>
 
 				<Dialog.Panel>
@@ -127,7 +141,7 @@ function MobileNavigationDialog({
 					>
 						<motion.div
 							layoutScroll
-							className="nav dark:nav-dark fixed bottom-0 left-0 top-14 md:top-28 w-full overflow-y-auto bg-white px-4 pb-4 pt-6 shadow-lg shadow-zinc-900/10 ring-1 ring-zinc-900/7.5 min-[416px]:max-w-sm sm:px-6 sm:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
+							className="nav dark:nav-dark fixed bottom-0 left-0 top-14 w-full overflow-y-auto bg-white px-4 pb-4 pt-6 shadow-lg shadow-zinc-900/10 ring-1 ring-zinc-900/7.5 min-[416px]:max-w-sm sm:px-6 sm:pb-10 md:top-28 dark:bg-zinc-900 dark:ring-zinc-800"
 						>
 							<Navigation />
 						</motion.div>

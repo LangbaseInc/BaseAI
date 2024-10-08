@@ -482,7 +482,7 @@ export function Search() {
 					<kbd className="font-sans">{modifierKey}</kbd>
 					<kbd className="font-sans">K</kbd>
 				</kbd>
-			</button>
+			</button> 
 			<Suspense fallback={null}>
 				<SearchDialog className="hidden lg:block" {...dialogProps} />
 			</Suspense>
