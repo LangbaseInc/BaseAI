@@ -13,7 +13,6 @@ import { Dialog, Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { create } from 'zustand';
 
-import { Header } from '@/components/Header';
 import { Navigation } from '@/components/Navigation';
 
 function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
@@ -41,6 +40,7 @@ function XIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 		>
 			<path d="m1.5 1 7 7M8.5 1l-7 7" />
 		</svg>
+		
 	);
 }
 
@@ -118,18 +118,6 @@ function MobileNavigationDialog({
 				</Transition.Child>
 
 				<Dialog.Panel>
-					{/* <Transition.Child
-						as={Fragment}
-						enter="duration-300 ease-out"
-						enterFrom="opacity-0"
-						enterTo="opacity-100"
-						leave="duration-200 ease-in"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0"
-					>
-						<Header />
-					</Transition.Child> */}
-
 					<Transition.Child
 						as={Fragment}
 						enter="duration-500 ease-in-out"
@@ -168,7 +156,7 @@ export const useMobileNavigationStore = create<{
 	toggle: () => set(state => ({ isOpen: !state.isOpen }))
 }));
 
-export function MobileNavigation(props: any) {
+export function MobileNavigation() {
 	let isInsideMobileNavigation = useIsInsideMobileNavigation();
 	let { isOpen, toggle, close } = useMobileNavigationStore();
 	let ToggleIcon = isOpen ? XIcon : MenuIcon;
@@ -188,6 +176,7 @@ export function MobileNavigation(props: any) {
 					<MobileNavigationDialog isOpen={isOpen} close={close} />
 				</Suspense>
 			)}
+			
 		</IsInsideMobileNavigationContext.Provider>
 	);
 }

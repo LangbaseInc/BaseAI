@@ -101,7 +101,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<GithubIcon className="size-4 dark:text-white/75 text-black/75" />
+				<GithubIcon className="size-4 text-black/75 dark:text-white/75" />
 			</Link>
 			<Link
 				className="hidden md:block"
@@ -109,7 +109,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<DiscordIcon className="size-4 dark:text-white/75 text-black/75" />
+				<DiscordIcon className="size-4 text-black/75 dark:text-white/75" />
 			</Link>
 			<Link
 				className="hidden md:block"
@@ -117,7 +117,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<TwitterIcon className="size-4 dark:text-white/75 text-black/75" />
+				<TwitterIcon className="size-4 text-black/75 dark:text-white/75" />
 			</Link>
 		</>
 	);
@@ -156,34 +156,29 @@ export const Header = forwardRef<
 		>
 			<div className="xbg-zinc-900/7.5 absolute inset-x-0 top-full h-px transition md:hidden dark:bg-white/7.5" />
 
-			<div className="hidden md:block">
+			<div className='flex items-center'>
 				<h2 className="flex items-center text-2xl font-bold leading-7 text-foreground sm:truncate sm:text-2xl sm:tracking-tight">
 					<IconDocs
 						className="mr-4 hidden h-7 w-7 text-muted-foreground/50 lg:block"
 						aria-hidden="true"
 					/>
-					<div className="mr-5 hidden sm:block lg:hidden">
+					<div className="mr-2 md:mr-4 lg:hidden">
 						<MobileNavigation />
 					</div>
-					{currentTitle}
+					<div className='hidden md:block'>{currentTitle}</div>
+					<Link
+						href="/"
+						aria-label="Home"
+						className="block font-bold text-black md:hidden dark:text-white"
+					>
+						<BaseAILogo className="w-[30%] sm:w-[22.5%]" />
+					</Link>
 				</h2>
 			</div>
 			<div className="flex w-full justify-between md:w-[60%] md:justify-end  md:space-x-6">
 				<Search />
-				<div className="hidden md:flex xl:hidden flex justify-center items-center">
+				<div className="flex hidden items-center justify-center md:flex xl:hidden">
 					<MobileSearch />
-				</div>
-				<div className="flex items-center gap-2 sm:gap-3 md:gap-5 md:hidden">
-					<div className="block md:hidden">
-						<MobileNavigation />
-					</div>
-					<Link
-						href="/"
-						aria-label="Home"
-						className="font-bold text-black lg:block dark:text-white"
-					>
-						<BaseAILogo className='w-[30%] sm:w-[22.5%]' />
-					</Link>
 				</div>
 				<div className="flex items-center justify-end gap-5">
 					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
