@@ -81,7 +81,7 @@ function HeaderLinks() {
 			<Anchor
 				href={'https://github.com/LangbaseInc/baseai'}
 				target="_blank"
-				className="hidden w-auto font-normal outline outline-[.5px] outline-black/35 lg:flex lg:items-center dark:outline-white/35 "
+				className="hidden w-auto font-normal outline outline-[1.5px] outline-black/35 lg:flex lg:items-center dark:outline-white/35 "
 				variant={'ghost'}
 			>
 				<GithubIcon className="size-4 text-black dark:text-white" />
@@ -173,16 +173,16 @@ export const Header = forwardRef<
 				<div className="hidden md:flex xl:hidden flex justify-center items-center">
 					<MobileSearch />
 				</div>
-				<div className="flex items-center gap-5 md:hidden">
+				<div className="flex items-center gap-2 sm:gap-3 md:gap-5 md:hidden">
 					<div className="block md:hidden">
 						<MobileNavigation />
 					</div>
 					<Link
 						href="/"
 						aria-label="Home"
-						className="hidden font-bold text-black lg:block dark:text-white"
+						className="font-bold text-black lg:block dark:text-white"
 					>
-						<BaseAILogo width="30%" />
+						<BaseAILogo className='w-[30%] sm:w-[22.5%]' />
 					</Link>
 				</div>
 				<div className="flex items-center justify-end gap-5">
