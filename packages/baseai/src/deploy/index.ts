@@ -487,7 +487,8 @@ export async function deployMemory({
 			// Get names of files to deploy, i.e., changed or new files
 			filesToDeploy = await handleGitSyncMemories({
 				memoryName,
-				config: memoryObject.config
+				config: memoryObject.config,
+				account
 			});
 
 			// Load all documents contents for the memory
@@ -646,7 +647,7 @@ export async function handleExistingMemoryDeploy({
 	// Fetch the existing documents and compare with the local documents
 	const prodDocs = await listMemoryDocuments({
 		account,
-		memory
+		memoryName: memory.name
 	});
 
 	// Get the list of local document names
@@ -773,14 +774,14 @@ async function uploadMissingDocumentsToMemory({
 
 export async function listMemoryDocuments({
 	account,
-	memory
+	memoryName
 }: {
 	account: Account;
-	memory: MemoryI;
+	memoryName: string;
 }) {
 	const { listDocuments } = getMemoryApiUrls({
 		account,
-		memoryName: memory.name
+		memoryName: memoryName
 	});
 
 	// Wait 500 ms to avoid rate limiting

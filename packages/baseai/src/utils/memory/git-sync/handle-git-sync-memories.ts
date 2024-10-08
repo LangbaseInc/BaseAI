@@ -5,13 +5,16 @@ import fs from 'fs/promises';
 import { saveDeployedCommitHashInMemoryConfig } from './save-deployed-commit-in-config';
 import { getChangedFilesBetweenCommits } from './get-changed-files-between-commits';
 import type { MemoryConfigI } from 'types/memory';
+import { listMemoryDocuments, type Account } from '@/deploy';
 
 export async function handleGitSyncMemories({
 	memoryName,
-	config
+	config,
+	account
 }: {
 	memoryName: string;
 	config: MemoryConfigI;
+	account: Account;
 }): Promise<string[]> {
 	// Check for uncommitted changes
 	try {
@@ -30,16 +33,35 @@ export async function handleGitSyncMemories({
 	const fullDirToTrack = path.join(repoPath, config.dirToTrack);
 	let filesToDeploy: string[] = [];
 
+	// Step 1:
+	// Fetch the uploaded documents and compare with the local documents
+	// Handles new files that are not in the prodDocs due to extension and path updates
+	const prodDocs = await listMemoryDocuments({
+		account,
+		memoryName
+	});
+
+	const allFiles = await getAllFilesInDirectory({
+		dir: fullDirToTrack,
+		extensions: config.extToTrack
+	});
+
+	// Get files from allFiles that are not in the prodDocs
+	const newFiles = allFiles.filter(
+		file => !prodDocs.some(doc => doc === file)
+	);
+
+	// Step 2.1:
+	// If there's no deployedCommitHash, user is deploying for the first time
+	// Deploy all files in the directory
 	if (!config.deployedCommitHash) {
-		// If there's no deployedCommitHash, return all files in the dirToTrack
-		filesToDeploy = await getAllFilesInDirectory({
-			dir: fullDirToTrack,
-			extensions: config.extToTrack
-		});
+		filesToDeploy = allFiles;
 		p.log.info(
 			`Found no previous deployed commit. Deploying all ${filesToDeploy.length} files in memory "${memoryName}":`
 		);
-	} else {
+	}
+	// Step 2.2: Otherwise, get changed files between commits
+	else {
 		filesToDeploy = await getChangedFilesBetweenCommits({
 			oldCommit: config.deployedCommitHash,
 			latestCommit: 'HEAD',
@@ -65,7 +87,13 @@ export async function handleGitSyncMemories({
 		}
 	}
 
+	// Step 3
+	// Combine filesToDeploy with newFiles, avoid duplicates
+	filesToDeploy = [...new Set([...filesToDeploy, ...newFiles])];
+
+	// Step 4
 	// Update deployedCommitHash in memory config
+	// TODO: Should we update the deployedCommitHash after deploying?
 	const currentCommitHash = execSync('git rev-parse HEAD').toString().trim();
 	await saveDeployedCommitHashInMemoryConfig({
 		memoryName,
