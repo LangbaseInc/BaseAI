@@ -20,6 +20,7 @@ import { setLocalEmbeddingsConfig } from './utils/config/set-local-embeddings';
 import debugMode from './utils/debug-mode';
 import cliInit from './utils/init';
 import { initLogger } from './utils/logger-utils';
+import { deploySingleDocument } from './deploy/document';
 
 const { flags, input, showHelp } = cli;
 const { clear, debug } = flags;
@@ -71,8 +72,18 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 		await build({ calledAsCommand: true });
 	}
 
-	if (command('deploy')) {
+	// Deploy all
+	if (command('deploy') && !flag('memory') && !flag('document')) {
 		await deploy({
+			overwrite: flags.overwrite
+		});
+	}
+
+	// Deploy single document
+	if (command('deploy') && flag('memory') && flag('document')) {
+		await deploySingleDocument({
+			memoryName: flags.memory,
+			documentName: flags.document,
 			overwrite: flags.overwrite
 		});
 	}
@@ -85,7 +96,7 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 		await createMemory();
 	}
 
-	if (command('embed') && flag('document')) {
+	if (command('embed') && flag('document') && flag('memory')) {
 		await embedDoc({
 			memoryName: flags.memory,
 			documentName: flags.document,

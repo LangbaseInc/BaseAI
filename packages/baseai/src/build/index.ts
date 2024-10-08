@@ -57,7 +57,9 @@ const buildTools = async () => {
 	listBuiltItems('Tools', builtTools, icons.tool);
 };
 
-const buildMemory = async () => {
+export const buildMemory = async ({
+	memoryName
+}: { memoryName?: string } = {}) => {
 	console.log('');
 	p.intro(heading({ text: 'MEMORY', sub: '', dim: true }));
 
@@ -71,27 +73,40 @@ const buildMemory = async () => {
 		return;
 	}
 
-	await fs.mkdir(outputPath, { recursive: true });
-
-	const filesBaseDir = await fs.readdir(sourcePath);
-	const files = filesBaseDir.map(file => `${file}/index.ts`);
-	const tsFiles = files.filter(file => file.endsWith('.ts'));
-
-	if (tsFiles.length === 0) {
-		p.log.info('MEMORY: No index.ts file found. Skipping memory build.');
-		return;
+	try {
+		await fs.access(outputPath);
+	} catch (error) {
+		// Create the build memory directory if it doesn't exist
+		await fs.mkdir(outputPath, { recursive: true });
 	}
 
-	const s = p.spinner();
-	s.start('Building memory');
-
 	const builtMemories: string[] = [];
+	const s = p.spinner();
+	let tsFiles: string[] = [];
+
+	// If a memoryName is provided, build only that memory
+	if (memoryName) {
+		tsFiles = await getSingleMemoryFile({ sourcePath, memoryName });
+	}
+
+	// If no memoryName is provided, build all memories
+	if (!memoryName) {
+		tsFiles = await getAllMemoryFile(sourcePath);
+
+		if (tsFiles.length === 0) {
+			p.log.info(
+				'MEMORY: No index.ts file found. Skipping memory build.'
+			);
+			return;
+		}
+	}
+
+	s.start('Building memory');
 
 	for (const file of tsFiles) {
 		const inputFile = path.join(sourcePath, file);
 		const outputFile = path.join(outputPath, `${path.dirname(file)}.json`);
 		const displayName = path.dirname(file); // This is the last directory name
-
 		try {
 			const { stdout } = await execAsync(
 				`npx tsx -e "import memoryConfig from '${inputFile}'; console.log(JSON.stringify(memoryConfig()))"`
@@ -180,3 +195,73 @@ const listBuiltItems = (title: string, items: string[], icon: string) => {
 		// console.log(`\nNo ${title.toLowerCase()} were built.`);
 	}
 };
+
+async function getSingleMemoryFile({
+	sourcePath,
+	memoryName
+}: {
+	sourcePath: string;
+	memoryName: string;
+}) {
+	// Array to store the paths of the memory files
+	const tsFiles: string[] = [];
+
+	const memoryPath = path.join(sourcePath, memoryName);
+
+	// Get all files in the memory directory
+	const files = await fs.readdir(memoryPath);
+	const indexFile = files.find(file => file === 'index.ts');
+
+	// If no index.ts file is found, no memory entry file exists. Skip the build.
+	if (!indexFile) {
+		p.log.info('MEMORY: No index.ts file found. Skipping memory build.');
+		process.exit(1); // Exiting process because it is a single memory build.
+	}
+
+	tsFiles.push(path.join(memoryName, indexFile));
+
+	return tsFiles;
+}
+
+async function getAllMemoryFile(sourcePath: string) {
+	// Array to store the paths of the memory files
+	let tsFiles: string[] = [];
+
+	// Get all folders in the memory directory
+	const filesBaseDir = await fs.readdir(sourcePath);
+
+	// Get only folders in the memory directory
+	const folderPromises = filesBaseDir.map(async file => {
+		const filePath = path.join(sourcePath, file);
+		const stats = await fs.stat(filePath);
+		return stats.isDirectory() ? file : '';
+	});
+
+	let allMemoryFolders = await Promise.all(folderPromises);
+
+	// Remove empty strings from the array
+	allMemoryFolders = allMemoryFolders.filter(folder => folder !== '');
+
+	if (allMemoryFolders.length === 0) {
+		p.log.info('MEMORY: No memory found. Skipping memory build.');
+		return [];
+	}
+
+	// Get all index.ts files in the all the memory folders
+	const tsFilesPromise = allMemoryFolders.map(async memory => {
+		const filePath = path.join(sourcePath, memory);
+		const files = await fs.readdir(filePath);
+		const indexFile = files.find(file => file === 'index.ts');
+
+		// if index file, return the memory/index.ts path
+		return indexFile ? path.join(memory, indexFile) : '';
+	});
+
+	// Wait for all the promises to resolve
+	tsFiles = await Promise.all(tsFilesPromise);
+
+	// Remove empty strings from the array
+	tsFiles = tsFiles.filter(file => file !== '');
+
+	return tsFiles;
+}

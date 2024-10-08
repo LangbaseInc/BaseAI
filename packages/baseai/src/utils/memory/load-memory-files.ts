@@ -85,3 +85,42 @@ export const loadMemoryFiles = async (
 
 	return memoryFilesContentFiltered;
 };
+
+export const getMemoryFileNames = async (
+	memoryName: string
+): Promise<string[]> => {
+	const memoryDir = path.join(process.cwd(), 'baseai', 'memory', memoryName);
+	const memoryFilesPath = path.join(memoryDir, 'documents');
+
+	try {
+		await fs.access(memoryFilesPath);
+	} catch (error) {
+		p.cancel(
+			`Documents directory for memory '${memoryName}' does not exist.`
+		);
+		process.exit(1);
+	}
+
+	try {
+		const memoryFiles = await fs.readdir(memoryFilesPath);
+
+		const validFiles = await Promise.all(
+			memoryFiles.map(async file => {
+				const filePath = path.join(memoryFilesPath, file);
+				const stats = await fs.stat(filePath);
+
+				const isSupportedExtension = allSupportedExtensions.some(
+					extension => file.endsWith(extension)
+				);
+				const isNotTooLarge = stats.size <= MEMORYSETS.MAX_DOC_SIZE;
+
+				return isSupportedExtension && isNotTooLarge ? file : null;
+			})
+		);
+
+		return validFiles.filter((file): file is string => file !== null);
+	} catch (error) {
+		p.cancel(`Failed to read documents in memory '${memoryName}'.`);
+		process.exit(1);
+	}
+};

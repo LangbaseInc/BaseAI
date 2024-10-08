@@ -1,0 +1,57 @@
+---
+title: 'Deploy a document to memory'
+description: "Deploy a document to memory on Langbase using the BaseAI CLI."
+tags:
+    - baseai
+    - auth
+    - langbase
+    - deploy
+    - document
+section: 'Deployment'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Deploy a document to memory
+
+Deploy a document to memory on [Langbase](https://langbase.com/) using the BaseAI CLI. Before you deploy a document, make sure you are [authenticated](/docs/deployment/authentication) with the BaseAI CLI.
+
+---
+
+## Deploy a document
+
+Pass the memory name and document name to the `deploy` command using the `--memory` flag or `-m` for short and `--document` flag or `-d` for short.
+
+```bash
+npx baseai@latest deploy -m <memory-name> -d <document-name>
+```
+
+### Document doesn't exist in memory on Langbase?
+
+The BaseAI CLI will add the missing provided document in memory.
+
+### Document exist in memory on Langbase?
+
+The BaseAI CLI will exit with message to run the command again with `--overwrite` flag to overwrite the document in memory.
+
+---
+
+## Overwrite a document in memory
+
+Overwrite the existing document in memory on Langbase using the `overwrite` flag or `-o` for short.
+
+```bash
+npx baseai@latest deploy -m <memory-name> -d <doc-name> -o
+```
+
+---
+
+## Example
+
+Here is an example of the command to deploy a document to memory on Langbase.
+
+```bash
+npx baseai@latest deploy -m chat-with-docs -d langbase.md
+```
+
+---

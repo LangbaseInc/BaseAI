@@ -66,6 +66,7 @@
 		"dotenv": "^16.4.5",
 		"execa": "^9.4.0",
 		"figures": "^6.1.0",
+		"find-up": "^7.0.0",
 		"get-package-json-file": "^2.0.0",
 		"hono": "^4.5.11",
 		"js-tiktoken": "^1.0.14",

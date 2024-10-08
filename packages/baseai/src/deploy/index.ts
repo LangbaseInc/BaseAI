@@ -6,6 +6,7 @@ import { heading } from '@/utils/heading';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 import { MEMORYSETS } from '@/utils/memory/constants';
 import {
+	getMemoryFileNames,
 	loadMemoryFiles,
 	type MemoryDocumentI
 } from '@/utils/memory/load-memory-files';
@@ -19,7 +20,7 @@ import type { MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
 import { getStoredAuth } from './../auth/index';
 
-interface Account {
+export interface Account {
 	login: string;
 	apiKey: string;
 }
@@ -153,7 +154,7 @@ async function readToolsDirectory({
 	}
 }
 
-async function retrieveAuthentication({
+export async function retrieveAuthentication({
 	spinner
 }: {
 	spinner: Spinner;
@@ -316,7 +317,7 @@ async function updateExistingPipe({
 	return (await updateResponse.json()) as PipeOld;
 }
 
-function handleError({
+export function handleError({
 	spinner,
 	message,
 	error
@@ -366,7 +367,7 @@ function handleAuthError({
 	p.log.error(`Error retrieving stored auth: ${(error as Error).message}`);
 }
 
-function handleInvalidConfig({
+export function handleInvalidConfig({
 	spinner,
 	name,
 	type
@@ -379,7 +380,7 @@ function handleInvalidConfig({
 	p.log.error(`Invalid ${type} configuration`);
 }
 
-function handleDeploymentError({
+export function handleDeploymentError({
 	spinner,
 	error,
 	name,
@@ -407,7 +408,7 @@ function handleFileProcessingError({
 	p.log.error(`File processing error: ${(error as Error).message}`);
 }
 
-async function readMemoryDirectory({
+export async function readMemoryDirectory({
 	spinner,
 	memoryDir
 }: {
@@ -449,7 +450,7 @@ async function deployMemories({
 	}
 }
 
-async function deployMemory({
+export async function deployMemory({
 	spinner,
 	memoryName,
 	memoryDir,
@@ -511,7 +512,7 @@ async function deployMemory({
 	}
 }
 
-async function upsertMemory({
+export async function upsertMemory({
 	memory,
 	documents,
 	account,
@@ -573,7 +574,7 @@ async function upsertMemory({
 	}
 }
 
-async function uploadDocumentsToMemory({
+export async function uploadDocumentsToMemory({
 	documents,
 	name,
 	account
@@ -597,13 +598,12 @@ async function uploadDocumentsToMemory({
 
 			p.log.message(`Uploaded document: ${doc.name}`);
 		} catch (error) {
-			console.error('Error in uploadDocumentToMemory:', error);
 			throw error;
 		}
 	}
 }
 
-async function handleExistingMemoryDeploy({
+export async function handleExistingMemoryDeploy({
 	memory,
 	account,
 	documents,
@@ -622,53 +622,57 @@ async function handleExistingMemoryDeploy({
 		memory
 	});
 
-	// Get the list of documents local.
-	const localDocs = documents.map(doc => doc.name);
+	// Get the list of local document names
+	const localDocs = await getMemoryFileNames(memory.name);
 
 	// Compare the documents
 	const {
 		areListsSame,
 		isProdSubsetOfLocal,
 		isProdSupersetOfLocal,
-		areMutuallyExclusive
+		areMutuallyExclusive,
+		areOverlapping
 	} = compareDocumentLists({
 		localDocs,
 		prodDocs
 	});
 
+	// If the user wants to overwrite, overwrite the memory.
 	if (overwrite) {
 		await overwriteMemory({ memory, documents, account });
-		return;
+		return true;
 	}
 
-	// If the lists are the same, do nothing and skip.
-	if (areListsSame && !overwrite) {
+	// If the lists are the same, do nothing and skip deployment.
+	if (areListsSame) {
 		p.log.info(
 			`Documents in local and prod are the same. Skipping deployment for memory: "${memory.name}".`
 		);
-		return;
+
+		return true;
 	}
 
 	// If prod is a subset of local, upload the missing documents.
 	if (isProdSubsetOfLocal) {
-		return await uploadMissingDocumentsToMemory({
+		await uploadMissingDocumentsToMemory({
 			memory,
-			localDocs,
 			prodDocs,
 			documents,
 			account
 		});
+		return true;
 	}
 
-	// If prod is a superset of local, show the diff and ask user if they want to overwrite.
-	if (isProdSupersetOfLocal || areMutuallyExclusive) {
-		return await handleProdSupersetOfLocal({
+	// If prod is a superset of local or the lists are mutually exclusive, ask the user whether to overwrite.
+	if (isProdSupersetOfLocal || areMutuallyExclusive || areOverlapping) {
+		await handleProdSupersetOfLocal({
 			memory,
 			localDocs,
 			prodDocs,
 			documents,
 			account
 		});
+		return true;
 	}
 }
 
@@ -711,13 +715,11 @@ async function handleProdSupersetOfLocal({
 
 async function uploadMissingDocumentsToMemory({
 	memory,
-	localDocs,
 	prodDocs,
 	documents,
 	account
 }: {
 	memory: MemoryI;
-	localDocs: string[];
 	prodDocs: string[];
 	documents: MemoryDocumentI[];
 	account: Account;
@@ -725,18 +727,14 @@ async function uploadMissingDocumentsToMemory({
 	p.log.info(
 		`Prod has missing documents. Uploading new documents to ${memory.name}.`
 	);
-	const missingDocsNames = localDocs.filter(doc => {
-		const isMissing = !prodDocs.includes(doc);
+	const missingDocs = documents.filter(doc => {
+		const isMissing = !prodDocs.includes(doc.name);
 		if (!isMissing) {
-			p.log.message(`Document "${doc}" already exists. Skipping.`);
+			p.log.message(`Document "${doc.name}" already exists. Skipping.`);
 		}
 		return isMissing;
 	});
 
-	// Upload the missing documents
-	const missingDocs = documents.filter(doc =>
-		missingDocsNames.includes(doc.name)
-	);
 	// wait for 500 ms to avoid rate limiting
 	await new Promise(resolve => setTimeout(resolve, 500));
 	await uploadDocumentsToMemory({
@@ -746,7 +744,7 @@ async function uploadMissingDocumentsToMemory({
 	});
 }
 
-async function listMemoryDocuments({
+export async function listMemoryDocuments({
 	account,
 	memory
 }: {
@@ -868,7 +866,7 @@ async function uploadDocument(signedUrl: string, document: Blob) {
 	}
 }
 
-function getMemoryApiUrls({
+export function getMemoryApiUrls({
 	account,
 	memoryName
 }: {

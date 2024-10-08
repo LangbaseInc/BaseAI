@@ -36,10 +36,14 @@ export function compareDocumentLists({
 		!localDocs.some(doc => prodSet.has(doc)) &&
 		!prodDocs.some(doc => localSet.has(doc));
 
+	// Case 5: Partial overlap
+	const areOverlapping = localDocs.some(doc => prodSet.has(doc));
+
 	return {
 		areListsSame,
 		isProdSubsetOfLocal,
 		isProdSupersetOfLocal,
-		areMutuallyExclusive
+		areMutuallyExclusive,
+		areOverlapping
 	};
 }

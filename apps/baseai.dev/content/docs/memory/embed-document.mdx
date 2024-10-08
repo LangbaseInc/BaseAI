@@ -28,7 +28,7 @@ Please make sure to add `OPENAI_API_KEY` to `.env` file in the root of your proj
 Pass the memory name and document name to the `embed` command using the `--memory` flag or `-m` for short and `--document` flag or `-d` for short.
 
 ```bash
-baseai embed -m chat-with-docs -d document-name
+npx baseai@latest embed -m chat-with-docs -d document-name
 ```
 
 It will generate embeddings and update the memory index. If the document is already embedded, it will update the embeddings for the document.

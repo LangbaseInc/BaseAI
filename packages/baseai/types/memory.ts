@@ -14,7 +14,9 @@ export const memoryNameSchema = z
 		'Memory name can only contain letters, numbers, dots, and hyphens'
 	);
 
-export const docEmbedSchema = z.object({
+export const docNameSchema = z.string().trim().min(1);
+
+export const memoryDocSchema = z.object({
 	memoryName: memoryNameSchema,
-	documentName: z.string().trim().min(1)
+	documentName: docNameSchema
 });

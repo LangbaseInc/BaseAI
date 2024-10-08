@@ -16,7 +16,7 @@ import {
 } from './db/lib';
 // import { generateLocalEmbeddings } from './generate-local-embeddings';
 import { dlog } from '@/dev/utils/dlog';
-import { docEmbedSchema, memoryNameSchema } from 'types/memory';
+import { memoryDocSchema, memoryNameSchema } from 'types/memory';
 import { loadConfig } from '../config/config-handler';
 import { logger } from '../logger-utils';
 import { generateLocalEmbeddings } from './generate-local-embeddings';
@@ -82,14 +82,14 @@ export const validateMemoryName = (memoryName: string) => {
 	return validatedName.data;
 };
 
-export const validatedocEmbedSchema = ({
+export const validateMemoryDocNames = ({
 	memoryName,
 	documentName
 }: {
 	memoryName: string;
 	documentName: string;
 }) => {
-	const validatedData = docEmbedSchema.safeParse({
+	const validatedData = memoryDocSchema.safeParse({
 		memoryName,
 		documentName
 	});
