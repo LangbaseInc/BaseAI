@@ -30,15 +30,16 @@ export const isMemoryDocExist = async ({
 	}
 
 	// 1- Check memory exists.
-	// s.start('Validating memory...');
 	const { memoryName: validMemoryName, documentName: validDocumentName } =
 		validateMemoryDocNames({
 			memoryName,
 			documentName
 		});
+
+	// 2- Check if memory exists.
 	await checkMemoryExists(validMemoryName);
 
-	// 2- Load memory data.
+	// 3- Load memory data.
 	spinner.start('Loading docs...');
 	const memoryFiles = await loadMemoryFiles(validMemoryName);
 

@@ -73,12 +73,7 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 	}
 
 	// Deploy all
-	if (
-		command('deploy') &&
-		!flag('memory') &&
-		!flag('document') &&
-		!flag('overwrite')
-	) {
+	if (command('deploy') && !flag('memory') && !flag('document')) {
 		await deploy({
 			overwrite: flags.overwrite
 		});

@@ -5,8 +5,8 @@ import * as p from '@clack/prompts';
 import {
 	handleDeploymentError,
 	handleError,
-	handleExistingMemoryDeploy,
 	handleInvalidConfig,
+	listMemoryDocuments,
 	retrieveAuthentication,
 	uploadDocumentsToMemory,
 	type Account
@@ -14,8 +14,13 @@ import {
 import path from 'path';
 import fs from 'fs/promises';
 import { cyan } from '@/utils/formatting';
-import { loadMemoryFiles } from '@/utils/memory/load-memory-files';
-import { dlog } from '@/dev/utils/dlog';
+import {
+	getMemoryFileNames,
+	loadMemoryFiles,
+	type MemoryDocumentI
+} from '@/utils/memory/load-memory-files';
+import type { MemoryI } from 'types/memory';
+import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 
 type Spinner = ReturnType<typeof p.spinner>;
 
@@ -110,44 +115,16 @@ async function deployDocument({
 			process.exit(1);
 		}
 
-		spinner.stop(`Processed ${documentName} of memory: ${memoryName}`);
+		await handleSingleMemoryDeploy({
+			memory: memoryObject,
+			account,
+			document,
+			overwrite
+		});
 
-		try {
-			if (overwrite) {
-				await uploadDocumentsToMemory({
-					account,
-					documents: [document],
-					name: memoryObject.name
-				});
-			}
-
-			if (!overwrite) {
-				const hasDeployed = await handleExistingMemoryDeploy({
-					account,
-					overwrite,
-					memory: memoryObject,
-					documents: [document],
-					runProdSuperSetOfLocal: false
-				});
-
-				if (!hasDeployed) {
-					p.log.warning(`Document already exists in prod memory.`);
-					p.log.info(
-						`Please run "npx baseai deploy ${memoryObject.name} -d ${document.name} -o" to overwrite the document.`
-					);
-					process.exit(1);
-				}
-			}
-		} catch (error) {
-			dlog('Error in upsertMemory:', error);
-			handleDeploymentError({
-				spinner,
-				name: memoryName,
-				error,
-				type: 'memory'
-			});
-			process.exit(1);
-		}
+		spinner.stop(
+			`Finished processing document ${documentName} of memory ${memoryName}`
+		);
 	} catch (error) {
 		handleDeploymentError({
 			spinner,
@@ -157,4 +134,133 @@ async function deployDocument({
 		});
 		process.exit(1);
 	}
+}
+
+export async function handleSingleMemoryDeploy({
+	memory,
+	account,
+	document,
+	overwrite
+}: {
+	memory: MemoryI;
+	account: Account;
+	document: MemoryDocumentI;
+	overwrite: boolean;
+}) {
+	p.log.info(
+		`Checking "${memory.name}" memory for document "${document.name}".`
+	);
+
+	// Fetch the existing documents
+	const prodDocs = await listMemoryDocuments({
+		account,
+		memory
+	});
+
+	// Get the list of local document names
+	const localDocs = await getMemoryFileNames(memory.name);
+
+	// If overwrite is present, deploy.
+	if (overwrite) {
+		await uploadDocumentsToMemory({
+			account,
+			documents: [document],
+			name: memory.name
+		});
+		p.log.success(
+			`Document "${document.name}" uploaded to memory "${memory.name}".`
+		);
+		return;
+	}
+
+	// If it is the only that does not exist in prod, deploy.
+	const onlyDeployDocMissing = checkOnlyDeployDocumentMissing({
+		localDocs,
+		prodDocs,
+		deployDoc: document.name
+	});
+
+	if (onlyDeployDocMissing) {
+		await uploadDocumentsToMemory({
+			account,
+			documents: [document],
+			name: memory.name
+		});
+		p.log.success(
+			`Document "${document.name}" uploaded to memory "${memory.name}".`
+		);
+		return;
+	}
+
+	const existInProd = prodDocs.includes(document.name);
+
+	if (existInProd) {
+		p.log.info(
+			`Document "${document.name}" already exists in memory "${memory.name}".`
+		);
+
+		p.log.info(
+			`Use the --overwrite flag to overwrite the existing document in memory.\n`
+		);
+		return;
+	}
+
+	// Compare the documents
+	const { isProdSupersetOfLocal, areMutuallyExclusive, areOverlapping } =
+		compareDocumentLists({
+			localDocs,
+			prodDocs
+		});
+
+	if (isProdSupersetOfLocal || areMutuallyExclusive || areOverlapping) {
+		p.log.warning(
+			`The documents in memory "${memory.name}" are not in sync with the production memory.`
+		);
+
+		p.log.warning(
+			`Memory deploy is currently in beta. We only support overwriting the prod memory on Langbase.com.`
+		);
+
+		p.log.info(
+			`Use the --overwrite flag to overwrite the existing document in memory.\n`
+		);
+		return;
+	}
+}
+
+export function checkOnlyDeployDocumentMissing({
+	localDocs,
+	prodDocs,
+	deployDoc
+}: {
+	localDocs: string[];
+	prodDocs: string[];
+	deployDoc: string;
+}): boolean {
+	// Convert arrays to Sets for efficient lookup
+	const localDocSet = new Set(localDocs);
+	const prodDocSet = new Set(prodDocs);
+
+	// Check if the deployed document is in local but not in prod
+	const deployDocMissing =
+		localDocSet.has(deployDoc) && !prodDocSet.has(deployDoc);
+
+	// If sizes don't match (excluding deployDoc), sets can't be equal
+	if (localDocSet.size !== prodDocSet.size + 1) {
+		return false;
+	}
+
+	// Check if all docs in prod are in local (excluding deployDoc)
+	for (const doc of prodDocSet) {
+		if (!localDocSet.has(doc)) {
+			return false;
+		}
+	}
+
+	// At this point, we know:
+	// 1. Local has exactly one more doc than prod (deployDoc)
+	// 2. All docs in prod are in local
+	// Therefore, local and prod are the same except for deployDoc
+
+	return deployDocMissing;
 }

@@ -1,11 +1,19 @@
 import unhandled from 'cli-handle-unhandled';
 import welcome from 'cli-welcome';
-import { getPackageJson } from 'get-package-json-file';
+import { findUpSync } from 'find-up';
+import fs from 'fs';
 
 export default async ({ clear = false }) => {
 	unhandled();
 
-	const pkgJson = await getPackageJson(`../../package.json`);
+	const pkgJsonPath = findUpSync('package.json');
+
+	if (!pkgJsonPath) {
+		console.error('Unable to find package.json');
+		process.exit(1);
+	}
+
+	const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
 
 	await welcome({
 		title: `baseai`,

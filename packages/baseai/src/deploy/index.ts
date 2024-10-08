@@ -6,6 +6,7 @@ import { heading } from '@/utils/heading';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
 import { MEMORYSETS } from '@/utils/memory/constants';
 import {
+	getMemoryFileNames,
 	loadMemoryFiles,
 	type MemoryDocumentI
 } from '@/utils/memory/load-memory-files';
@@ -606,14 +607,12 @@ export async function handleExistingMemoryDeploy({
 	memory,
 	account,
 	documents,
-	overwrite,
-	runProdSuperSetOfLocal = true
+	overwrite
 }: {
 	memory: MemoryI;
 	account: Account;
 	documents: MemoryDocumentI[];
 	overwrite: boolean;
-	runProdSuperSetOfLocal?: boolean;
 }) {
 	p.log.info(`Fetching "${memory.name}" memory documents.`);
 
@@ -623,8 +622,8 @@ export async function handleExistingMemoryDeploy({
 		memory
 	});
 
-	// Get the list of documents local.
-	const localDocs = documents.map(doc => doc.name);
+	// Get the list of local document names
+	const localDocs = await getMemoryFileNames(memory.name);
 
 	// Compare the documents
 	const {
@@ -632,30 +631,31 @@ export async function handleExistingMemoryDeploy({
 		isProdSubsetOfLocal,
 		isProdSupersetOfLocal,
 		areMutuallyExclusive,
-		isLocalDocumentMissingInProd
+		areOverlapping
 	} = compareDocumentLists({
 		localDocs,
 		prodDocs
 	});
 
+	// If the user wants to overwrite, overwrite the memory.
 	if (overwrite) {
 		await overwriteMemory({ memory, documents, account });
 		return true;
 	}
 
-	// If the lists are the same, do nothing and skip.
-	if (areListsSame && !overwrite) {
+	// If the lists are the same, do nothing and skip deployment.
+	if (areListsSame) {
 		p.log.info(
 			`Documents in local and prod are the same. Skipping deployment for memory: "${memory.name}".`
 		);
+
 		return true;
 	}
 
 	// If prod is a subset of local, upload the missing documents.
-	if (isProdSubsetOfLocal || isLocalDocumentMissingInProd) {
+	if (isProdSubsetOfLocal) {
 		await uploadMissingDocumentsToMemory({
 			memory,
-			localDocs,
 			prodDocs,
 			documents,
 			account
@@ -663,10 +663,8 @@ export async function handleExistingMemoryDeploy({
 		return true;
 	}
 
-	// If prod is a superset of local, show the diff and ask user if they want to overwrite.
-	if (isProdSupersetOfLocal || areMutuallyExclusive) {
-		if (!runProdSuperSetOfLocal) return false;
-
+	// If prod is a superset of local or the lists are mutually exclusive, ask the user whether to overwrite.
+	if (isProdSupersetOfLocal || areMutuallyExclusive || areOverlapping) {
 		await handleProdSupersetOfLocal({
 			memory,
 			localDocs,
@@ -717,13 +715,11 @@ async function handleProdSupersetOfLocal({
 
 async function uploadMissingDocumentsToMemory({
 	memory,
-	localDocs,
 	prodDocs,
 	documents,
 	account
 }: {
 	memory: MemoryI;
-	localDocs: string[];
 	prodDocs: string[];
 	documents: MemoryDocumentI[];
 	account: Account;
@@ -731,18 +727,14 @@ async function uploadMissingDocumentsToMemory({
 	p.log.info(
 		`Prod has missing documents. Uploading new documents to ${memory.name}.`
 	);
-	const missingDocsNames = localDocs.filter(doc => {
-		const isMissing = !prodDocs.includes(doc);
+	const missingDocs = documents.filter(doc => {
+		const isMissing = !prodDocs.includes(doc.name);
 		if (!isMissing) {
-			p.log.message(`Document "${doc}" already exists. Skipping.`);
+			p.log.message(`Document "${doc.name}" already exists. Skipping.`);
 		}
 		return isMissing;
 	});
 
-	// Upload the missing documents
-	const missingDocs = documents.filter(doc =>
-		missingDocsNames.includes(doc.name)
-	);
 	// wait for 500 ms to avoid rate limiting
 	await new Promise(resolve => setTimeout(resolve, 500));
 	await uploadDocumentsToMemory({
@@ -752,7 +744,7 @@ async function uploadMissingDocumentsToMemory({
 	});
 }
 
-async function listMemoryDocuments({
+export async function listMemoryDocuments({
 	account,
 	memory
 }: {
