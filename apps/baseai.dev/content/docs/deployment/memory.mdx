@@ -1,0 +1,43 @@
+---
+title: 'Deploy Memory to Langbase'
+description: "Deploy a memory on Langbase using the BaseAI CLI."
+tags:
+    - baseai
+    - auth
+    - langbase
+    - deploy
+    - memory
+section: 'Deployment'
+published: 2024-09-24
+modified: 2024-09-24
+---
+
+# Deploy Memory to Langbase
+
+Deploy a memory on [Langbase](https://langbase.com/) using the BaseAI CLI. Before you deploy a memory, make sure you are [authenticated](/docs/deployment/authentication) with the BaseAI CLI.
+
+---
+
+## Deploy a memory
+
+Pass the memory name to the `deploy` command using the `--memory` flag or `-m` for short.
+
+```bash
+npx baseai@latest deploy -m <memory-name>
+```
+
+Single memory deploy follows the [deploy Workflow](/docs/deployment/deploy#deployment-workflow).
+
+---
+
+## Overwrite an existing memory
+
+Overwrite an existing memory on Langbase using the `--overwrite` flag or `-o` for short.
+
+```bash
+npx baseai@latest deploy -m <memory-name> -o
+```
+
+For the git synced memory, `-o` is neglected and the new changes are pushed to the Langbase memory.
+
+---

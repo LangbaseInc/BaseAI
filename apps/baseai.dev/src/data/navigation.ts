@@ -180,6 +180,10 @@ const navigationData: NavigationItem[] = [
 				href: '/docs/deployment/deploy'
 			},
 			{
+				title: 'Deploy Memory',
+				href: '/docs/deployment/memory'
+			},
+			{
 				title: 'Deploy Document',
 				href: '/docs/deployment/document'
 			}
@@ -216,6 +220,10 @@ const navigationData: NavigationItem[] = [
 			{
 				title: 'Build Next.js App with BaseAI',
 				href: '/docs/guides/nextjs-with-baseai'
+			},
+			{
+				title: 'Create Memory from Git Repo',
+				href: '/docs/guides/memory-from-git'
 			}
 		]
 	}
