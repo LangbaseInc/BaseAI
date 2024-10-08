@@ -1,11 +1,10 @@
 import { execSync } from 'child_process';
 import * as p from '@clack/prompts';
-import path from 'path';
-import fs from 'fs/promises';
 import { saveDeployedCommitHashInMemoryConfig } from './save-deployed-commit-in-config';
 import { getChangedFilesBetweenCommits } from './get-changed-files-between-commits';
 import type { MemoryConfigI } from 'types/memory';
 import { listMemoryDocuments, type Account } from '@/deploy';
+import { loadMemoryFilesFromCustomDir } from '../load-memory-files';
 
 export async function handleGitSyncMemories({
 	memoryName,
@@ -29,8 +28,6 @@ export async function handleGitSyncMemories({
 		process.exit(1);
 	}
 
-	const repoPath = process.cwd();
-	const fullDirToTrack = path.join(repoPath, config.dirToTrack);
 	let filesToDeploy: string[] = [];
 
 	// Step 1:
@@ -41,10 +38,12 @@ export async function handleGitSyncMemories({
 		memoryName
 	});
 
-	const allFiles = await getAllFilesInDirectory({
-		dir: fullDirToTrack,
-		extensions: config.extToTrack
+	const allFilesWithContent = await loadMemoryFilesFromCustomDir({
+		memoryName,
+		memoryConfig: config
 	});
+
+	const allFiles = allFilesWithContent.map(file => file.name);
 
 	// Get files from allFiles that are not in the prodDocs
 	const newFiles = allFiles.filter(
@@ -81,15 +80,15 @@ export async function handleGitSyncMemories({
 				`No changes detected for memory "${memoryName}" since last deployment.`
 			);
 		}
-
-		if (filesToDeploy.length === 0) {
-			return filesToDeploy;
-		}
 	}
 
 	// Step 3
 	// Combine filesToDeploy with newFiles, avoid duplicates
 	filesToDeploy = [...new Set([...filesToDeploy, ...newFiles])];
+
+	if (filesToDeploy.length === 0) {
+		return [];
+	}
 
 	// Step 4
 	// Update deployedCommitHash in memory config
@@ -101,31 +100,4 @@ export async function handleGitSyncMemories({
 	});
 
 	return filesToDeploy;
-}
-
-async function getAllFilesInDirectory({
-	dir,
-	extensions = []
-}: {
-	dir: string;
-	extensions: string[];
-}): Promise<string[]> {
-	const files = await fs.readdir(dir, { withFileTypes: true });
-	const result: string[] = [];
-
-	for (const file of files) {
-		const fullPath = path.join(dir, file.name);
-		if (file.isDirectory()) {
-			result.push(
-				...(await getAllFilesInDirectory({ dir: fullPath, extensions }))
-			);
-		} else if (
-			extensions.length === 0 ||
-			extensions.some(ext => file.name.endsWith(ext))
-		) {
-			result.push(fullPath);
-		}
-	}
-
-	return result;
 }

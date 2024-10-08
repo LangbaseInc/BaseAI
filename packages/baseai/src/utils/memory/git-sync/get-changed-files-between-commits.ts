@@ -24,7 +24,7 @@ export async function getChangedFilesBetweenCommits({
 }): Promise<string[]> {
 	try {
 		// Validate inputs
-		if (oldCommit !== '' || latestCommit !== '') {
+		if (oldCommit === '') {
 			throw new Error('Invalid commit references');
 		}
 
@@ -42,15 +42,8 @@ export async function getChangedFilesBetweenCommits({
 		// Process the result
 		let changedFiles = result.split('\n').filter(Boolean);
 
-		// Filter by extensions if provided
-		if (extensions.length > 0) {
-			changedFiles = changedFiles.filter(file =>
-				extensions.some(ext => file.endsWith(ext))
-			);
-		}
-
 		// Resolve full paths
-		changedFiles = changedFiles.map(file => path.resolve(repoPath, file));
+		changedFiles = changedFiles.map(file => file.replace(/\//g, '-'));
 
 		return changedFiles;
 	} catch (error) {

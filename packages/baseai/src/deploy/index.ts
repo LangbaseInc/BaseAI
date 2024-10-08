@@ -1,4 +1,4 @@
-import build from '@/build';
+import build, { buildMemory } from '@/build';
 import { OLLAMA } from '@/dev/data/models';
 import { dlog } from '@/dev/utils/dlog';
 import { cyan, dim, dimItalic, green } from '@/utils/formatting';
@@ -20,6 +20,7 @@ import type { MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
 import { getStoredAuth } from './../auth/index';
 import { handleGitSyncMemories } from '@/utils/memory/git-sync/handle-git-sync-memories';
+import { handleSingleDocDeploy } from './document';
 
 export interface Account {
 	login: string;
@@ -394,6 +395,7 @@ export function handleDeploymentError({
 }): void {
 	spinner.stop(`Failed to deploy ${type}: ${name}`);
 	p.log.error(`Deployment error: ${(error as Error).message}`);
+	process.exit(0);
 }
 
 function handleFileProcessingError({
@@ -419,7 +421,6 @@ export async function readMemoryDirectory({
 	spinner.start('Reading memory directory');
 	try {
 		const memory = await fs.readdir(memoryDir);
-		spinner.stop(`Found ${memory.length} memory`);
 		return memory;
 	} catch (error) {
 		handleDirectoryReadError({ spinner, dir: memoryDir, error });
@@ -467,7 +468,7 @@ export async function deployMemory({
 	const filePath = path.join(memoryDir, memoryName);
 	const memoryNameWithoutExt = memoryName.split('.')[0]; // Remove .json extension
 
-	spinner.start(`Processing memory: ${memoryName}`);
+	spinner.start(`Processing memory: ${memoryNameWithoutExt}`);
 	try {
 		const memoryContent = await fs.readFile(filePath, 'utf-8');
 		const memoryObject = JSON.parse(memoryContent);
@@ -477,7 +478,7 @@ export async function deployMemory({
 			return;
 		}
 
-		p.log.step(`Processing documents for memory: ${memoryName}`);
+		p.log.step(`Processing documents for memory: ${memoryNameWithoutExt}`);
 
 		let filesToDeploy: string[] = [];
 		let memoryDocs: MemoryDocumentI[] = [];
@@ -486,7 +487,7 @@ export async function deployMemory({
 		if (memoryObject.config.useGitRepo) {
 			// Get names of files to deploy, i.e., changed or new files
 			filesToDeploy = await handleGitSyncMemories({
-				memoryName,
+				memoryName: memoryNameWithoutExt,
 				config: memoryObject.config,
 				account
 			});
@@ -496,18 +497,18 @@ export async function deployMemory({
 
 			// Filter memoryDocs to only include documents in filesToDeploy
 			// i.e., changed or new files
-			memoryDocs.filter(doc => filesToDeploy.includes(doc.name));
-		}
-
-		// Non git-sync memories
-		else {
+			memoryDocs = memoryDocs.filter(doc =>
+				filesToDeploy.includes(doc.name)
+			);
+		} else {
+			// Non-git sync memories
 			memoryDocs = await loadMemoryFiles(memoryNameWithoutExt);
 			filesToDeploy = memoryDocs.map(doc => doc.name);
 		}
 
 		if (filesToDeploy.length === 0) {
 			spinner.stop(
-				`No documents found for memory: ${memoryName}. Skipping.`
+				`No documents to deploy for memory: ${memoryNameWithoutExt}. Skipping.`
 			);
 			return;
 		}
@@ -515,14 +516,13 @@ export async function deployMemory({
 		spinner.stop(`Processed memory: ${memoryName.split('.')[0]}`);
 		spinner.start(`Deploying memory: ${memoryObject.name.split('.')[0]}`);
 
-		// TODO: Handle Git-sync memories from here
-
 		try {
 			await upsertMemory({
 				memory: memoryObject,
 				documents: memoryDocs,
 				account,
-				overwrite
+				overwrite,
+				isGitSync: memoryObject.config.useGitRepo
 			});
 			spinner.stop(`Deployment finished memory: ${memoryObject.name}`);
 		} catch (error) {
@@ -536,6 +536,7 @@ export async function deployMemory({
 			error,
 			type: 'memory'
 		});
+		spinner.stop(`Error processing memory: ${memoryName}`);
 		throw error;
 	}
 }
@@ -544,12 +545,14 @@ export async function upsertMemory({
 	memory,
 	documents,
 	account,
-	overwrite
+	overwrite,
+	isGitSync = false
 }: {
 	memory: MemoryI;
 	documents: MemoryDocumentI[];
 	account: Account;
 	overwrite: boolean;
+	isGitSync?: boolean;
 }): Promise<void> {
 	const { createMemory } = getMemoryApiUrls({
 		account,
@@ -572,17 +575,33 @@ export async function upsertMemory({
 
 			// If memory already exists, handle it.
 			if (errorData.error?.message.includes('already exists')) {
-				// Show that Memory already exists
-				p.log.info(
-					`Memory "${memory.name}" already exists in production.`
-				);
-				await handleExistingMemoryDeploy({
-					memory,
-					account,
-					documents,
-					overwrite
-				});
-				return;
+				if (!isGitSync) {
+					// Show that Memory already exists
+					p.log.info(
+						`Memory "${memory.name}" already exists in production.`
+					);
+					await handleExistingMemoryDeploy({
+						memory,
+						account,
+						documents,
+						overwrite
+					});
+					return;
+				}
+
+				// If Git-sync memory, update the existing memory
+				if (isGitSync) {
+					p.log.info(
+						`Memory "${memory.name}" already exists. Updating changed documents.`
+					);
+					await handleGitSyncMemoryDeploy({
+						memory,
+						account,
+						documents,
+						overwrite
+					});
+					return;
+				}
 			}
 
 			// Throw error if not already exists
@@ -795,9 +814,17 @@ export async function listMemoryDocuments({
 	});
 
 	if (!listResponse.ok) {
-		const error = await listResponse.text();
+		const errorData = (await listResponse.json()) as ErrorResponse;
+
+		const errorMsg = errorData.error?.message;
+
+		if (errorMsg?.includes('Invalid memory name.')) {
+			p.log.info(`Memory "${memoryName}" does not exist in production.`);
+			return [];
+		}
+
 		throw new Error(
-			`HTTP error! status: ${listResponse.status}, message: ${error}`
+			`HTTP error! status: ${listResponse.status}, message: ${errorMsg}`
 		);
 	}
 
@@ -975,6 +1002,98 @@ async function overwriteMemory({
 		account,
 		overwrite: true
 	});
+}
+
+export async function handleGitSyncMemoryDeploy({
+	memory,
+	account,
+	documents,
+	overwrite
+}: {
+	memory: MemoryI;
+	account: Account;
+	documents: MemoryDocumentI[];
+	overwrite: boolean;
+}) {
+	for (const doc in documents) {
+		await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
+		await handleSingleDocDeploy({
+			memory,
+			account,
+			document: documents[doc],
+			overwrite: true // TODO: Implement overwrite for git-sync memories
+		});
+	}
+}
+
+export async function deploySingleMemory({
+	memoryName,
+	overwrite
+}: {
+	memoryName: string;
+	overwrite: boolean;
+}): Promise<void> {
+	const spinner = p.spinner();
+
+	try {
+		p.intro(heading({ text: 'BUILDING', sub: 'baseai...' }));
+
+		await buildMemory({
+			memoryName: memoryName
+		});
+
+		console.log('');
+		p.outro(heading({ text: 'BUILD', sub: 'complete', green: true }));
+
+		p.intro(heading({ text: 'DEPLOY', sub: 'Deploy your BaseAI Memory' }));
+
+		const buildDir = path.join(process.cwd(), '.baseai');
+		const memoryDir = path.join(buildDir, 'memory');
+		const allMemory = await readMemoryDirectory({
+			spinner,
+			memoryDir
+		});
+
+		// Check if the memory exists
+		if (!allMemory?.includes(`${memoryName}.json`)) {
+			p.log.error(`Memory "${memoryName}" not found.`);
+			return;
+		}
+
+		// Retrieve authentication
+		const account = await retrieveAuthentication({ spinner });
+		if (!account) {
+			p.log.error(
+				'Authentication failed. Please run "npx baseai auth" to authenticate.'
+			);
+			return;
+		}
+
+		// Call deployMemory function
+		await deployMemory({
+			spinner,
+			memoryName: `${memoryName}.json`,
+			memoryDir,
+			account,
+			overwrite
+		});
+
+		p.outro(`Successfully deployed memory: ${memoryName}`);
+		process.exit(1);
+	} catch (error) {
+		if (error instanceof Error) {
+			if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+				p.log.error(
+					`Directory or file not found. Make sure you're in the correct project directory and the memory exists.`
+				);
+			} else {
+				p.log.error(`Error deploying memory: ${error.message}`);
+			}
+		} else {
+			p.log.error(`An unknown error occurred while deploying memory.`);
+		}
+		process.exit(1);
+	}
 }
 
 export { deploy };
