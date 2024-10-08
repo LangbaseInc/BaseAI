@@ -95,19 +95,32 @@ export const getMemoryFileNames = async (
 	try {
 		await fs.access(memoryFilesPath);
 	} catch (error) {
-		console.error(
+		p.cancel(
 			`Documents directory for memory '${memoryName}' does not exist.`
 		);
-		return [];
+		process.exit(1);
 	}
 
 	try {
 		const memoryFiles = await fs.readdir(memoryFilesPath);
-		return memoryFiles.filter(file =>
-			allSupportedExtensions.some(extension => file.endsWith(extension))
+
+		const validFiles = await Promise.all(
+			memoryFiles.map(async file => {
+				const filePath = path.join(memoryFilesPath, file);
+				const stats = await fs.stat(filePath);
+
+				const isSupportedExtension = allSupportedExtensions.some(
+					extension => file.endsWith(extension)
+				);
+				const isNotTooLarge = stats.size <= MEMORYSETS.MAX_DOC_SIZE;
+
+				return isSupportedExtension && isNotTooLarge ? file : null;
+			})
 		);
+
+		return validFiles.filter((file): file is string => file !== null);
 	} catch (error) {
-		console.error(`Failed to read documents in memory '${memoryName}'.`);
-		return [];
+		p.cancel(`Failed to read documents in memory '${memoryName}'.`);
+		process.exit(1);
 	}
 };

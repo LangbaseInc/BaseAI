@@ -115,7 +115,7 @@ async function deployDocument({
 			process.exit(1);
 		}
 
-		await handleSingleMemoryDeploy({
+		await handleSingleDocDeploy({
 			memory: memoryObject,
 			account,
 			document,
@@ -136,7 +136,7 @@ async function deployDocument({
 	}
 }
 
-export async function handleSingleMemoryDeploy({
+export async function handleSingleDocDeploy({
 	memory,
 	account,
 	document,
