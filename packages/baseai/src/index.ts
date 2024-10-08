@@ -4,7 +4,7 @@ import path from 'path';
 import { addPipe } from './add';
 import { auth } from './auth';
 import build from './build';
-import { deploy } from './deploy';
+import { deploy, deploySingleMemory } from './deploy';
 import { runBaseServer } from './dev';
 import { init } from './init';
 import { createMemory } from './memory/create';
@@ -75,6 +75,14 @@ const flag = (flg: string): boolean => Boolean(flags[flg]);
 	// Deploy all
 	if (command('deploy') && !flag('memory') && !flag('document')) {
 		await deploy({
+			overwrite: flags.overwrite
+		});
+	}
+
+	// Deploy memory
+	if (command('deploy') && flag('memory') && !flag('document')) {
+		await deploySingleMemory({
+			memoryName: flags.memory,
 			overwrite: flags.overwrite
 		});
 	}

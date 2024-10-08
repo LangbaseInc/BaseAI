@@ -82,6 +82,15 @@ export const validateMemoryName = (memoryName: string) => {
 	return validatedName.data;
 };
 
+/**
+ * Validates the document embedding schema using the provided memory and document names.
+ *
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.memoryName - The name of the memory.
+ * @param {string} params.documentName - The name of the document.
+ * @returns {Object} The validated data if the input is valid.
+ * @throws Will terminate the process if the input is invalid.
+ */
 export const validateMemoryDocNames = ({
 	memoryName,
 	documentName

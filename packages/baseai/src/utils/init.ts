@@ -1,14 +1,20 @@
 import unhandled from 'cli-handle-unhandled';
 import welcome from 'cli-welcome';
-import { findUpSync } from 'find-up';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import fs from 'fs';
 
 export default async ({ clear = false }) => {
 	unhandled();
 
-	const pkgJsonPath = findUpSync('package.json');
+	// Get the directory of the current module
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
 
-	if (!pkgJsonPath) {
+	// Go up two levels to find the package.json
+	const pkgJsonPath = path.join(__dirname, '..', 'package.json');
+
+	if (!fs.existsSync(pkgJsonPath)) {
 		console.error('Unable to find package.json');
 		process.exit(1);
 	}

@@ -154,11 +154,8 @@ export async function handleSingleDocDeploy({
 	// Fetch the existing documents
 	const prodDocs = await listMemoryDocuments({
 		account,
-		memory
+		memoryName: memory.name
 	});
-
-	// Get the list of local document names
-	const localDocs = await getMemoryFileNames(memory.name);
 
 	// If overwrite is present, deploy.
 	if (overwrite) {
@@ -172,6 +169,9 @@ export async function handleSingleDocDeploy({
 		);
 		return;
 	}
+
+	// Get the list of local document names
+	const localDocs = await getMemoryFileNames(memory.name);
 
 	// If it is the only that does not exist in prod, deploy.
 	const onlyDeployDocMissing = checkOnlyDeployDocumentMissing({
