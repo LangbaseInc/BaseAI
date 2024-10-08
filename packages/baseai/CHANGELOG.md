@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.5
+
+### Patch Changes
+
+-   📦 NEW: Add git synced memory
+
 ## 0.9.4
 
 ### Patch Changes
