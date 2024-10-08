@@ -287,6 +287,12 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			completionCost: 0.3
 		},
 		{
+			id: 'gemini-1.5-flash-8b-latest',
+			provider: GOOGLE,
+			promptCost: 0.0375,
+			completionCost: 0.15
+		},
+		{
 			id: 'gemini-pro',
 			provider: GOOGLE,
 			promptCost: 0.5,

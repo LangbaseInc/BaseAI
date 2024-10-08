@@ -287,6 +287,12 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			completionCost: 0.3,
 		},
 		{
+			id: 'gemini-1.5-flash-8b-latest',
+			provider: GOOGLE,
+			promptCost: 0.0375,
+			completionCost: 0.15,
+		},
+		{
 			id: 'gemini-pro',
 			provider: GOOGLE,
 			promptCost: 0.5,
@@ -412,4 +418,5 @@ export const jsonModeModels = [
 	'mistralai/Mixtral-8x7B-Instruct-v0.1',
 	'gemini-1.5-pro-latest',
 	'gemini-1.5-flash-latest',
+	'gemini-1.5-flash-8b-latest',
 ];
