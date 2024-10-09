@@ -471,7 +471,7 @@ export async function deployMemory({
 	spinner.start(`Processing memory: ${memoryNameWithoutExt}`);
 	try {
 		const memoryContent = await fs.readFile(filePath, 'utf-8');
-		const memoryObject = JSON.parse(memoryContent);
+		const memoryObject = JSON.parse(memoryContent) as MemoryI;
 
 		if (!memoryObject) {
 			handleInvalidConfig({ spinner, name: memoryName, type: 'memory' });
@@ -484,7 +484,7 @@ export async function deployMemory({
 		let memoryDocs: MemoryDocumentI[] = [];
 
 		// Git sync memories
-		if (memoryObject.config.useGitRepo) {
+		if (memoryObject.config?.useGitRepo) {
 			// Get names of files to deploy, i.e., changed or new files
 			filesToDeploy = await handleGitSyncMemories({
 				memoryName: memoryNameWithoutExt,
@@ -522,7 +522,7 @@ export async function deployMemory({
 				documents: memoryDocs,
 				account,
 				overwrite,
-				isGitSync: memoryObject.config.useGitRepo
+				isGitSync: memoryObject.config?.useGitRepo
 			});
 			spinner.stop(`Deployment finished memory: ${memoryObject.name}`);
 		} catch (error) {
