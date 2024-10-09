@@ -1,0 +1,73 @@
+---
+title: 'Create Memory from Git Repository'
+description: "Create a memory from a git repository using BaseAI CLI."
+tags:
+    - baseai
+    - memory
+    - git
+    - langbase
+section: 'Memory'
+published: 2024-10-08
+modified: 2024-10-08
+---
+
+# Create a Memory from git Repository
+
+Create a memory from a git repository using BaseAI CLI.
+
+---
+
+## Step #1 Create memory in your existing git repository
+
+Create a new memory using the `memory` command in root of project. It will ask you for name and description of the memory.
+
+Let's use the name `chat-with-repo` for this example.
+
+```bash
+npx baseai@latest memory
+```
+
+## Step #2 Allow memory to track git repository
+
+It will also prompt you if you want to create a memory from the current project git repository. Select `yes`.
+```
+Do you want to create memory from current project git repository? (yes/no) yes
+```
+
+## Step #3 Provide directory 
+
+Next, it will ask you which directory or subdirectory you want to use for the memory. You can select the current directory or any subdirectory.
+
+```
+Enter the path to the directory to track (relative to current directory): 
+```
+
+Provide the path relative to the root of the project directory that you want to use for the memory. E.g., `src/content/docs`, to use the `docs` directory in the `src/content` directory.
+
+## Step #4 Provide file extensions
+
+Next, it will ask you which files extensions you want to track. You can provide a comma-separated list of file extensions. E.g., `.mdx,.md` to track markdown files. Alternatively, you can provide `*` to track all files.
+
+```
+Enter file extensions to track (use * for all, or comma-separated list, e.g., .md,.mdx)
+```
+
+That's it! It creates a memory at `baseai/memory/chat-with-repo` in your current directory that tracks the git repository directory and file extensions you provided.
+
+## Step #5 Deploy the memory
+
+Commit all the changes to git and deploy. 
+
+```bash
+npx baseai@latest deploy -m chat-with-repo
+```
+
+Next time you want to update the memory with the latest changes from the git repository, you can run the `deploy` command again. Make sure to commit all the changes before deploying.
+
+---
+
+## Running the memory locally
+
+You can embed the memory locally using the `embed` command. Just like any other memory and use it with a Pipe. Follow the [quickstart guide](/docs/memory/quickstart) to see how to embed and use the memory.
+
+---
