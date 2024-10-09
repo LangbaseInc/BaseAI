@@ -10,9 +10,9 @@ const toolCalculator = () => ({
 	function: {
 		name: 'calculator',
 		description:
-			`A tool for evaluating mathematical expressions. ` +
+			`A tool that can evaluate mathematical expressions. ` +
 			`Example expressions: ` +
-			`'1.2 * (2 + 4.5)', '12.7 cm to inch', 'sin(45 deg) ^ 2'.`,
+			`'5.6 * (5 + 10.5)', '7.86 cm to inch', 'cos(80 deg) ^ 4'.`,
 		parameters: {
 			type: 'object',
 			required: ['expression'],
