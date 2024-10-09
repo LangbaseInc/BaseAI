@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.7
+
+### Patch Changes
+
+-   🐛 FIX: Default config for non-git-sync memory
+
 ## 0.9.6
 
 ### Patch Changes
