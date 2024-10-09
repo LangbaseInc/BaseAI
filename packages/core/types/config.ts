@@ -26,5 +26,6 @@ export interface BaseAIConfig {
 	memory: {
 		useLocalEmbeddings: boolean;
 	};
+	envFilePath: string;
 	// Other configuration options can be added here
 }
