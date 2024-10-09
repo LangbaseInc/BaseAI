@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.6
+
+### Patch Changes
+
+-   🐛 FIX: Optional git memory config
+
 ## 0.9.5
 
 ### Patch Changes
