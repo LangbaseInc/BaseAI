@@ -13,8 +13,4 @@ export const config = {
 		useLocalEmbeddings: false,
 	},
 	envFilePath: '.env',
-	env: {
-		langbase: '===========================================================',
-		openai: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-	},
 };
