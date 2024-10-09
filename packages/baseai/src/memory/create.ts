@@ -63,8 +63,8 @@ export async function createMemory() {
 		}
 	);
 
-	let memoryFilesDir = '';
-	let fileExtensions: string[] = [];
+	let memoryFilesDir = '.';
+	let fileExtensions: string[] = ['*'];
 
 	if (memoryInfo.useGitRepo) {
 		// Check if the current directory is a Git repository
