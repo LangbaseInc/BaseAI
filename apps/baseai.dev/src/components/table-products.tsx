@@ -29,7 +29,7 @@ interface TableRowProps {
 const TableRow: React.FC<TableRowProps> = ({ product, description, href }) => (
 	<tr>
 		<td className="w-[180px] p-2 align-top">
-			<Link href={href}>⌘ {product.main}</Link>
+			<Link href={href}>{product.main}</Link>
 			{product.sub && (
 				<div className="xtext-muted-foreground/50 mt-1 text-sm text-[#7f7db0]/50">
 					({product.sub})

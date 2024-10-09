@@ -1,6 +1,12 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-export default function BaseAILogo({width = '30%', className}: {width?: string, className?: string}) {
+export default function BaseAILogo({
+	width = '30%',
+	className
+}: {
+	width?: string;
+	className?: string;
+}) {
 	return (
 		<>
 			<img
@@ -12,7 +18,10 @@ export default function BaseAILogo({width = '30%', className}: {width?: string, 
 					height: 'auto',
 					color: 'transparent'
 				}}
-				className={cn("block max-w-full object-cover dark:hidden", className)}
+				className={cn(
+					'block max-w-full object-cover dark:hidden',
+					className
+				)}
 			/>
 			<img
 				alt="BaseAI"
@@ -23,7 +32,10 @@ export default function BaseAILogo({width = '30%', className}: {width?: string, 
 					height: 'auto',
 					color: 'transparent'
 				}}
-				className={cn("hidden max-w-full object-cover dark:block", className)}
+				className={cn(
+					'hidden max-w-full object-cover dark:block',
+					className
+				)}
 			/>
 		</>
 	);

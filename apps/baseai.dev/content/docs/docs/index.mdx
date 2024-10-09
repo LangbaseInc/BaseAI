@@ -9,15 +9,25 @@ modified: 2024-09-24
 ---
 
 <a href="https://baseai.dev/docs" className="hidden lg:flex h-full w-full items-center justify-center mb-4">
-    <BaseAILogo className="w-full" />
+    <img className="w-full" src="https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-cover.png" alt="BaseAI.dev" />
 </a>
 
 <h1 className="flex flex lg:hidden">BaseAI Docs</h1>
 
-BaseAI helps developers locally build AI agents, memory (RAG), and then deploy them to a highly scalable API. It is the first AI framework for Web. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).
+BaseAI is the first web AI framework built for web developers.
 
-1. Start by building local AI agents [Pipes](/docs/pipe/quickstart)
-2. Then create a local managed semantic [memory (RAG)](/docs/memory/quickstart) so your AI can talk to your data
+- **OPEN**: BaseAI is **free and open-source**,
+- **LOCAL**: offers a world-class **local developer experience**,
+- **CLEAN**: unlike existing frameworks bloatware, BaseAI **removes the boilerplate code**,
+- **COMPOSABLE**: build composable AI **pipes** (agents), **tools** (self-healing), and **memory** (RAG),
+- **SERVERLESS**: prod-ready as it [**deploys to serverless AI cloud**][lb] with `npx baseai deploy` command
+
+
+Developers use BaseAI to develop high-quality AI agents with memory (RAG) using TypeScript and then deploy serverless as a highly scalable API using [⌘ Langbase][lb] (creators of BaseAI).
+
+
+1. Start by building local AI agents we call [Pipes](/docs/pipe/quickstart)
+2. Then create a local semantic [memory (RAG)](/docs/memory/quickstart) so your AI agents can chat with your data
 
 
 <CTAButtons
@@ -33,7 +43,7 @@ BaseAI helps developers locally build AI agents, memory (RAG), and then deploy t
 BaseAI is web-first with TypeScript support and a familiar RESTful API. Integrate AI into your web stack as easily as adding a React component or API route—whether you're using Next.js, Vue, or vanilla Node.js. With most AI use cases on the web, BaseAI helps you ship AI features faster.
 </SpoilerAdvanced>
 
-<SpoilerAdvanced title="Local-First Development" sub="Zero-cost local development, version-control, and complete observability logs">
+<SpoilerAdvanced title="Local developer experience" sub="Zero-cost local development, version-control, and complete observability logs">
 Develop AI features on your machine with zero cloud costs. Git integrates out of the box, so you can branch and merge AI models like code. Complete observability logs let you debug AI like JavaScript—trace decisions, data points, and outputs. It's like Chrome DevTools for your AI.
 </SpoilerAdvanced>
 
@@ -68,3 +78,6 @@ BaseAI introduces composable AI with agentic pipes, tools, and memory. Think of 
 <Guides />
 
 ---
+
+[lb]: https://langbase.com
+[bai]: https://baseai.dev
