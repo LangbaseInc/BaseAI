@@ -20,8 +20,9 @@ export const defaultConfig: BaseAIConfig = {
 	memory: {
 		useLocalEmbeddings: false
 	},
-	envFilePath: '.env'
+	envFilePath: '.env',
 	// Other default configuration options can be added here
+	env: {} as any
 };
 
 export async function loadConfig(): Promise<BaseAIConfig> {
