@@ -1,8 +1,9 @@
 import {PipeI} from '@baseai/core';
+import {config} from '../baseai.config';
 
 const buildPipe = (): PipeI => ({
-	apiKey: process.env.LANGBASE_API_KEY!, // Replace with your API key https://langbase.com/docs/api-reference/api-keys
-	name: 'summary',
+	apiKey: config.env.langbase,
+	name: 'summary-nodejs',
 	description: '',
 	status: 'private',
 	model: 'openai:gpt-4o-mini',
@@ -18,7 +19,12 @@ const buildPipe = (): PipeI => ({
 	stop: [],
 	tool_choice: 'auto',
 	parallel_tool_calls: false,
-	messages: [{role: 'system', content: `You are a helpful AI assistant.`}],
+	messages: [
+		{
+			role: 'system',
+			content: `You are a helpful AI assistant. Make everything less wordy.`,
+		},
+	],
 	variables: [],
 	memory: [],
 	tools: [],

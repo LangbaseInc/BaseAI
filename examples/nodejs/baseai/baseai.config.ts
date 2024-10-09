@@ -1,6 +1,4 @@
-import type {BaseAIConfig} from 'baseai';
-
-export const config: BaseAIConfig = {
+export const config = {
 	log: {
 		isEnabled: true,
 		logSensitiveData: false,
@@ -15,4 +13,8 @@ export const config: BaseAIConfig = {
 		useLocalEmbeddings: false,
 	},
 	envFilePath: '.env',
+	env: {
+		langbase: '===========================================================',
+		openai: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+	},
 };

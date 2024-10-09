@@ -24,7 +24,8 @@
 	},
 	"homepage": "https://BaseAI.dev",
 	"files": [
-		"dist/**"
+		"dist/**",
+		"bin/**"
 	],
 	"scripts": {
 		"build": "tsup",

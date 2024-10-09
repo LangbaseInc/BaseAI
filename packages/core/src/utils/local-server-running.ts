@@ -29,7 +29,7 @@ export async function isLocalServerRunning(): Promise<Boolean> {
 	} catch (error) {
 		// Port is not in use and BaseAI dev server is not running
 		console.error(
-			`\nBaseAI dev server is not running. \nPlease run "npx baseai@latest dev" in a new teriminal to start dev server.\n`,
+			`\nBaseAI dev server is not running. \nPlease run "npx baseai dev" in a new teriminal, in the root of this project.\n`,
 		);
 		return false;
 	}

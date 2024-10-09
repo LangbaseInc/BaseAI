@@ -29,4 +29,16 @@ export interface BaseAIConfig {
 	log: LoggerConfig;
 	memory: MemoryConfig;
 	envFilePath: string;
+	env: {
+		NODE_ENV: string;
+		OPENAI_API_KEY: string;
+		ANTHROPIC_API_KEY: string;
+		COHERE_API_KEY: string;
+		FIREWORKS_API_KEY: string;
+		GOOGLE_API_KEY: string;
+		GROQ_API_KEY: string;
+		MISTRAL_API_KEY: string;
+		PERPLEXITY_API_KEY: string;
+		TOGETHER_API_KEY: string;
+	};
 }

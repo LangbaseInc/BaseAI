@@ -132,8 +132,9 @@ export async function createPipe() {
 	const pipeContent = `import { PipeI } from '@baseai/core';${selectedTools}${selectedMemories}
 
 const ${pipeNameCamelCase} = (): PipeI => ({
-    // Replace with your API key https://langbase.com/docs/api-reference/api-keys
-	apiKey: process.env.LANGBASE_API_KEY!,
+    // Prod only: Replace with your Langbase API key
+    // https://langbase.com/docs/api-reference/api-keys
+    apiKey: process.env.LANGBASE_API_KEY,
     name: '${pipeNameSlugified}',
     description: '${pipeInfo.description || ''}',
     status: '${pipeInfo.status}',

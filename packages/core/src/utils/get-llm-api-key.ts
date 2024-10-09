@@ -10,27 +10,47 @@ import {
 	TOGETHER_AI,
 } from '../data/models';
 
-export function getLLMApiKey(modelProvider: string): string {
+export function getLLMApiKey({
+	modelProvider,
+	configEnv,
+}: {
+	modelProvider: string;
+	configEnv?: Record<string, string>;
+}): string {
+	const getEnv = (key: string) => {
+		let value;
+		if (configEnv && key in configEnv) {
+			value = configEnv[key];
+		} else {
+			value = process.env[key];
+		}
+		if (!value) {
+			throw new Error(
+				`Environment variable ${key} is not set or empty. Only needed in local dev environment. \nNote: In production, add it to your keysets https://langbase.com/docs/features/keysets\n`,
+			);
+		}
+		return value;
+	};
+
 	switch (true) {
 		case modelProvider.includes(OPEN_AI):
-			return process.env.OPENAI_API_KEY || '';
+			return getEnv('OPENAI_API_KEY');
 		case modelProvider === ANTHROPIC:
-			return process.env.ANTHROPIC_API_KEY || '';
+			return getEnv('ANTHROPIC_API_KEY');
 		case modelProvider === TOGETHER_AI:
-			return process.env.TOGETHER_API_KEY || '';
+			return getEnv('TOGETHER_API_KEY');
 		case modelProvider === GROQ:
-			return process.env.GROQ_API_KEY || '';
+			return getEnv('GROQ_API_KEY');
 		case modelProvider === GOOGLE:
-			return process.env.GOOGLE_API_KEY || '';
+			return getEnv('GOOGLE_API_KEY');
 		case modelProvider.includes(COHERE):
-			return process.env.COHERE_API_KEY || '';
+			return getEnv('COHERE_API_KEY');
 		case modelProvider.includes(FIREWORKS_AI):
-			return process.env.FIREWORKS_API_KEY || '';
+			return getEnv('FIREWORKS_API_KEY');
 		case modelProvider.includes(PERPLEXITY):
-			return process.env.PERPLEXITY_API_KEY || '';
+			return getEnv('PERPLEXITY_API_KEY');
 		case modelProvider.includes(OLLAMA):
-			return process.env.OLLAMA_API_KEY || '';
-
+			return getEnv('OLLAMA_API_KEY');
 		default:
 			throw new Error(`Unsupported model provider: ${modelProvider}`);
 	}

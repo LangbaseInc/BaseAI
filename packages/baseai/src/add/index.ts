@@ -302,8 +302,9 @@ async function createLocalPipe(pipe: Pipe) {
 ${toolData.map(tool => tool.importPath).join('\n')}
 
 		const ${pipeNameCamelCase} = (): PipeI => ({
-			// Replace with your API key https://langbase.com/docs/api-reference/api-keys
-			apiKey: process.env.LANGBASE_API_KEY!,
+			// Prod only: Replace with your Langbase API key
+			// https://langbase.com/docs/api-reference/api-keys
+			apiKey: process.env.LANGBASE_API_KEY,
 			name: \`${pipe.name}\`,
 			description: \`${pipe.description}\`,
 			status: \`${pipe.status}\`,

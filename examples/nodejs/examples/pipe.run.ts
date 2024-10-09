@@ -1,8 +1,12 @@
 import 'dotenv/config';
-import {Pipe} from '@baseai/core';
+import {config} from '../baseai/baseai.config';
 import pipeSummary from '../baseai/pipes/summary';
+import {Pipe} from './../../../packages/core/src/pipes/pipes';
 
-const pipe = new Pipe(pipeSummary());
+const pipe = new Pipe({
+	...pipeSummary(),
+	config,
+});
 
 async function main() {
 	const userMsg = 'Who is an AI Engineer?';

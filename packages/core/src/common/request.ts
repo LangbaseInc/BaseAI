@@ -1,4 +1,5 @@
 import {Stream} from 'openai/streaming';
+import {Logger} from 'src/helpers/logger';
 import {APIConnectionError, APIError} from './errors';
 
 interface RequestOptions {
@@ -10,10 +11,11 @@ interface RequestOptions {
 	rawResponse?: boolean;
 }
 
-interface RequestConfig {
+interface RequestProps {
 	apiKey?: string;
 	baseUrl: string;
 	timeout?: number;
+	config?: any; // TODO: BaseAIConfig
 }
 
 interface SendOptions extends RequestOptions {
@@ -34,10 +36,12 @@ interface HandleGenerateResponseParams {
 }
 
 export class Request {
-	private config: RequestConfig;
+	private console: any;
+	private props: RequestProps;
 
-	constructor(config: RequestConfig) {
-		this.config = config;
+	constructor(props: RequestProps) {
+		this.props = props;
+		this.console = new Logger(this.props.config);
 	}
 
 	private async send<T>({endpoint, ...options}: SendOptions): Promise<T> {
@@ -79,7 +83,7 @@ export class Request {
 	}
 
 	private buildUrl({endpoint}: {endpoint: string}): string {
-		return `${this.config.baseUrl}${endpoint}`;
+		return `${this.props.baseUrl}${endpoint}`;
 	}
 
 	private buildHeaders({
@@ -89,7 +93,7 @@ export class Request {
 	}): Record<string, string> {
 		return {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${this.config.apiKey}`,
+			Authorization: `Bearer ${this.props.apiKey}`,
 			...headers,
 		};
 	}
@@ -99,12 +103,17 @@ export class Request {
 		options,
 		headers,
 	}: MakeRequestParams): Promise<Response> {
-		// console.log(' =================== REQUEST ===================');
+		this.console.log('pipe.request', {
+			url,
+			method: options.method,
+			headers,
+			body: options.body,
+		});
 		const resp = await fetch(url, {
 			method: options.method,
 			headers,
 			body: JSON.stringify(options.body),
-			signal: AbortSignal.timeout(this.config.timeout || 30000),
+			signal: AbortSignal.timeout(this.props.timeout || 30000),
 		});
 		return resp;
 	}
@@ -194,9 +203,6 @@ export class Request {
 	}
 
 	async post<T>(options: Omit<RequestOptions, 'method'>): Promise<T> {
-		console.log('Request.post.options');
-		console.dir(options, {depth: null, colors: true});
-
 		return this.send<T>({...options, method: 'POST'});
 	}
 
