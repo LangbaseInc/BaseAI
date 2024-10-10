@@ -4,6 +4,15 @@ We welcome contributions to this project.
 
 ---
 
+## Releasing a test snapshot
+
+Run the following command to create a snapshot of the current changes, this must be done in a custom branch. If the current version is `1.0.0`, the snapshot will be `1.0.1-snapshot.0` and if done again `1.0.1-snapshot.1` and so on. This version will also be committed to the package.json file. And in the next normal release, the version will be `1.0.1` and the snapshot will be reset.
+
+```bash
+pnpm snapshot
+```
+
+  ```
 ## Releasing a new version
 
 ```bash
