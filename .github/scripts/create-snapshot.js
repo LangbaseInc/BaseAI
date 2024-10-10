@@ -1,3 +1,19 @@
+/**
+ * This script creates a snapshot release by performing the following steps:
+ * 1. Ensures the script is running from the project root directory.
+ * 2. Defines a function to execute shell commands and log their output.
+ * 3. Defines a function to update the version in a given package.json file.
+ *    - If the current version is already a snapshot, it increments the snapshot number.
+ *    - If the current version is not a snapshot, it increments the patch version and sets the snapshot number to 0.
+ * 4. Retrieves the current commit short SHA.
+ * 5. Bumps the version in the specified package.json files.
+ * 6. Runs a series of commands to version, build, and publish the packages as a snapshot release.
+ *
+ * @file /Users/ahmadawais/Documents/Sandbox/baseai/.github/scripts/create-snapshot.js
+ * @requires child_process
+ * @requires path
+ * @requires fs
+ */
 const {execSync} = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -48,21 +64,11 @@ console.log('Creating snapshot release...');
 bumpVersion('./packages/baseai/package.json');
 bumpVersion('./packages/core/package.json');
 
-process.exit(0);
-run('pnpm build:pkgs');
-
-// Create snapshot version
+// Version and tag the snapshot release
 run(`pnpm changeset version --snapshot ${SHORT_SHA}`);
 
-run(
-	'pnpm clean-examples && pnpm install --no-frozen-lockfile --filter=./packages/* --filter=./tools/*',
-);
-
-run(
-	'turbo clean && pnpm i && turbo build --filter=./packages/* --filter=./tools/*',
-);
-
-// Publish snapshot
+// Build and publish the snapshot release
+run('pnpm build:pkgs');
 run('pnpm changeset publish --no-git-tag --tag snapshot');
 
 console.log('Snapshot release complete!');
