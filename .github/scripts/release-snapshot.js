@@ -72,7 +72,7 @@ run('pnpm build:pkgs');
 run('pnpm changeset publish --no-git-tag --tag snapshot');
 
 // Reset Git changes
-console.log('Resetting Git changes...');
-run('git reset --hard');
+console.log('Git commit and push changes...');
+run('git add . && git commit -m "📦 NEW: snapshot release" && git push');
 
 console.log('All changes have been reset. Snapshot release process complete!');
