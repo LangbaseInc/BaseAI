@@ -15,7 +15,7 @@
 		"changeset": "changeset",
 		"publint": "turbo publint",
 		"type-check": "turbo type-check",
-		"version-packages": "changeset version && pnpm clean-examples && pnpm install --no-frozen-lockfile --filter=./packages/* --filter=./tools/* ",
+		"version-packages": "changeset version && pnpm clean-examples && pnpm install --no-frozen-lockfile --filter=./packages/* --filter=./tools/*",
 		"clean": "turbo clean",
 		"clean-all": "turbo clean && rm -rf node_modules",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",

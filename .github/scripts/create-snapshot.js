@@ -21,14 +21,16 @@ const SHORT_SHA = execSync('git rev-parse --short HEAD').toString().trim();
 
 console.log('Creating snapshot release...');
 
-// Clean and build the project
-run('pnpm clean && pnpm build:pkgs');
+run('pnpm build:pkgs');
 
 // Create snapshot version
 run(`pnpm changeset version --snapshot ${SHORT_SHA}`);
 
-// Clean examples (if applicable)
 run('pnpm clean-examples');
+
+run(
+	'turbo clean && pnpm i && turbo build --filter=./packages/* --filter=./tools/*',
+);
 
 // Publish snapshot
 run('pnpm changeset publish --no-git-tag --tag snapshot');
