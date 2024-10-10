@@ -6,21 +6,16 @@ export const config: BaseAIConfig = {
 		isEnabledInProd: true,
 		logSensitiveData: false,
 		pipe: true,
+		tool: true,
+		memory: true,
 		'pipe.completion': true,
 		'pipe.request': true,
 		'pipe.response': true,
 		'pipe.request.prodOptions': false,
 		'pipe.request.localOptions': false,
-		tool: false,
-		memory: false,
 	},
 	memory: {
 		useLocalEmbeddings: false,
 	},
 	envFilePath: '.env',
-	env: {
-		NODE_ENV: 'production',
-		LANGBASE_API_KEY: process.env.LANGBASE_API_KEY,
-		OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-	},
 };

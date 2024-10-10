@@ -29,7 +29,9 @@
 		"clean-examples": "node .github/scripts/cleanup-examples-changesets.mjs",
 		"update-examples": "npx tsx .github/scripts/update-examples.ts",
 		"ci:version": "changeset version && node .github/scripts/cleanup-examples-changesets.mjs && pnpm install --no-frozen-lockfile",
-		"snapshot": "changeset --empty && changeset version --snapshot && changeset publish --no-git-tag --snapshot"
+		"//snapshot": "changeset --empty && changeset version --snapshot && changeset publish --no-git-tag --snapshot",
+		"///snapshot": "changeset version --snapshot next && changeset publish --tag next",
+		"snapshot": "changeset version --snapshot next && changeset publish --tag next --no-git-tag"
 	},
 	"devDependencies": {
 		"@baseai/eslint-config": "workspace:*",
