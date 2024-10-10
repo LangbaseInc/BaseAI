@@ -2,7 +2,7 @@ import {PipeI} from '@baseai/core';
 import toolCalculator from '../tools/calculator';
 import toolGetWeather from '../tools/weather';
 
-const pipeWithTools = (): PipeI => ({
+const pipeWithTools = (pipeOptions: any): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!,
 	name: 'pipe-with-tool',
 	description: 'An AI agent pipe that can call tools',

@@ -6,10 +6,17 @@ export async function POST(req: NextRequest) {
 	const runOptions = await req.json();
 
 	// 1. Initiate the Pipe.
-	const pipe = new Pipe(pipeWithTools());
+	const pipe = new Pipe(pipeWithTools({constant: 10}));
 
 	// 2. Run the pipe with user messages and other run options.
-	let result = await pipe.run(runOptions);
+	let result = await pipe.run({
+		...runOptions,
+		toolOptions: {
+			calculator: {
+				threadId: 10,
+			},
+		},
+	});
 
 	// 2. Return the response stringified.
 	return new Response(JSON.stringify(result));

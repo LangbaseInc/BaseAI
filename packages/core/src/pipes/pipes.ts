@@ -39,6 +39,7 @@ export interface RunOptions {
 	variables?: Variable[];
 	threadId?: string;
 	rawResponse?: boolean;
+	tools?: Record<string, any>;
 }
 
 export interface RunOptionsStream extends RunOptions {
@@ -133,11 +134,18 @@ export class Pipe {
 		return tools;
 	}
 
-	private async runTools(toolCalls: ToolCall[]): Promise<Message[]> {
+	private async runTools({
+		runOptions,
+		toolCalls,
+	}: {
+		runOptions: Record<string, any>;
+		toolCalls: ToolCall[];
+	}): Promise<Message[]> {
 		const toolPromises = toolCalls.map(async (toolCall: ToolCall) => {
 			const toolName = toolCall.function.name;
 			const toolParameters = JSON.parse(toolCall.function.arguments);
 			const toolFunction = this.tools[toolName];
+			const runParameter = toolOptions[toolName];
 
 			if (!toolFunction) {
 				throw new Error(`Tool '${toolName}' not found`);
@@ -235,9 +243,10 @@ export class Pipe {
 				responseMessage.tool_calls,
 			);
 
-			const toolResults = await this.runTools(
-				responseMessage.tool_calls as ToolCall[],
-			);
+			const toolResults = await this.runTools({
+				runOptions: options.tools,
+				toolCalls: responseMessage.tool_calls as ToolCall[],
+			});
 			this.console.log('pipe.run.toolResults', toolResults);
 
 			messages = this.getMessagesToSend(

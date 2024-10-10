@@ -1,6 +1,13 @@
 import * as math from 'mathjs';
 
-export async function calculator({expression}: {expression: string}) {
+export async function calculator({
+	expression,
+	runOptions,
+}: {
+	expression: string;
+	runOptions: any;
+}) {
+	console.log('✨ ~ runOptions.threadId:', runOptions.threadId);
 	return math.evaluate(expression);
 }
 
