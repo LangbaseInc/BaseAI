@@ -33,7 +33,7 @@
 		"///snapshot": "changeset version --snapshot next && changeset publish --tag next",
 		"xsnapshot": "changeset version --snapshot next && changeset publish --tag next --no-git-tag",
 		"xxxsnapshot": "changeset --empty && changeset version --snapshot next && changeset publish --tag next --no-git-tag",
-		"snapshot": "./.github/scripts/create-snapshot.js"
+		"snapshot": "node .github/scripts/create-snapshot.js"
 	},
 	"devDependencies": {
 		"@baseai/eslint-config": "workspace:*",
