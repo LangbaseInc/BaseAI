@@ -9,4 +9,5 @@ interface MemoryConfig {
 	dirToTrack: string;
 	extToTrack: string[];
 	deployedCommitHash?: string;
+	embeddedCommitHash?: string;
 }

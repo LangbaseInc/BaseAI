@@ -19,7 +19,10 @@ import color from 'picocolors';
 import type { MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
 import { getStoredAuth } from './../auth/index';
-import { handleGitSyncMemories } from '@/utils/memory/git-sync/handle-git-sync-memories';
+import {
+	handleGitSyncMemories,
+	updateDeployedCommitHash
+} from '@/utils/memory/git-sync/handle-git-sync-memories';
 import { handleSingleDocDeploy } from './document';
 
 export interface Account {
@@ -615,6 +618,10 @@ export async function upsertMemory({
 		// Upload documents
 		const { name } = (await createResponse.json()) as MemoryI;
 		await uploadDocumentsToMemory({ documents, name, account });
+
+		if (isGitSync) {
+			await updateDeployedCommitHash(memory.name);
+		}
 	} catch (error) {
 		dlog('Error in createNewMemory:', error);
 		throw error;

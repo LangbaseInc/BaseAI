@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import * as p from '@clack/prompts';
-import type { MemoryConfigI } from 'types/memory';
+import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
 
 function parsePathJoin(joinArgs: string): string {
 	// Remove any quotes, split by comma, and trim each argument
@@ -24,6 +24,12 @@ function parseConfig(configString: string): MemoryConfigI {
 		/dirToTrack:(?:path\.(?:posix\.)?join\((.*?)\)|['"](.+?)['"])/
 	);
 	const extToTrackMatch = cleanConfig.match(/extToTrack:(\[.*?\])/);
+	const deployedCommitHashMatch = cleanConfig.match(
+		/deployedCommitHash:['"](.+?)['"]/
+	);
+	const embeddedCommitHashMatch = cleanConfig.match(
+		/embeddedCommitHash:['"](.+?)['"]/
+	);
 
 	if (!useGitRepoMatch || !dirToTrackMatch || !extToTrackMatch) {
 		throw new Error('Unable to parse config structure');
@@ -34,12 +40,34 @@ function parseConfig(configString: string): MemoryConfigI {
 		? dirToTrackMatch[2]
 		: parsePathJoin(dirToTrackMatch[1]);
 	const extToTrack = JSON.parse(extToTrackMatch[1].replace(/'/g, '"'));
+	const deployedCommitHash = deployedCommitHashMatch
+		? deployedCommitHashMatch[1]
+		: undefined;
+	const embeddedCommitHash = embeddedCommitHashMatch
+		? embeddedCommitHashMatch[1]
+		: undefined;
 
-	return {
+	const config: MemoryConfigI = {
 		useGitRepo,
 		dirToTrack,
 		extToTrack
 	};
+
+	if (deployedCommitHash) {
+		config.deployedCommitHash = deployedCommitHash;
+	}
+
+	if (embeddedCommitHash) {
+		config.embeddedCommitHash = embeddedCommitHash;
+	}
+
+	// Validate the parsed config against the schema
+	const result = memoryConfigSchema.safeParse(config);
+	if (!result.success) {
+		throw new Error(`Invalid config: ${result.error.message}`);
+	}
+
+	return config;
 }
 
 export default async function loadMemoryConfig(
@@ -73,14 +101,28 @@ export default async function loadMemoryConfig(
 		try {
 			const config = parseConfig(configMatch[1]);
 			return config;
-		} catch (parseError) {
-			p.cancel(`Unable to read config in '${memoryName}/index.ts'.`);
+		} catch (error) {
+			if (error instanceof Error) {
+				p.cancel(
+					`Unable to read config in '${memoryName}/index.ts': ${error.message}`
+				);
+			} else {
+				p.cancel(
+					`Unable to read config in '${memoryName}/index.ts': Unknown error occurred`
+				);
+			}
 			process.exit(1);
 		}
 	} catch (error) {
-		p.cancel(
-			`Memory '${memoryName}' does not exist or could not be loaded.`
-		);
+		if (error instanceof Error) {
+			p.cancel(
+				`Memory '${memoryName}' does not exist or could not be loaded: ${error.message}`
+			);
+		} else {
+			p.cancel(
+				`Memory '${memoryName}' does not exist or could not be loaded: Unknown error occurred`
+			);
+		}
 		process.exit(1);
 	}
 }

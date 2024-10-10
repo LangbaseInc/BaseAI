@@ -231,3 +231,13 @@ function generateEmbeddingSummary({
 
 	p.log.info(summary);
 }
+
+export async function listLocalEmbeddedMemoryDocuments({
+	memoryName
+}: {
+	memoryName: string;
+}) {
+	const memoryDb = await loadDb(memoryName);
+	const documents = Object.keys(memoryDb.data.documents);
+	return documents;
+}

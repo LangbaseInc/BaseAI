@@ -5,6 +5,8 @@ import { getChangedFilesBetweenCommits } from './get-changed-files-between-commi
 import type { MemoryConfigI } from 'types/memory';
 import { listMemoryDocuments, type Account } from '@/deploy';
 import { loadMemoryFilesFromCustomDir } from '../load-memory-files';
+import { listLocalEmbeddedMemoryDocuments } from '../generate-embeddings';
+import { saveEmbeddedCommitHashInMemoryConfig } from './save-embedded-commit-in-config';
 
 export async function handleGitSyncMemories({
 	memoryName,
@@ -13,7 +15,7 @@ export async function handleGitSyncMemories({
 }: {
 	memoryName: string;
 	config: MemoryConfigI;
-	account: Account;
+	account?: Account; // Undefined for local embed
 }): Promise<string[]> {
 	// Check for uncommitted changes
 	try {
@@ -30,13 +32,19 @@ export async function handleGitSyncMemories({
 
 	let filesToDeploy: string[] = [];
 
+	const isEmbed = !account;
+
 	// Step 1:
 	// Fetch the uploaded documents and compare with the local documents
 	// Handles new files that are not in the prodDocs due to extension and path updates
-	const prodDocs = await listMemoryDocuments({
-		account,
-		memoryName
-	});
+	const prodDocs = !isEmbed
+		? await listMemoryDocuments({
+				account,
+				memoryName
+			})
+		: await listLocalEmbeddedMemoryDocuments({
+				memoryName
+			}); // For local embedded docs are prod equivalent
 
 	const allFilesWithContent = await loadMemoryFilesFromCustomDir({
 		memoryName,
@@ -53,7 +61,11 @@ export async function handleGitSyncMemories({
 	// Step 2.1:
 	// If there's no deployedCommitHash, user is deploying for the first time
 	// Deploy all files in the directory
-	if (!config.deployedCommitHash) {
+	const lastHashUsed = isEmbed
+		? config.embeddedCommitHash
+		: config.deployedCommitHash;
+
+	if (!lastHashUsed) {
 		filesToDeploy = allFiles;
 		p.log.info(
 			`Found no previous deployed commit. Deploying all ${filesToDeploy.length} files in memory "${memoryName}":`
@@ -62,10 +74,9 @@ export async function handleGitSyncMemories({
 	// Step 2.2: Otherwise, get changed files between commits
 	else {
 		filesToDeploy = await getChangedFilesBetweenCommits({
-			oldCommit: config.deployedCommitHash,
+			oldCommit: lastHashUsed,
 			latestCommit: 'HEAD',
-			dirToTrack: config.dirToTrack,
-			extensions: config.extToTrack
+			dirToTrack: config.dirToTrack
 		});
 
 		if (filesToDeploy.length > 0) {
@@ -76,9 +87,16 @@ export async function handleGitSyncMemories({
 			// Print the changed file names TODO: Remove because it may clutter the terminal?
 			filesToDeploy.forEach(file => p.log.message(file));
 		} else {
-			p.log.info(
-				`No changes detected for memory "${memoryName}" since last deployment.`
-			);
+			const isEmbed = !account;
+			if (isEmbed) {
+				p.log.info(
+					`No changes detected for memory "${memoryName}" since last embedding.`
+				);
+			} else {
+				p.log.info(
+					`No changes detected for memory "${memoryName}" since last deployment.`
+				);
+			}
 		}
 	}
 
@@ -90,14 +108,21 @@ export async function handleGitSyncMemories({
 		return [];
 	}
 
-	// Step 4
-	// Update deployedCommitHash in memory config
-	// TODO: Should we update the deployedCommitHash after deploying?
+	return filesToDeploy;
+}
+
+export async function updateDeployedCommitHash(memoryName: string) {
 	const currentCommitHash = execSync('git rev-parse HEAD').toString().trim();
 	await saveDeployedCommitHashInMemoryConfig({
 		memoryName,
 		deployedCommitHash: currentCommitHash
 	});
+}
 
-	return filesToDeploy;
+export async function updateEmbeddedCommitHash(memoryName: string) {
+	const currentCommitHash = execSync('git rev-parse HEAD').toString().trim();
+	await saveEmbeddedCommitHashInMemoryConfig({
+		memoryName,
+		embeddedCommitHash: currentCommitHash
+	});
 }
