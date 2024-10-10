@@ -1,16 +1,32 @@
 import * as p from '@clack/prompts';
 import { getEncoding } from 'js-tiktoken';
 import OpenAI from 'openai';
+import { loadConfig } from '../config/config-handler';
+import { cyan } from '../formatting';
 import { MEMORYSETS } from './constants';
 
 export const getOpenAIEmbeddings = async (
 	chunks: string[]
 ): Promise<OpenAI.Embeddings.Embedding[]> => {
-	const openAiKey = process.env.OPENAI_API_KEY;
+	const config = await loadConfig();
+	const configEnv = config?.env;
+
+	const getEnv = (key: string): string | undefined => {
+		let value: string | undefined;
+		if (configEnv && key in configEnv) {
+			value = configEnv[key as keyof typeof configEnv];
+		} else {
+			value = process.env[key];
+		}
+
+		return value;
+	};
+
+	const openAiKey = getEnv('OPENAI_API_KEY');
 
 	if (!openAiKey) {
 		p.cancel(
-			'OpenAI key not found. Please set the OPENAI_API_KEY environment variable. Only required locally, in production, add it to your keysets https://langbase.com/docs/features/keysets'
+			`Environment variable ${cyan(`OPENAI_API_KEY`)} is not set or empty. Only needed in local dev environment. \nNote: In production, add it to your keysets https://langbase.com/docs/features/keysets\n`
 		);
 		process.exit(1);
 	}

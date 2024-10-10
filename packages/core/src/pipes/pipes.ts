@@ -1,10 +1,11 @@
 import type {Runner} from 'src/helpers';
+import {Logger} from 'src/helpers/logger';
+import {isLocalServerRunning} from 'src/utils/local-server-running';
 import {Pipe as PipeI} from '../../types/pipes';
 import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
-import {isLocalServerRunning} from 'src/utils/local-server-running';
 
 // Type Definitions
 export type Role = 'user' | 'assistant' | 'system' | 'tool';
@@ -75,6 +76,7 @@ export interface RunResponseStream {
 
 export interface PipeOptions extends PipeI {
 	maxCalls?: number;
+	config?: any;
 }
 
 interface ChoiceGenerate {
@@ -94,6 +96,9 @@ interface Tool {
 }
 
 export class Pipe {
+	private console: any;
+	private config: any;
+	private configEnv: any;
 	private request: Request;
 	private pipe: any;
 	private tools: Record<string, (...args: any[]) => Promise<any>>;
@@ -101,11 +106,16 @@ export class Pipe {
 	private hasTools: boolean;
 
 	constructor(options: PipeOptions) {
-		const baseUrl = getApiUrl();
-		this.request = new Request({apiKey: options.apiKey, baseUrl});
+		this.config = options?.config;
+		this.console = new Logger(this.config);
+		this.configEnv = options?.config?.env;
+		this.request = new Request({
+			baseUrl: getApiUrl(this.configEnv),
+			apiKey: options.apiKey,
+			config: this.config,
+		});
 		this.pipe = toOldPipeFormat(options);
 		delete this.pipe.apiKey;
-
 		this.tools = this.getToolsFromPipe(this.pipe);
 		this.maxCalls = options.maxCalls || 100; // TODO: Find a sane default.
 		this.hasTools = Object.keys(this.tools).length > 0;
@@ -177,12 +187,14 @@ export class Pipe {
 	public async run(
 		options: RunOptions | RunOptionsStream,
 	): Promise<RunResponse | RunResponseStream> {
-		console.log('pipe.run', this.pipe.name, 'RUN');
+		this.console.log('pipe', this.pipe.name, 'PIPE RUN');
 
 		const endpoint = '/beta/pipes/run';
-		console.log('pipe.run.baseUrl.endpoint', getApiUrl() + endpoint);
-		console.log('pipe.run.options');
-		console.dir(options, {depth: null, colors: true});
+		this.console.log(
+			'pipe.run.baseUrl.endpoint',
+			getApiUrl(this.configEnv) + endpoint,
+		);
+		this.console.log('pipe.runOptions', options);
 
 		const requestedStream = this.isStreamRequested(options);
 		const stream = this.hasTools ? false : requestedStream;
@@ -197,8 +209,7 @@ export class Pipe {
 			return {} as RunResponse | RunResponseStream;
 		}
 
-		console.log('pipe.run.response');
-		console.dir(response, {depth: null, colors: true});
+		this.console.log('pipe.response', response);
 
 		if (stream) {
 			return response as RunResponseStream;
@@ -212,21 +223,22 @@ export class Pipe {
 			const responseMessage = currentResponse.choices[0].message;
 
 			if (this.hasNoToolCalls(responseMessage)) {
-				console.log('No more tool calls. Returning final response.');
+				this.console.log(
+					'pipe.hasNoToolCalls',
+					'No more tool calls. Returning final response.',
+				);
 				return currentResponse;
 			}
 
-			console.log('\npipe.run.response.toolCalls');
-			console.dir(responseMessage.tool_calls, {
-				depth: null,
-				colors: true,
-			});
+			this.console.log(
+				'pipe.run.response.toolCalls',
+				responseMessage.tool_calls,
+			);
 
 			const toolResults = await this.runTools(
 				responseMessage.tool_calls as ToolCall[],
 			);
-			console.log('\npipe.run.toolResults');
-			console.dir(toolResults, {depth: null, colors: true});
+			this.console.log('pipe.run.toolResults', toolResults);
 
 			messages = this.getMessagesToSend(
 				messages,
@@ -262,29 +274,38 @@ export class Pipe {
 	}
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
-		const prodOptions = {
-			endpoint,
-			body: {
-				...body,
-				name: this.pipe.name,
-			},
-		};
+		const isProdEnv = isProd(this.configEnv);
+
+		// PROD.
+		if (isProdEnv) {
+			const prodOptions = {
+				endpoint,
+				body: {
+					...body,
+					name: this.pipe.name,
+				},
+			};
+			this.console.log('pipe.request.prodOptions', prodOptions);
+			return this.request.post<T>(prodOptions);
+		}
+
+		// LOCAL.
+		const isServerRunning = await isLocalServerRunning();
+		if (!isServerRunning) return {} as T;
+
 		const localOptions = {
 			endpoint,
 			body: {
 				...body,
 				pipe: this.pipe,
-				llmApiKey: getLLMApiKey(this.pipe.model.provider),
+				llmApiKey: getLLMApiKey({
+					modelProvider: this.pipe.model.provider,
+					configEnv: this.configEnv,
+				}),
 			},
 		};
-
-		const isProdEnv = isProd();
-		if (!isProdEnv) {
-			const isServerRunning = await isLocalServerRunning();
-			if (!isServerRunning) return {} as T;
-		}
-
-		return this.request.post<T>(isProdEnv ? prodOptions : localOptions);
+		this.console.log('pipe.request.localOptions', localOptions);
+		return this.request.post<T>(localOptions);
 	}
 }
 

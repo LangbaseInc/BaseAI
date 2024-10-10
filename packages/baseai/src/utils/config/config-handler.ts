@@ -1,27 +1,34 @@
 import * as p from '@clack/prompts';
 import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
-import type { BaseAIConfig } from 'types/config';
+import type { BaseAIConfig, EnvConfig } from 'types/config';
 
+/**
+ * Default configuration for BaseAI.
+ */
 export const defaultConfig: BaseAIConfig = {
 	log: {
 		// Enable or disable logging
 		isEnabled: true,
-		// Log sensitive data
+		// Enable logging in production when NODE_ENV is set to production
+		isEnabledInProd: false,
 		logSensitiveData: false,
-		// Toggle specific log categories
 		pipe: true,
 		'pipe.completion': true,
 		'pipe.request': true,
 		'pipe.response': true,
+		'pipe.request.prodOptions': false,
+		'pipe.request.localOptions': false,
 		tool: true,
 		memory: true
 	},
 	memory: {
 		useLocalEmbeddings: false
 	},
-	envFilePath: '.env'
+	// Path to the .env file starting from the root of the project
+	envFilePath: '.env',
 	// Other default configuration options can be added here
+	env: {} as EnvConfig
 };
 
 export async function loadConfig(): Promise<BaseAIConfig> {

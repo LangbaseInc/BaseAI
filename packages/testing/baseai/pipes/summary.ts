@@ -1,9 +1,8 @@
 import {PipeI} from '@baseai/core';
-import {config} from '../baseai.config';
 
 const buildPipe = (): PipeI => ({
-	apiKey: config.env.langbase,
-	name: 'summary-nodejs',
+	apiKey: process.env.LANGBASE_API_KEY,
+	name: 'summary-testing',
 	description: '',
 	status: 'private',
 	model: 'openai:gpt-4o-mini',
