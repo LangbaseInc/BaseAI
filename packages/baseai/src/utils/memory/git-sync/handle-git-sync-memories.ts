@@ -6,6 +6,7 @@ import type { MemoryConfigI } from 'types/memory';
 import { listMemoryDocuments, type Account } from '@/deploy';
 import { loadMemoryFilesFromCustomDir } from '../load-memory-files';
 import { listLocalEmbeddedMemoryDocuments } from '../generate-embeddings';
+import { saveEmbeddedCommitHashInMemoryConfig } from './save-embedded-commit-in-config';
 
 export async function handleGitSyncMemories({
 	memoryName,
@@ -31,12 +32,12 @@ export async function handleGitSyncMemories({
 
 	let filesToDeploy: string[] = [];
 
+	const isEmbed = !account;
+
 	// Step 1:
 	// Fetch the uploaded documents and compare with the local documents
 	// Handles new files that are not in the prodDocs due to extension and path updates
-	// The account is required to fetch the documents when deploying.
-	// For the local embed, the account is not required.
-	const prodDocs = account
+	const prodDocs = !isEmbed
 		? await listMemoryDocuments({
 				account,
 				memoryName
@@ -60,7 +61,11 @@ export async function handleGitSyncMemories({
 	// Step 2.1:
 	// If there's no deployedCommitHash, user is deploying for the first time
 	// Deploy all files in the directory
-	if (!config.deployedCommitHash) {
+	const lastHashUsed = isEmbed
+		? config.embeddedCommitHash
+		: config.deployedCommitHash;
+
+	if (!lastHashUsed) {
 		filesToDeploy = allFiles;
 		p.log.info(
 			`Found no previous deployed commit. Deploying all ${filesToDeploy.length} files in memory "${memoryName}":`
@@ -69,10 +74,9 @@ export async function handleGitSyncMemories({
 	// Step 2.2: Otherwise, get changed files between commits
 	else {
 		filesToDeploy = await getChangedFilesBetweenCommits({
-			oldCommit: config.deployedCommitHash,
+			oldCommit: lastHashUsed,
 			latestCommit: 'HEAD',
-			dirToTrack: config.dirToTrack,
-			extensions: config.extToTrack
+			dirToTrack: config.dirToTrack
 		});
 
 		if (filesToDeploy.length > 0) {
@@ -112,5 +116,13 @@ export async function updateDeployedCommitHash(memoryName: string) {
 	await saveDeployedCommitHashInMemoryConfig({
 		memoryName,
 		deployedCommitHash: currentCommitHash
+	});
+}
+
+export async function updateEmbeddedCommitHash(memoryName: string) {
+	const currentCommitHash = execSync('git rev-parse HEAD').toString().trim();
+	await saveEmbeddedCommitHashInMemoryConfig({
+		memoryName,
+		embeddedCommitHash: currentCommitHash
 	});
 }

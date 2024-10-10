@@ -1,26 +1,23 @@
 import { execSync } from 'child_process';
-import path from 'path';
 
 /**
- * Get changed files between two Git commits
- * @param {Object} options - The options for the function
- * @param {string} options.oldCommit - The old already deployed commit
- * @param {string} options.latestCommit - The latest commit to deploy (default: 'HEAD')
- * @param {string} options.repoPath - The path to the Git repository (default: process.cwd())
- * @param {string[]} options.extensions - Array of file extensions to filter (default: all files)
- * @param {boolean} options.includeUntracked - Whether to include untracked files (default: false)
- * @returns {Promise<string[]>} - Array of changed file paths
+ * Retrieves a list of files that have changed between two Git commits within a specified directory.
+ *
+ * @param {Object} options - The options for the function.
+ * @param {string} options.oldCommit - The old commit reference to compare from.
+ * @param {string} [options.latestCommit='HEAD'] - The latest commit reference to compare to. Defaults to 'HEAD'.
+ * @param {string} options.dirToTrack - The directory to track for changes.
+ * @returns {Promise<string[]>} A promise that resolves to an array of changed file paths.
+ * @throws Will throw an error if the Git command fails or if the oldCommit is an empty string.
  */
 export async function getChangedFilesBetweenCommits({
 	oldCommit,
 	latestCommit = 'HEAD',
-	dirToTrack,
-	extensions = []
+	dirToTrack
 }: {
 	oldCommit: string;
 	latestCommit: string;
 	dirToTrack: string;
-	extensions: string[];
 }): Promise<string[]> {
 	try {
 		// Validate inputs

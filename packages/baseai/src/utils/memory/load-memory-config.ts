@@ -27,6 +27,9 @@ function parseConfig(configString: string): MemoryConfigI {
 	const deployedCommitHashMatch = cleanConfig.match(
 		/deployedCommitHash:['"](.+?)['"]/
 	);
+	const embeddedCommitHashMatch = cleanConfig.match(
+		/embeddedCommitHash:['"](.+?)['"]/
+	);
 
 	if (!useGitRepoMatch || !dirToTrackMatch || !extToTrackMatch) {
 		throw new Error('Unable to parse config structure');
@@ -40,6 +43,9 @@ function parseConfig(configString: string): MemoryConfigI {
 	const deployedCommitHash = deployedCommitHashMatch
 		? deployedCommitHashMatch[1]
 		: undefined;
+	const embeddedCommitHash = embeddedCommitHashMatch
+		? embeddedCommitHashMatch[1]
+		: undefined;
 
 	const config: MemoryConfigI = {
 		useGitRepo,
@@ -49,6 +55,10 @@ function parseConfig(configString: string): MemoryConfigI {
 
 	if (deployedCommitHash) {
 		config.deployedCommitHash = deployedCommitHash;
+	}
+
+	if (embeddedCommitHash) {
+		config.embeddedCommitHash = embeddedCommitHash;
 	}
 
 	// Validate the parsed config against the schema
