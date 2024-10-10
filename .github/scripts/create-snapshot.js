@@ -26,7 +26,9 @@ run('pnpm build:pkgs');
 // Create snapshot version
 run(`pnpm changeset version --snapshot ${SHORT_SHA}`);
 
-run('pnpm clean-examples');
+run(
+	'pnpm clean-examples && pnpm install --no-frozen-lockfile --filter=./packages/* --filter=./tools/*',
+);
 
 run(
 	'turbo clean && pnpm i && turbo build --filter=./packages/* --filter=./tools/*',
