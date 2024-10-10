@@ -1,7 +1,9 @@
 import { heading } from '@/utils/heading';
 import { checkMemoryExists } from '@/utils/memory/check-memory-exist';
 import { generateEmbeddings } from '@/utils/memory/generate-embeddings';
+import { handleGitSyncMemories } from '@/utils/memory/git-sync/handle-git-sync-memories';
 import { validateMemoryName } from '@/utils/memory/lib';
+import loadMemoryConfig from '@/utils/memory/load-memory-config';
 import { loadMemoryFiles } from '@/utils/memory/load-memory-files';
 import * as p from '@clack/prompts';
 import color from 'picocolors';
@@ -39,19 +41,37 @@ export async function embedMemory({
 
 		// 2- Load memory data.
 		s.start('Processing memory docs...');
-		const memoryFiles = await loadMemoryFiles(memoryName);
+		let memoryFiles = await loadMemoryFiles(memoryName);
 
 		if (memoryFiles.length === 0) {
 			p.cancel(`No valid documents found in memory '${memoryName}'.`);
 			process.exit(1);
 		}
 
-		// 3- Generate embeddings.
+		// 3- Get memory config.
+		const memoryConfig = await loadMemoryConfig(memoryName);
+
+		let filesToEmbed: string[] = [];
+
+		if (memoryConfig?.useGitRepo) {
+			filesToEmbed = await handleGitSyncMemories({
+				memoryName: memoryName,
+				config: memoryConfig
+			});
+
+			// Filter memory files to emebed
+			memoryFiles = memoryFiles.filter(doc =>
+				filesToEmbed.includes(doc.name)
+			);
+		}
+
+		// 4- Generate embeddings.
 		s.message('Generating embeddings...');
+		const shouldOverwrite = memoryConfig?.useGitRepo ? true : overwrite;
 		const result = await generateEmbeddings({
 			memoryFiles,
 			memoryName,
-			overwrite: overwrite || false,
+			overwrite: shouldOverwrite || false,
 			useLocalEmbeddings
 		});
 

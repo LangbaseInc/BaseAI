@@ -5,6 +5,7 @@ import { getChangedFilesBetweenCommits } from './get-changed-files-between-commi
 import type { MemoryConfigI } from 'types/memory';
 import { listMemoryDocuments, type Account } from '@/deploy';
 import { loadMemoryFilesFromCustomDir } from '../load-memory-files';
+import { listLocalEmbeddedMemoryDocuments } from '../generate-embeddings';
 
 export async function handleGitSyncMemories({
 	memoryName,
@@ -13,7 +14,7 @@ export async function handleGitSyncMemories({
 }: {
 	memoryName: string;
 	config: MemoryConfigI;
-	account: Account;
+	account?: Account; // Undefined for local embed
 }): Promise<string[]> {
 	// Check for uncommitted changes
 	try {
@@ -33,10 +34,16 @@ export async function handleGitSyncMemories({
 	// Step 1:
 	// Fetch the uploaded documents and compare with the local documents
 	// Handles new files that are not in the prodDocs due to extension and path updates
-	const prodDocs = await listMemoryDocuments({
-		account,
-		memoryName
-	});
+	// The account is required to fetch the documents when deploying.
+	// For the local embed, the account is not required.
+	const prodDocs = account
+		? await listMemoryDocuments({
+				account,
+				memoryName
+			})
+		: await listLocalEmbeddedMemoryDocuments({
+				memoryName
+			}); // For local embedded docs are prod equivalent
 
 	const allFilesWithContent = await loadMemoryFilesFromCustomDir({
 		memoryName,
@@ -76,9 +83,16 @@ export async function handleGitSyncMemories({
 			// Print the changed file names TODO: Remove because it may clutter the terminal?
 			filesToDeploy.forEach(file => p.log.message(file));
 		} else {
-			p.log.info(
-				`No changes detected for memory "${memoryName}" since last deployment.`
-			);
+			const isEmbed = !account;
+			if (isEmbed) {
+				p.log.info(
+					`No changes detected for memory "${memoryName}" since last embedding.`
+				);
+			} else {
+				p.log.info(
+					`No changes detected for memory "${memoryName}" since last deployment.`
+				);
+			}
 		}
 	}
 
