@@ -1,7 +1,10 @@
 import { heading } from '@/utils/heading';
 import { checkMemoryExists } from '@/utils/memory/check-memory-exist';
 import { generateEmbeddings } from '@/utils/memory/generate-embeddings';
-import { handleGitSyncMemories } from '@/utils/memory/git-sync/handle-git-sync-memories';
+import {
+	handleGitSyncMemories,
+	updateDeployedCommitHash
+} from '@/utils/memory/git-sync/handle-git-sync-memories';
 import { validateMemoryName } from '@/utils/memory/lib';
 import loadMemoryConfig from '@/utils/memory/load-memory-config';
 import { loadMemoryFiles } from '@/utils/memory/load-memory-files';
@@ -74,6 +77,11 @@ export async function embedMemory({
 			overwrite: shouldOverwrite || false,
 			useLocalEmbeddings
 		});
+
+		if (memoryConfig?.useGitRepo) {
+			p.log.success('Synced memory files with git repository.');
+			await updateDeployedCommitHash(memoryName);
+		}
 
 		s.stop(result);
 	} catch (error: any) {

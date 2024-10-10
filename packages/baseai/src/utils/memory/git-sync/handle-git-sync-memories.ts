@@ -104,14 +104,13 @@ export async function handleGitSyncMemories({
 		return [];
 	}
 
-	// Step 4
-	// Update deployedCommitHash in memory config
-	// TODO: Should we update the deployedCommitHash after deploying?
+	return filesToDeploy;
+}
+
+export async function updateDeployedCommitHash(memoryName: string) {
 	const currentCommitHash = execSync('git rev-parse HEAD').toString().trim();
 	await saveDeployedCommitHashInMemoryConfig({
 		memoryName,
 		deployedCommitHash: currentCommitHash
 	});
-
-	return filesToDeploy;
 }
