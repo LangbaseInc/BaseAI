@@ -32,7 +32,8 @@
 		"//snapshot": "changeset --empty && changeset version --snapshot && changeset publish --no-git-tag --snapshot",
 		"///snapshot": "changeset version --snapshot next && changeset publish --tag next",
 		"xsnapshot": "changeset version --snapshot next && changeset publish --tag next --no-git-tag",
-		"snapshot": "changeset --empty && changeset version --snapshot next && changeset publish --tag next --no-git-tag"
+		"xxxsnapshot": "changeset --empty && changeset version --snapshot next && changeset publish --tag next --no-git-tag",
+		"snapshot": "pnpm changeset --empty && changeset version --snapshot next && changeset publish --tag next --no-git-tag"
 	},
 	"devDependencies": {
 		"@baseai/eslint-config": "workspace:*",
