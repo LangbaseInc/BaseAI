@@ -54,9 +54,8 @@ async function deploy({
 		const pipes = await readPipesDirectory({ spinner, pipesDir });
 		if (!pipes) {
 			p.outro(
-				`No pipes found. Skipping deployment. \nAdd a pipe by running: ${cyan(`npx baseai@latest pipe`)} command`
+				`No pipes found. Skipping deployment of pipes. \nAdd a pipe by running: ${cyan(`npx baseai@latest pipe`)} command`
 			);
-			process.exit(1);
 		}
 
 		const memoryDir = path.join(buildDir, 'memory');
@@ -85,8 +84,7 @@ async function deploy({
 				overwrite
 			});
 		}
-
-		await deployPipes({ spinner, pipes, pipesDir, account });
+		if (pipes) await deployPipes({ spinner, pipes, pipesDir, account });
 
 		p.outro(
 			heading({ text: 'DEPLOYED', sub: 'successfully', green: true })
@@ -100,7 +98,7 @@ async function deploy({
 
 		p.log.info(
 			`${dim(`Successfully deployed:`)}
-${dim(`- ${green(pipes?.length)} pipe${pipes.length !== 1 ? 's' : ''}
+${dim(`- ${green(pipes?.length)} pipe${pipes?.length !== 1 ? 's' : ''}
 - ${green(tools?.length ?? 0)} tool${tools?.length !== 1 ? 's' : ''}
 - ${green(memory?.length ?? 0)} memory${memory?.length !== 1 ? 'sets' : ''}`)}`
 		);
