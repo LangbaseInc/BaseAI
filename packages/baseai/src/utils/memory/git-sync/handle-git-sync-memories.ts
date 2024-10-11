@@ -24,13 +24,19 @@ export async function handleGitSyncMemories({
 
 	// Check for uncommitted changes
 	try {
-		execSync('git diff-index --quiet HEAD --');
+		const hasChanges = execSync('git status --porcelain').toString().trim();
+		if (hasChanges) {
+			p.log.error(
+				`There are uncommitted changes in the Git repository for ${isEmbed ? 'embedding' : 'deploying'} git-synced memory "${memoryName}".`
+			);
+			p.log.info(
+				`Please commit these changes before ${isEmbed ? 'embedding' : 'deploying'}. Aborting.`
+			);
+			process.exit(1);
+		}
 	} catch (error) {
 		p.log.error(
-			`There are uncommitted changes in the Git repository for ${isEmbed ? 'embedding' : 'deploying'} git-synced memory "${memoryName}".`
-		);
-		p.log.info(
-			`Please commit these changes before ${isEmbed ? 'embedding' : 'deploying'}. Aborting.`
+			`Failed to check if there are uncommitted changes: ${error}`
 		);
 		process.exit(1);
 	}

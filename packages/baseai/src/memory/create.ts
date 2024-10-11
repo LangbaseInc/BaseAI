@@ -16,7 +16,7 @@ const execAsync = promisify(exec);
 
 const defaultConfig = {
 	name: 'ai-agent-memory',
-	description: 'My list of docs for an AI agent pipe'
+	description: 'My list of docs as memory for an AI agent pipe'
 };
 
 const MEMORY_CONSTANTS = {
@@ -45,7 +45,7 @@ export async function createMemory() {
 				}),
 			description: () =>
 				p.text({
-					message: 'Description of the pipe',
+					message: 'Description of the memory',
 					placeholder: defaultConfig.description
 				}),
 			useGitRepo: () =>
@@ -78,6 +78,7 @@ export async function createMemory() {
 		memoryFilesDir = (await p.text({
 			message:
 				'Enter the path to the directory to track (relative to current directory):',
+			initialValue: '.',
 			validate: value => {
 				if (!value.trim()) {
 					return 'The path cannot be empty.';
@@ -174,7 +175,7 @@ export default ${memoryNameCamelCase};
 		p.outro(
 			heading({
 				text: memoryNameCamelCase,
-				sub: `created as a new pipe \n ${dim(figures.pointer)} ${dimItalic(` ${filePath}`)}`,
+				sub: `created as a new memory \n ${dim(figures.pointer)} ${dimItalic(` ${filePath}`)}`,
 				green: true
 			})
 		);
