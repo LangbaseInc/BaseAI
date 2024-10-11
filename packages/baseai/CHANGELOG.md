@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.8
+
+### Patch Changes
+
+-   👌 IMPROVE: Memory and deployment workflows
+
 ## 0.9.7
 
 ### Patch Changes
