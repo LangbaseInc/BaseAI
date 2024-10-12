@@ -76,7 +76,7 @@ export async function embedMemory({
 
 		// 4- Generate embeddings.
 		let embedResult = 'Embeddings updated.';
-		if (filesToEmbed && filesToEmbed.length > 0) {
+		if (memoryFiles && memoryFiles.length > 0) {
 			s.message('Generating embeddings...');
 			const shouldOverwrite = memoryConfig?.useGitRepo ? true : overwrite;
 			embedResult = await generateEmbeddings({
