@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.9
+
+### Patch Changes
+
+-   🐛 FIX: Files check to generate embeddings
+
 ## 0.9.8
 
 ### Patch Changes
