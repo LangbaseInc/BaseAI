@@ -49,8 +49,8 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### OpenAI
 
-| Model                                                                        | Provider | Owner  | Context | Cost*                                        |
-|------------------------------------------------------------------------------|----------|--------|---------|----------------------------------------------|
+| Model                                                                               | Provider | Owner  | Context | Cost*                                        |
+|-------------------------------------------------------------------------------------|----------|--------|---------|----------------------------------------------|
 | o1-preview           <br/> ID:  <InlineCopy content="openai:o1-preview" />          | OpenAI   | OpenAI | 128,000 | $15.0         prompt <br/> $60.0  completion |
 | o1-mini              <br/> ID:  <InlineCopy content="openai:o1-mini" />             | OpenAI   | OpenAI | 128,000 | $3.0          prompt <br/> $12.0  completion |
 | gpt-4o               <br/> ID:  <InlineCopy content="openai:gpt-4o" />              | OpenAI   | OpenAI | 128,000 | $5.0          prompt <br/> $15.0  completion |
@@ -73,8 +73,8 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### Together AI
 
-| Model                                                                                                            | Provider | Owner      | Context | Cost*                                        |
-|------------------------------------------------------------------------------------------------------------------|----------|------------|---------|----------------------------------------------|
+| Model                                                                                                                     | Provider | Owner      | Context | Cost*                                        |
+|---------------------------------------------------------------------------------------------------------------------------|----------|------------|---------|----------------------------------------------|
 | Llama-3.1-405B-Instruct-Turbo  <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo" /> | Together | Meta       | 4,096   | $5            prompt <br/> $5     completion |
 | Llama-3.1-70B-Instruct-Turbo   <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" />  | Together | Meta       | 8,192   | $0.88         prompt <br/> $0.88  completion |
 | Llama-3.1-8B-Instruct-Turbo    <br/> ID:  <InlineCopy content="together:meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo" />   | Together | Meta       | 8,192   | $0.18         prompt <br/> $0.18  completion |
@@ -94,8 +94,8 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### Anthropic
 
-| Model                                                                             | Provider  | Owner     | Context | Cost*                                       |
-|-----------------------------------------------------------------------------------|-----------|-----------|---------|---------------------------------------------|
+| Model                                                                                       | Provider  | Owner     | Context | Cost*                                       |
+|---------------------------------------------------------------------------------------------|-----------|-----------|---------|---------------------------------------------|
 | claude-3.5-sonnet  <br/> ID:  <InlineCopy content="anthropic:claude-3-5-sonnet-20240620" /> | Anthropic | Anthropic | 200K    | $3            prompt <br/> $15   completion |
 | claude-3-opus      <br/> ID:  <InlineCopy content="anthropic:claude-3-opus-20240229" />     | Anthropic | Anthropic | 200K    | $15           prompt <br/> $75   completion |
 | claude-3-sonnet    <br/> ID:  <InlineCopy content="anthropic:claude-3-sonnet-20240229" />   | Anthropic | Anthropic | 200K    | $3            prompt <br/> $15   completion |
@@ -105,18 +105,19 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### Google AI
 
-| Model                                                                         | Provider | Owner  | Context | Cost*                                      |
-|-------------------------------------------------------------------------------|----------|--------|---------|--------------------------------------------|
-| gemini-1.5-pro    <br/> ID:  <InlineCopy content="google:gemini-1.5-pro-latest" />   | Google   | Google | upto 1M | $7            prompt <br/> $21  completion |
-| gemini-1.5-flash  <br/> ID:  <InlineCopy content="google:gemini-1.5-flash-latest" /> | Google   | Google | upto 1M | $0.075        prompt <br/> $0.3 completion |
-| gemini-1.0-pro    <br/> ID:  <InlineCopy content="google:gemini-pro" />              | Google   | Google | 30,720  | $0.5          prompt <br/> $1.5 completion |
+| Model                                                                                | Provider | Owner  | Context | Cost*                                        |
+|--------------------------------------------------------------------------------------|----------|--------|---------|----------------------------------------------|
+| gemini-1.5-pro    <br/> ID:  <InlineCopy content="google:gemini-1.5-pro-latest" />   | Google   | Google | upto 1M | $7            prompt <br/> $21  completion   |
+| gemini-1.5-flash  <br/> ID:  <InlineCopy content="google:gemini-1.5-flash-latest" /> | Google   | Google | upto 1M | $0.075        prompt <br/> $0.3 completion   |
+| gemini-1.5-flash-8b  <br/> ID:  <InlineCopy content="gemini-1.5-flash-8b-latest" />  | Google   | Google | upto 1M | $0.0375        prompt <br/> $0.15 completion |
+| gemini-1.0-pro    <br/> ID:  <InlineCopy content="google:gemini-pro" />              | Google   | Google | 30,720  | $0.5          prompt <br/> $1.5 completion   |
 
 <span className='text-xs'>* USD per Million tokens</span>
 
 ### Groq
 
-| Model                                                                              | Provider | Owner   | Context | Cost*                                       |
-|------------------------------------------------------------------------------------|----------|---------|---------|---------------------------------------------|
+| Model                                                                                   | Provider | Owner   | Context | Cost*                                       |
+|-----------------------------------------------------------------------------------------|----------|---------|---------|---------------------------------------------|
 | Llama-3.1-70b-versatile <br/> ID: <InlineCopy content="groq:llama-3.1-70b-versatile" /> | Groq     | Meta    | 131,072 | $0.59         prompt <br/> $0.79 completion |
 | Llama-3.1-8b-instant <br/> ID: <InlineCopy content="groq:llama-3.1-8b-instant" />       | Groq     | Meta    | 131,072 | $0.59         prompt <br/> $0.79 completion |
 | Llama-3-70b         <br/> ID: <InlineCopy content="groq:llama3-70b-8192" />             | Groq     | Meta    | 8,192   | $0.59         prompt <br/> $0.79 completion |
@@ -155,8 +156,8 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### Mistral AI
 
-| Model                                                                          | Provider   | Owner      | Context | Cost*                                        |
-|--------------------------------------------------------------------------------|------------|------------|---------|----------------------------------------------|
+| Model                                                                                  | Provider   | Owner      | Context | Cost*                                        |
+|----------------------------------------------------------------------------------------|------------|------------|---------|----------------------------------------------|
 | Mistral Large 2       <br/> ID:  <InlineCopy content="mistral:mistral-large-latest" /> | Mistral AI | Mistral AI | 128K    | $3 prompt <br/> $9 completion                |
 | Mistral Nemo  <br/> ID:  <InlineCopy content="mistral:open-mistral-nemo" />            | Mistral AI | Mistral AI | 128K    | $0.3 prompt            <br/> $0.3 completion |
 | Codestral  <br/> ID:  <InlineCopy content="mistral:codestral-latest" />                | Mistral AI | Mistral AI | 32,768  | $1 prompt            <br/> $3 completion     |
@@ -165,8 +166,8 @@ Learn more about [using Ollama models](/docs/guides/using-ollama-models) in Base
 
 ### Cohere
 
-| Model                                                              | Provider | Owner  | Context | Cost*                                     |
-|--------------------------------------------------------------------|----------|--------|---------|-------------------------------------------|
+| Model                                                                     | Provider | Owner  | Context | Cost*                                     |
+|---------------------------------------------------------------------------|----------|--------|---------|-------------------------------------------|
 | command-r       <br/> ID:  <InlineCopy content="cohere:command-r" />      | Cohere   | Cohere | 128K    | $0.5 prompt <br/> $1.5 completion         |
 | command-r-plus  <br/> ID:  <InlineCopy content="cohere:command-r-plus" /> | Cohere   | Cohere | 128K    | $3 prompt            <br/> $15 completion |
 
