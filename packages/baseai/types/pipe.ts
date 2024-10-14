@@ -66,7 +66,7 @@ interface ToolChoiceFunction {
 	function: ToolFunction;
 }
 
-export type ToolChoice = 'auto' | 'required' | ToolChoiceFunction;
+export type ToolChoice = 'auto' | 'required' | 'none' | ToolChoiceFunction;
 
 export type PipeModelT =
 	| OpenAIModels
@@ -142,5 +142,14 @@ export interface PipeOld {
 		};
 		tools: any[];
 		memorysets: string[];
+	};
+}
+
+export interface ToolCall {
+	id: string;
+	type: string;
+	function: {
+		name: string;
+		arguments: string;
 	};
 }

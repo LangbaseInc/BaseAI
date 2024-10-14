@@ -7,7 +7,7 @@ export interface ProviderMessage {
 	/** The role of the message sender. It can be 'system', 'user', 'assistant', or 'function'. */
 	role: MessageRole;
 	/** The content of the message. */
-	content?: string | ContentType[];
+	content?: string | ContentType[] | null;
 	/** The name of the function to call, if any. */
 	name?: string;
 	/** The function call to make, if any. */
