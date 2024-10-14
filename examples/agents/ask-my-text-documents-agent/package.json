@@ -1,0 +1,50 @@
+{
+  "name": "ask-my-text-documents-agent",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
+    "baseai": "baseai"
+  },
+  "dependencies": {
+    "@baseai/core": "^0.9.8",
+    "@tailwindcss/typography": "github:tailwindcss/typography",
+    "ai": "^3.4.9",
+    "class-variance-authority": "^0.7.0",
+    "mxcn": "^2.0.0",
+    "next": "14.2.5",
+    "openai": "^4.67.3",
+    "radix-ui": "^1.0.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "react-textarea-autosize": "^8.5.4",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
+    "sonner": "^1.5.0"
+  },
+  "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.5",
+    "@cloudflare/workers-types": "^4.20241011.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "baseai": "^0.9.8",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "eslint-plugin-next-on-pages": "^1.13.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5",
+    "vercel": "^37.8.0",
+    "wrangler": "^3.80.4"
+  }
+}
