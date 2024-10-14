@@ -5,6 +5,7 @@ import { ANTHROPIC } from '../data/models';
 import { handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message } from 'types/pipe';
+import { addToolsToParams } from '../utils/add-tools-to-params';
 
 export async function callAnthropic({
 	pipe,
@@ -19,6 +20,7 @@ export async function callAnthropic({
 }) {
 	try {
 		const modelParams = buildModelParams(pipe, stream, messages);
+		addToolsToParams(modelParams, pipe);
 
 		// Transform params according to provider's format
 		const transformedRequestParams = transformToProviderRequest({

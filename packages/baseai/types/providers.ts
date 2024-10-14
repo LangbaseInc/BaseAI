@@ -1,9 +1,11 @@
+export type MessageRole = 'system' | 'user' | 'assistant' | 'function' | 'tool';
+
 /**
  * Message type supporting providers, multi-model, function and tool calls.
  */
 export interface ProviderMessage {
 	/** The role of the message sender. It can be 'system', 'user', 'assistant', or 'function'. */
-	role: 'system' | 'user' | 'assistant' | 'function' | 'tool';
+	role: MessageRole;
 	/** The content of the message. */
 	content?: string | ContentType[];
 	/** The name of the function to call, if any. */
@@ -11,6 +13,7 @@ export interface ProviderMessage {
 	/** The function call to make, if any. */
 	function_call?: any;
 	tool_calls?: any;
+	tool_call_id?: string;
 	citationMetadata?: CitationMetadata;
 }
 
