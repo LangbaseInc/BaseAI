@@ -5,6 +5,7 @@ import { GOOGLE } from '../data/models';
 import { applyJsonModeIfEnabledForGoogle, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message } from 'types/pipe';
+import { addToolsToParams } from '../utils/add-tools-to-params';
 
 export async function callGoogle({
 	pipe,
@@ -19,6 +20,7 @@ export async function callGoogle({
 }) {
 	try {
 		const modelParams = buildModelParams(pipe, stream, messages);
+		addToolsToParams(modelParams, pipe);
 
 		// Transform params according to provider's format
 		const transformedRequestParams = transformToProviderRequest({
