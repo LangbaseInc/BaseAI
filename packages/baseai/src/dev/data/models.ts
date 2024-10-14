@@ -18,6 +18,10 @@ interface Model {
 	promptCost: number;
 	completionCost: number;
 	requestCost?: number;
+	toolSupport?: {
+		toolChoice: boolean;
+		parallelToolCalls: boolean;
+	};
 }
 
 interface ModelsByProviderInclCosts {
@@ -30,85 +34,141 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'gpt-4o',
 			provider: OPEN_AI,
 			promptCost: 5.0,
-			completionCost: 15.0
+			completionCost: 15.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4o-2024-08-06',
 			provider: OPEN_AI,
 			promptCost: 2.5,
-			completionCost: 10.0
+			completionCost: 10.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4o-mini',
 			provider: OPEN_AI,
 			promptCost: 0.15,
-			completionCost: 0.6
+			completionCost: 0.6,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-turbo',
 			provider: OPEN_AI,
 			promptCost: 10.0,
-			completionCost: 30.0
+			completionCost: 30.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-turbo-preview',
 			provider: OPEN_AI,
 			promptCost: 10.0,
-			completionCost: 30.0
+			completionCost: 30.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-0125-preview',
 			provider: OPEN_AI,
 			promptCost: 10.0,
-			completionCost: 30.0
+			completionCost: 30.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-1106-preview',
 			provider: OPEN_AI,
 			promptCost: 10.0,
-			completionCost: 30.0
+			completionCost: 30.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4',
 			provider: OPEN_AI,
 			promptCost: 30.0,
-			completionCost: 60.0
+			completionCost: 60.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-0613',
 			provider: OPEN_AI,
 			promptCost: 30.0,
-			completionCost: 60.0
+			completionCost: 60.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-4-32k',
 			provider: OPEN_AI,
 			promptCost: 60.0,
-			completionCost: 120.0
+			completionCost: 120.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-3.5-turbo',
 			provider: OPEN_AI,
 			promptCost: 0.5,
-			completionCost: 1.5
+			completionCost: 1.5,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-3.5-turbo-0125',
 			provider: OPEN_AI,
 			promptCost: 0.5,
-			completionCost: 1.5
+			completionCost: 1.5,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-3.5-turbo-1106',
 			provider: OPEN_AI,
 			promptCost: 1.0,
-			completionCost: 2.0
+			completionCost: 2.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gpt-3.5-turbo-16k',
 			provider: OPEN_AI,
 			promptCost: 3.0,
-			completionCost: 4.0
+			completionCost: 4.0,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		}
 	],
 	[TOGETHER_AI]: [
@@ -116,19 +176,31 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo',
 			provider: TOGETHER_AI,
 			promptCost: 5,
-			completionCost: 5
+			completionCost: 5,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
 			provider: TOGETHER_AI,
 			promptCost: 0.88,
-			completionCost: 0.88
+			completionCost: 0.88,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
 			provider: TOGETHER_AI,
 			promptCost: 0.18,
-			completionCost: 0.18
+			completionCost: 0.18,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'meta-llama/Llama-3-70b-chat-hf',
@@ -176,7 +248,11 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'mistralai/Mistral-7B-Instruct-v0.1',
 			provider: TOGETHER_AI,
 			promptCost: 0.2,
-			completionCost: 0.2
+			completionCost: 0.2,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'mistralai/Mistral-7B-Instruct-v0.2',
@@ -188,7 +264,11 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
 			provider: TOGETHER_AI,
 			promptCost: 0.6,
-			completionCost: 0.6
+			completionCost: 0.6,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'mistralai/Mixtral-8x22B-Instruct-v0.1',
@@ -208,25 +288,41 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'claude-3-5-sonnet-20240620',
 			provider: ANTHROPIC,
 			promptCost: 3,
-			completionCost: 15
+			completionCost: 15,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'claude-3-opus-20240229',
 			provider: ANTHROPIC,
 			promptCost: 15,
-			completionCost: 75
+			completionCost: 75,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'claude-3-sonnet-20240229',
 			provider: ANTHROPIC,
 			promptCost: 3,
-			completionCost: 15
+			completionCost: 15,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'claude-3-haiku-20240307',
 			provider: ANTHROPIC,
 			promptCost: 0.25,
-			completionCost: 1.25
+			completionCost: 1.25,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		}
 	],
 	[GROQ]: [
@@ -278,25 +374,41 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'gemini-1.5-pro-latest',
 			provider: GOOGLE,
 			promptCost: 3.5,
-			completionCost: 10.5
+			completionCost: 10.5,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gemini-1.5-flash-latest',
 			provider: GOOGLE,
 			promptCost: 0.075,
-			completionCost: 0.3
+			completionCost: 0.3,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gemini-1.5-flash-8b-latest',
 			provider: GOOGLE,
 			promptCost: 0.0375,
-			completionCost: 0.15
+			completionCost: 0.15,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'gemini-pro',
 			provider: GOOGLE,
 			promptCost: 0.5,
-			completionCost: 1.5
+			completionCost: 1.5,
+			toolSupport: {
+				toolChoice: false,
+				parallelToolCalls: false
+			}
 		}
 	],
 	[COHERE]: [
