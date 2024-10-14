@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.10
+
+### Patch Changes
+
+-   📦 NEW: Tool call support for models by Together, Anthropic, Google
+
 ## 0.9.9
 
 ### Patch Changes
