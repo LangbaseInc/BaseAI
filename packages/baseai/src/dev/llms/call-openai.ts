@@ -6,6 +6,7 @@ import { OPEN_AI } from '../data/models';
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { Message } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
+import { addToolsToParams } from '../utils/add-tools-to-params';
 
 export async function callOpenAI({
 	pipe,
@@ -74,12 +75,4 @@ function buildModelParams(
 		model: pipe.model.name || 'gpt-4o-mini',
 		...pipe.model.params
 	};
-}
-
-function addToolsToParams(modelParams: ModelParams, pipe: any) {
-	if (!pipe.functions.length) return;
-
-	modelParams.tools = pipe.functions;
-	modelParams.tool_choice = pipe.model.tool_choice;
-	modelParams.parallel_tool_calls = pipe.model.parallel_tool_calls;
 }
