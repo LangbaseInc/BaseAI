@@ -155,7 +155,9 @@ export const addContextFromMemory = async ({
 		if (!isMemoryAttached || !messagesExist) return;
 
 		// This will be the user prompt.
-		const lastUserMsg = messages.reverse().find(m => m.role === 'user');
+		const lastUserMsg = [...messages]
+			.reverse()
+			.find(m => m.role === 'user');
 		const userPrompt = lastUserMsg?.content;
 
 		// If there is no user prompt, return the messages.
