@@ -6,8 +6,8 @@ export interface Memory {
 
 interface MemoryConfig {
 	useGitRepo: boolean;
-	dirToTrack: string;
-	extToTrack: string[];
+	include: string;
+	extensions: string[];
 	deployedCommitHash?: string;
 	embeddedCommitHash?: string;
 }

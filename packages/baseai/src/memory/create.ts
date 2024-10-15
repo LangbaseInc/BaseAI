@@ -133,18 +133,14 @@ export async function createMemory() {
 	const dbDir = path.join(process.cwd(), '.baseai', 'db');
 
 	const memoryContent = `import { MemoryI } from '@baseai/core';
-import path from 'path';
 
 const ${memoryNameCamelCase} = (): MemoryI => ({
   name: '${memoryNameSlugified}',
   description: ${JSON.stringify(memoryInfo.description) || ''},
   config: {
 		useGitRepo: ${memoryInfo.useGitRepo},
-		dirToTrack: path.posix.join(${memoryFilesDir
-			.split(path.sep)
-			.map(segment => `'${segment}'`)
-			.join(', ')}),
-		extToTrack: ${JSON.stringify(fileExtensions)}
+		include: '${memoryFilesDir}',
+		extensions: ${JSON.stringify(fileExtensions)}
   }
 });
 

@@ -87,7 +87,7 @@ export async function handleGitSyncMemories({
 			await getChangedAndDeletedFilesBetweenCommits({
 				oldCommit: lastHashUsed,
 				latestCommit: 'HEAD',
-				dirToTrack: config.dirToTrack
+				include: config.include
 			});
 
 		filesToDeploy = changedFiles;

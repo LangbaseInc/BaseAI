@@ -9,6 +9,7 @@
  * 5. Bumps the version in the specified package.json files.
  * 6. Runs a series of commands to version, build, and publish the packages as a snapshot release.
  *
+ * @file /Users/ahmadawais/Documents/Sandbox/baseai/.github/scripts/create-snapshot.js
  * @requires child_process
  * @requires path
  * @requires fs
