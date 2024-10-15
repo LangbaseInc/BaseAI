@@ -6,6 +6,7 @@ import { getDocumentContent } from './get-document-content';
 import { formatDocSize } from './lib';
 import loadMemoryConfig from './load-memory-config';
 import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
+import { execSync } from 'child_process';
 
 export interface MemoryDocumentI {
 	name: string;
@@ -64,7 +65,11 @@ export const loadMemoryFilesFromCustomDir = async ({
 
 	let allFiles: string[];
 	try {
-		allFiles = await traverseDirectory(memoryFilesPath);
+		allFiles = execSync(`git ls-files ${memoryFilesPath}`, {
+			encoding: 'utf-8'
+		})
+			.split('\n')
+			.filter(Boolean);
 	} catch (error) {
 		p.cancel(`Failed to read documents in memory '${memoryName}'.`);
 		process.exit(1);
