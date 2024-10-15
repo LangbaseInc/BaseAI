@@ -45,12 +45,10 @@ export const loadMemoryFiles = async (
  */
 export const loadMemoryFilesFromCustomDir = async ({
 	memoryName,
-	memoryConfig,
-	useGitRepo
+	memoryConfig
 }: {
 	memoryName: string;
 	memoryConfig: MemoryConfigI;
-	useGitRepo?: boolean;
 }): Promise<MemoryDocumentI[]> => {
 	const memoryFilesPath = memoryConfig.dirToTrack;
 
@@ -67,15 +65,11 @@ export const loadMemoryFilesFromCustomDir = async ({
 
 	let allFiles: string[];
 	try {
-		if (useGitRepo) {
-			allFiles = execSync(`git ls-files ${memoryFilesPath}`, {
-				encoding: 'utf-8'
-			})
-				.split('\n')
-				.filter(Boolean);
-		} else {
-			allFiles = await traverseDirectory(memoryFilesPath);
-		}
+		allFiles = execSync(`git ls-files ${memoryFilesPath}`, {
+			encoding: 'utf-8'
+		})
+			.split('\n')
+			.filter(Boolean);
 	} catch (error) {
 		p.cancel(`Failed to read documents in memory '${memoryName}'.`);
 		process.exit(1);
