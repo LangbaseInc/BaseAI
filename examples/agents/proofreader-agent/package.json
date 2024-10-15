@@ -1,0 +1,24 @@
+{
+  "name": "proofreader-agent",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "baseai": "baseai"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@baseai/core": "^0.9.3",
+    "dotenv": "^16.4.5",
+    "inquirer": "^11.1.0",
+    "marked": "^13.0.3",
+    "marked-terminal": "^7.1.0",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "baseai": "^0.9.3"
+  }
+}
