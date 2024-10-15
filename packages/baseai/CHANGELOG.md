@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.13
+
+### Patch Changes
+
+-   📦 NEW: Handle gitignored files in git repo memory
+
 ## 0.9.12
 
 ### Patch Changes
