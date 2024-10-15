@@ -58,7 +58,8 @@ export async function handleGitSyncMemories({
 
 	const allFilesWithContent = await loadMemoryFilesFromCustomDir({
 		memoryName,
-		memoryConfig: config
+		memoryConfig: config,
+		useGitRepo: true
 	});
 
 	const allFiles = allFilesWithContent.map(file => file.name);
