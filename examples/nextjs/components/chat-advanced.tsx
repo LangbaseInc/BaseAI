@@ -1,22 +1,23 @@
 'use client';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {usePipe} from '@baseai/core/react';
-import React, {useCallback} from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Message } from '@baseai/core';
+import { usePipe } from '@baseai/core/react';
+import React, { useCallback } from 'react';
 
 const ChatAdvanced: React.FC = () => {
 	const handleResponse = useCallback(
-		(message: {role: string; content: string}) => {
+		(message: Message) => {
 			console.log(
 				'Received response:',
-				message.content.slice(0, 50) + '...',
+				message.content?.slice(0, 50) + '...',
 			);
 		},
 		[],
 	);
 
 	const handleFinish = useCallback(
-		(messages: {role: string; content: string}[]) => {
+		(messages: Message[]) => {
 			console.log(
 				`Conversation finished. Total messages: ${messages.length}`,
 			);
@@ -61,14 +62,14 @@ const ChatAdvanced: React.FC = () => {
 
 	const handleRegenerateWithOptions = () => {
 		regenerate({
-			headers: {'Custom-Header': 'Regenerate'},
-			body: {customOption: 'regenerateValue'},
+			headers: { 'Custom-Header': 'Regenerate' },
+			body: { customOption: 'regenerateValue' },
 		});
 	};
 
 	const handleCustomMessage = () => {
 		sendMessage('This is a custom message', {
-			data: {context: 'custom context'},
+			data: { context: 'custom context' },
 			allowEmptySubmit: false,
 		});
 	};
@@ -82,9 +83,8 @@ const ChatAdvanced: React.FC = () => {
 				{messages.map((m, index) => (
 					<div
 						key={index}
-						className={`p-2 rounded ${
-							m.role === 'user' ? 'bg-indigo-200' : 'bg-gray-100'
-						}`}
+						className={`p-2 rounded ${m.role === 'user' ? 'bg-indigo-200' : 'bg-gray-100'
+							}`}
 					>
 						<strong>{m.role === 'user' ? 'You: ' : 'AI: '}</strong>
 						{m.content}
@@ -133,7 +133,7 @@ const ChatAdvanced: React.FC = () => {
 				</div>
 
 				<form
-					onSubmit={e => handleSubmit(e, {allowEmptySubmit: true})}
+					onSubmit={e => handleSubmit(e, { allowEmptySubmit: true })}
 					className="flex space-x-2"
 				>
 					<Input
