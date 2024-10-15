@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.14
+
+### Patch Changes
+
+-   🐛 FIX: Message order when memory attached
+
 ## 0.9.13
 
 ### Patch Changes
