@@ -116,7 +116,7 @@ export function usePipe({
 	);
 
 	const sendRequest = useCallback(
-		async (content: string, options: PipeRequestOptions = {}) => {
+		async (content: string | null, options: PipeRequestOptions = {}) => {
 			abortControllerRef.current = new AbortController();
 			const {signal} = abortControllerRef.current;
 
@@ -127,7 +127,8 @@ export function usePipe({
 
 				let updatedMessages = messagesRef.current;
 
-				if (content.trim()) {
+				const hasContent = content && content.trim();
+				if (hasContent) {
 					// Add new user message only if content is not empty
 					updatedMessages = [
 						...messagesRef.current,

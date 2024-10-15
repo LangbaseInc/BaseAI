@@ -10,12 +10,26 @@ import {
 	PerplexityModels,
 	TogetherModels,
 } from './model';
+
 export type MessageRole = 'function' | 'assistant' | 'system' | 'user' | 'tool';
+
+export interface Function {
+	name: string;
+	arguments: string;
+}
+
+export interface ToolCall {
+	id: string;
+	type: 'function';
+	function: Function;
+}
 
 export interface Message {
 	role: MessageRole;
-	content: string;
+	content: string | null;
 	name?: string;
+	tool_call_id?: string;
+	tool_calls?: ToolCall[];
 }
 
 interface ToolFunction {
