@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.9.12
+
+### Patch Changes
+
+-   🐛 FIX: Export Message and MessageRole types
+
 ## 0.9.11
 
 ### Patch Changes
