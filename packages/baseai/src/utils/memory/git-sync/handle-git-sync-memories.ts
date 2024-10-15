@@ -78,7 +78,7 @@ export async function handleGitSyncMemories({
 	if (!lastHashUsed) {
 		filesToDeploy = allFiles;
 		p.log.info(
-			`Found no previous deployed commit. Deploying all ${filesToDeploy.length} files in memory "${memoryName}":`
+			`Found no previous ${isEmbed ? 'deployed' : 'embedded'} commit. ${isEmbed ? 'Deploying' : 'Embedding'} all ${filesToDeploy.length} files in memory "${memoryName}":`
 		);
 	}
 	// Step 2.2: Otherwise, get changed files between commits
