@@ -1,5 +1,11 @@
 # `langbase` SDK
 
+## 0.9.11
+
+### Patch Changes
+
+-   🐛 FIX: Unify multiple Messages type
+
 ## 0.9.10
 
 ### Patch Changes
