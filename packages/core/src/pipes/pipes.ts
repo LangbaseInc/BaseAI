@@ -1,32 +1,10 @@
 import type {Runner} from 'src/helpers';
-import {Pipe as PipeI} from '../../types/pipes';
+import {Message, MessageRole, Pipe as PipeI, ToolCall} from '../../types/pipes';
 import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
 import {isLocalServerRunning} from 'src/utils/local-server-running';
-
-// Type Definitions
-export type Role = 'user' | 'assistant' | 'system' | 'tool';
-
-export interface Function {
-	name: string;
-	arguments: string;
-}
-
-export interface ToolCall {
-	id: string;
-	type: 'function';
-	function: Function;
-}
-
-export interface Message {
-	role: Role;
-	content: string | null;
-	name?: string;
-	tool_call_id?: string;
-	tool_calls?: ToolCall[];
-}
 
 export interface Variable {
 	name: string;
@@ -137,7 +115,7 @@ export class Pipe {
 
 			return {
 				tool_call_id: toolCall.id,
-				role: 'tool' as Role,
+				role: 'tool' as MessageRole,
 				name: toolName,
 				content: JSON.stringify(toolResponse),
 			};
@@ -330,7 +308,7 @@ interface ChoiceStream {
 }
 
 interface Delta {
-	role?: Role;
+	role?: MessageRole;
 	content?: string;
 	tool_calls?: ToolCall[];
 }
