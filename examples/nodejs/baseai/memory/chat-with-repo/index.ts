@@ -5,7 +5,7 @@ const memoryChatWithRepo = (): MemoryI => ({
   description: '',
   config: {
 		useGitRepo: true,
-		include: '.',
+		include: './examples',
 		extensions: ['*'],
   }
 });
