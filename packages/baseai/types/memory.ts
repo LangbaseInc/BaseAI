@@ -24,11 +24,11 @@ export const memoryDocSchema = z.object({
 
 export const memoryConfigSchema = z.object({
 	useGitRepo: z.boolean(),
-	dirToTrack: z
+	include: z
 		.string()
 		.trim()
 		.min(1, 'Directory to track must not be empty'),
-	extToTrack: z.union([
+	extensions: z.union([
 		z.tuple([z.literal('*')]),
 		z
 			.array(

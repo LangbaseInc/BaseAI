@@ -50,7 +50,7 @@ export const loadMemoryFilesFromCustomDir = async ({
 	memoryName: string;
 	memoryConfig: MemoryConfigI;
 }): Promise<MemoryDocumentI[]> => {
-	const memoryFilesPath = memoryConfig.dirToTrack;
+	const memoryFilesPath = memoryConfig.include;
 
 	try {
 		await fs.access(memoryFilesPath);
@@ -76,12 +76,12 @@ export const loadMemoryFilesFromCustomDir = async ({
 	}
 
 	// Check if all extensions are allowed.
-	const allExtensionsAllowed = memoryConfig.extToTrack[0] === '*';
+	const allExtensionsAllowed = memoryConfig.extensions[0] === '*';
 
 	// Filter files based on allowed extensions.
 	const extensionsToUse = allExtensionsAllowed
 		? allSupportedExtensions
-		: memoryConfig.extToTrack.filter(ext =>
+		: memoryConfig.extensions.filter(ext =>
 				allSupportedExtensions.includes(ext)
 			);
 

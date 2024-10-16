@@ -3,15 +3,6 @@ import path from 'path';
 import * as p from '@clack/prompts';
 import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
 
-function parsePathJoin(joinArgs: string): string {
-	// Remove any quotes, split by comma, and trim each argument
-	const args = joinArgs
-		.split(',')
-		.map(arg => arg.trim().replace(/['"]/g, ''));
-	// Join all arguments to preserve the complete path
-	return path.join(...args);
-}
-
 function parseConfig(configString: string): MemoryConfigI {
 	// Remove all whitespace that's not inside quotes
 	const cleanConfig = configString.replace(
@@ -20,10 +11,8 @@ function parseConfig(configString: string): MemoryConfigI {
 	);
 
 	const useGitRepoMatch = cleanConfig.match(/useGitRepo:(true|false)/);
-	const dirToTrackMatch = cleanConfig.match(
-		/dirToTrack:(?:path\.(?:posix\.)?join\((.*?)\)|['"](.+?)['"])/
-	);
-	const extToTrackMatch = cleanConfig.match(/extToTrack:(\[.*?\])/);
+	const includeMatch = cleanConfig.match(/include:['"](.+?)['"]/);
+	const extensionsMatch = cleanConfig.match(/extensions:(\[.*?\])/);
 	const deployedCommitHashMatch = cleanConfig.match(
 		/deployedCommitHash:['"](.+?)['"]/
 	);
@@ -31,15 +20,13 @@ function parseConfig(configString: string): MemoryConfigI {
 		/embeddedCommitHash:['"](.+?)['"]/
 	);
 
-	if (!useGitRepoMatch || !dirToTrackMatch || !extToTrackMatch) {
+	if (!useGitRepoMatch || !includeMatch || !extensionsMatch) {
 		throw new Error('Unable to parse config structure');
 	}
 
 	const useGitRepo = useGitRepoMatch[1] === 'true';
-	const dirToTrack = dirToTrackMatch[2]
-		? dirToTrackMatch[2]
-		: parsePathJoin(dirToTrackMatch[1]);
-	const extToTrack = JSON.parse(extToTrackMatch[1].replace(/'/g, '"'));
+	const include = path.resolve(process.cwd(), includeMatch[1]);
+	const extensions = JSON.parse(extensionsMatch[1].replace(/'/g, '"'));
 	const deployedCommitHash = deployedCommitHashMatch
 		? deployedCommitHashMatch[1]
 		: undefined;
@@ -49,8 +36,8 @@ function parseConfig(configString: string): MemoryConfigI {
 
 	const config: MemoryConfigI = {
 		useGitRepo,
-		dirToTrack,
-		extToTrack
+		include,
+		extensions
 	};
 
 	if (deployedCommitHash) {
