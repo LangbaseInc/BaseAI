@@ -10,10 +10,10 @@ const pipe = new Pipe(pipeAgileUserStoriesAgent());
 
 async function main() {
 
-    const initialSpinner = ora('Checking attached content type...').start();
+    const initialSpinner = ora('Connecting to agile user stories agent...').start();
     try {
         const { completion: initialUserStoriesAgentReps } = await pipe.run({
-            messages: [{ role: 'user', content: 'How can I use your services?' }],
+            messages: [{ role: 'user', content: 'Let me know how to use your services?' }],
         });
         initialSpinner.stop();
         console.log(chalk.cyan('User Stories Agent response...'));
