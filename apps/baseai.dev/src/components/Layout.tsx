@@ -38,7 +38,7 @@ export function Layout({
 				<div className="z-1 relative flex flex-col rounded-bl-[calc(var(--radius)+2px)] rounded-tl-[calc(var(--radius)+2px)] bg-background md:mt-5 md:border md:border-r-0 md:border-border md:p-1 md:pr-0">
 					<Header />
 					<div className="prose rounded-bl-lg rounded-tl-lg bg-muted">
-						<main className="flex-auto px-4 md:m-0 md:p-0">
+						<main className="flex-auto px-4 md:m-0 md:px-6">
 							{children}
 						</main>
 						<Footer />
