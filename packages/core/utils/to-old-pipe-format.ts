@@ -1,4 +1,4 @@
-import type {Pipe, PipeOld} from '../../types/pipes';
+import type {Pipe, PipeOld} from '../types/pipes';
 
 import {
 	ANTHROPIC,

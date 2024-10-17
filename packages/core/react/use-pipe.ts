@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Message, MessageRole} from 'types/pipes';
+import {Message, MessageRole} from '../types/pipes';
 import {z} from 'zod';
 import {getRunner, Runner} from '../helpers';
 import {RunResponse} from '../pipes/pipes';

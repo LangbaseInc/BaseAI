@@ -1,5 +1,5 @@
 import {ChatCompletionStream} from 'openai/lib/ChatCompletionStream';
-import {ChunkStream} from 'src/pipes';
+import {ChunkStream} from '../pipes';
 
 export interface Runner extends ChatCompletionStream<null> {}
 

@@ -1,5 +1,5 @@
 import {act, renderHook} from '@testing-library/react';
-import {Message} from 'types/pipes';
+import {Message} from '../types/pipes';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import * as isProdModule from '../utils/is-prod'; // Adjust the import path as needed
 import {usePipe} from './use-pipe'; // Adjust the import path as needed
