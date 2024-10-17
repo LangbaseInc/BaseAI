@@ -4,6 +4,14 @@ We welcome contributions to this project.
 
 ---
 
+## Releasing a snapshot version
+
+To release a snapshot version to test changes, run the following command:
+
+```bash
+npx run snapshot
+```
+
 ## Releasing a new version
 
 ```bash
@@ -27,9 +35,9 @@ To test the changes locally, you can run the following command:
   "dependencies": {
     "@baseai/core": "workspace:*"
   },
-    "devDependencies": {
-        "baseai": "workspace:*"
-    }
+  "devDependencies": {
+      "baseai": "workspace:*"
+  }
 }
 ```
 
