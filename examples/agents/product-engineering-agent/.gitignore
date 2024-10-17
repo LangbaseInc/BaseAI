@@ -1,0 +1,8 @@
+# baseai
+**/.baseai/
+node_modules
+.env
+package-lock.json
+pnpm-lock.yaml
+# env file
+.env
