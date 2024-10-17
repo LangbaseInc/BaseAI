@@ -13,7 +13,7 @@ export default defineConfig([
 	},
 	{
 		entry: ['src/pipes/index.ts'],
-		outDir: 'pipes/dist',
+		outDir: 'src/pipes/dist',
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
@@ -22,7 +22,7 @@ export default defineConfig([
 	},
 	{
 		entry: ['src/helpers/index.ts'],
-		outDir: 'helpers/dist',
+		outDir: 'src/helpers/dist',
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
@@ -32,7 +32,7 @@ export default defineConfig([
 	// React APIs
 	{
 		entry: ['src/react/index.ts'],
-		outDir: 'react/dist',
+		outDir: 'src/react/dist',
 		banner: {
 			js: "'use client'",
 		},

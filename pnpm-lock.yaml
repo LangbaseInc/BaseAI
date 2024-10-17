@@ -312,8 +312,8 @@ importers:
   examples/nextjs:
     dependencies:
       '@baseai/core':
-        specifier: ^0.9.14
-        version: 0.9.14(react@18.3.1)(zod@3.23.8)
+        specifier: 0.9.15-snapshot.0
+        version: 0.9.15-snapshot.0(react@18.3.1)(zod@3.23.8)
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
@@ -361,8 +361,8 @@ importers:
         specifier: ^18
         version: 18.3.0
       baseai:
-        specifier: ^0.9.14
-        version: 0.9.14(@types/node@20.16.10)(typescript@5.6.2)
+        specifier: 0.9.15-snapshot.0
+        version: 0.9.15-snapshot.0(@types/node@20.16.10)(typescript@5.6.2)
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -1042,6 +1042,18 @@ packages:
 
   '@baseai/core@0.9.14':
     resolution: {integrity: sha512-hFgpbmlnZY1HgU6ijOhdm9OD0mY9LzFaOcwasa4/cu6cUmA7hZXRqi4v9MaxQ5MVOBtVT3SEwqObFvE9ILgjAw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: ^18 || ^19
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      zod:
+        optional: true
+
+  '@baseai/core@0.9.15-snapshot.0':
+    resolution: {integrity: sha512-Yw8MNnXhANzWd70xhyVnQfh4wMp9v9WLZHrBBf42DavkwGOAijeXMhp6bzRFZhOwWxasTkAYlHWGYlVbwLOgmQ==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19
@@ -3703,6 +3715,10 @@ packages:
 
   baseai@0.9.14:
     resolution: {integrity: sha512-mWmDsigbL0RzzZtJv+jAAFss6qedfIVLZSQaU9VHFMlVPunAUgEVDgeGw46kO/EawKv2nGqcr2Akj5hPCaAIcQ==}
+    hasBin: true
+
+  baseai@0.9.15-snapshot.0:
+    resolution: {integrity: sha512-IJkZB5EHRGPRCdzG2pYu+pK60+EaQ9Kl+D9WAdoLTphnhPATtxfL9ETkkB13qPlGjvMNVkD6EjCqnoa8JvMP4A==}
     hasBin: true
 
   basic-auth@2.0.1:
@@ -9880,6 +9896,15 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  '@baseai/core@0.9.15-snapshot.0(react@18.3.1)(zod@3.23.8)':
+    dependencies:
+      openai: 4.67.1(zod@3.23.8)
+    optionalDependencies:
+      react: 18.3.1
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - encoding
+
   '@changesets/apply-release-plan@7.0.5':
     dependencies:
       '@changesets/config': 3.0.3
@@ -12771,7 +12796,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  baseai@0.9.14(@types/node@20.16.10)(typescript@5.6.2):
+  baseai@0.9.14(@types/node@22.7.4)(typescript@5.6.2):
     dependencies:
       '@antfu/ni': 0.23.0
       '@clack/core': 0.3.4
@@ -12790,7 +12815,7 @@ snapshots:
       compute-cosine-similarity: 1.1.0
       conf: 13.0.1
       cosmiconfig: 9.0.0(typescript@5.6.2)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.16.10)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.7.4)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
       dotenv: 16.4.5
       execa: 9.4.0
       figures: 6.1.0
@@ -12819,7 +12844,7 @@ snapshots:
       - supports-color
       - typescript
 
-  baseai@0.9.14(@types/node@22.7.4)(typescript@5.6.2):
+  baseai@0.9.15-snapshot.0(@types/node@20.16.10)(typescript@5.6.2):
     dependencies:
       '@antfu/ni': 0.23.0
       '@clack/core': 0.3.4
@@ -12838,7 +12863,7 @@ snapshots:
       compute-cosine-similarity: 1.1.0
       conf: 13.0.1
       cosmiconfig: 9.0.0(typescript@5.6.2)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.7.4)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.16.10)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
       dotenv: 16.4.5
       execa: 9.4.0
       figures: 6.1.0
