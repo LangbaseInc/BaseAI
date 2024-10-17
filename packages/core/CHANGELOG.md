@@ -1,4 +1,4 @@
-# `langbase` SDK
+# `baseai` SDK
 
 ## 0.9.15
 
