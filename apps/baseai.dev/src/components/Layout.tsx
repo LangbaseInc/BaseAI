@@ -27,11 +27,8 @@ export function Layout({
 					className="contents lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex"
 				>
 					<div className="contents bg-background lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-6 xl:w-80 lg:dark:border-white/10">
-						<div className="hidden lg:flex mt-4">
-							<Link
-								href="/docs"
-								aria-label="Home"
-							>
+						<div className="mt-4 hidden lg:flex">
+							<Link href="/docs" aria-label="Home">
 								<BaseAILogo width="30%" />
 							</Link>
 						</div>
@@ -41,7 +38,7 @@ export function Layout({
 				<div className="z-1 relative flex flex-col rounded-bl-[calc(var(--radius)+2px)] rounded-tl-[calc(var(--radius)+2px)] bg-background md:mt-5 md:border md:border-r-0 md:border-border md:p-1 md:pr-0">
 					<Header />
 					<div className="prose rounded-bl-lg rounded-tl-lg bg-muted">
-						<main className="flex-auto px-4 md:m-0 md:p-0">
+						<main className="flex-auto px-4 md:m-0 md:px-6">
 							{children}
 						</main>
 						<Footer />
