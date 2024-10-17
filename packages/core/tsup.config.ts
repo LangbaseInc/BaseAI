@@ -17,7 +17,6 @@ export default defineConfig([
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
-		clean: false,
 		sourcemap: true,
 	},
 	{
@@ -26,7 +25,6 @@ export default defineConfig([
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
-		clean: false,
 		sourcemap: true,
 	},
 	// React APIs
@@ -39,7 +37,6 @@ export default defineConfig([
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue', 'solid-js'],
 		dts: true,
-		clean: false,
 		sourcemap: true,
 	},
 ]);
