@@ -141,7 +141,7 @@ export const Header = forwardRef<
 			ref={ref}
 			className={clsx(
 				className,
-				'fixed inset-0 inset-x-0 top-0 z-50 flex h-14 px-4 md:static md:mx-5 md:my-6 md:flex md:h-auto md:items-center md:justify-between md:gap-12 md:px-0 md:transition lg:left-72 lg:z-30 xl:left-80',
+				'fixed inset-0 inset-x-0 top-0 z-50 flex h-14 px-4 md:static md:mx-5 md:my-6 md:flex md:h-auto md:items-center md:justify-between md:gap-0 md:px-0 md:transition lg:left-72 lg:z-30 xl:left-80',
 				!isInsideMobileNavigation &&
 					'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
 				isInsideMobileNavigation ? 'xbg-background' : 'xbg-background'
@@ -155,7 +155,7 @@ export const Header = forwardRef<
 		>
 			<div className="xbg-zinc-900/7.5 absolute inset-x-0 top-full h-px transition md:hidden dark:bg-white/7.5" />
 
-			<div className="flex items-center">
+			<div className="flex items-center md:w-[30%]">
 				<h2 className="flex items-center text-2xl font-bold leading-7 text-foreground sm:truncate sm:text-2xl sm:tracking-tight">
 					<IconDocs
 						className="mr-4 hidden h-7 w-7 text-muted-foreground/50 lg:block"
@@ -174,12 +174,12 @@ export const Header = forwardRef<
 					</Link>
 				</h2>
 			</div>
-			<div className="flex w-full justify-end md:w-[70%] md:space-x-6">
+			<div className="flex w-full justify-end md:w-[60%] lg:w-[70%] md:space-x-5 lg:space-x-2">
 				<Search />
 				<div className="flex hidden items-center justify-center md:flex xl:hidden">
 					<MobileSearch />
 				</div>
-				<div className="flex items-center justify-end gap-5">
+				<div className="flex items-center justify-end gap-5 lg:gap-3 xl:gap-5">
 					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
 					<div className="flex items-center gap-4">
 						<div className="md:hidden">
