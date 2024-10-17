@@ -312,8 +312,8 @@ importers:
   examples/nextjs:
     dependencies:
       '@baseai/core':
-        specifier: 0.9.15-snapshot.0
-        version: 0.9.15-snapshot.0(react@18.3.1)(zod@3.23.8)
+        specifier: 0.9.15-snapshot.2
+        version: 0.9.15-snapshot.2(react@18.3.1)(zod@3.23.8)
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
@@ -1052,8 +1052,8 @@ packages:
       zod:
         optional: true
 
-  '@baseai/core@0.9.15-snapshot.0':
-    resolution: {integrity: sha512-Yw8MNnXhANzWd70xhyVnQfh4wMp9v9WLZHrBBf42DavkwGOAijeXMhp6bzRFZhOwWxasTkAYlHWGYlVbwLOgmQ==}
+  '@baseai/core@0.9.15-snapshot.2':
+    resolution: {integrity: sha512-ekgDJF5hWUlOv7I3vN8HrMjIPNEKhIC2NgotkF1/TuFM08zntkww7avjOJBBlO7V/t3u0ll9TAqYyWR6TfvTIw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19
@@ -9896,7 +9896,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@baseai/core@0.9.15-snapshot.0(react@18.3.1)(zod@3.23.8)':
+  '@baseai/core@0.9.15-snapshot.2(react@18.3.1)(zod@3.23.8)':
     dependencies:
       openai: 4.67.1(zod@3.23.8)
     optionalDependencies:
