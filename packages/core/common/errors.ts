@@ -1,4 +1,4 @@
-import type {Headers} from './../../types/index';
+import type {Headers} from '../types/index';
 
 export class APIError extends Error {
 	readonly status: number | undefined;

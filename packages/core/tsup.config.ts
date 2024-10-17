@@ -3,7 +3,7 @@ import {defineConfig} from 'tsup';
 export default defineConfig([
 	// Universal APIs
 	{
-		entry: ['src/index.ts'],
+		entry: ['index.ts'],
 		outDir: 'dist',
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
@@ -12,8 +12,8 @@ export default defineConfig([
 		sourcemap: true,
 	},
 	{
-		entry: ['src/pipes/index.ts'],
-		outDir: 'src/pipes/dist',
+		entry: ['pipes/index.ts'],
+		outDir: 'pipes/dist',
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
@@ -21,8 +21,8 @@ export default defineConfig([
 		sourcemap: true,
 	},
 	{
-		entry: ['src/helpers/index.ts'],
-		outDir: 'src/helpers/dist',
+		entry: ['helpers/index.ts'],
+		outDir: 'helpers/dist',
 		format: ['cjs', 'esm'],
 		external: ['react', 'svelte', 'vue'],
 		dts: true,
@@ -31,8 +31,8 @@ export default defineConfig([
 	},
 	// React APIs
 	{
-		entry: ['src/react/index.ts'],
-		outDir: 'src/react/dist',
+		entry: ['react/index.ts'],
+		outDir: 'react/dist',
 		banner: {
 			js: "'use client'",
 		},

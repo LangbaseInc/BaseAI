@@ -6,12 +6,12 @@
 		"allowSyntheticDefaultImports": true,
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"target": "ES2018",
-		"stripInternal": true,
+		"stripInternal": true
 		// "sourceMap": true,
 		// "inlineSources": true,
-		"baseUrl": "."
+		// "baseUrl": ".",
 		// "paths": {
-		// 	"@/*": ["src/*"]
+		// 	"@/*": ["."]
 		// }
 	}
 }

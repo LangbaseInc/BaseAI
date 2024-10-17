@@ -1,10 +1,10 @@
-import type {Runner} from 'src/helpers';
-import {Message, MessageRole, Pipe as PipeI, ToolCall} from '../../types/pipes';
+import type {Runner} from '../helpers';
+import {Message, MessageRole, Pipe as PipeI, ToolCall} from '../types/pipes';
 import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
-import {isLocalServerRunning} from 'src/utils/local-server-running';
+import {isLocalServerRunning} from '../utils/local-server-running';
 
 export interface Variable {
 	name: string;
