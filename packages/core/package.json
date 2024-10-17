@@ -9,6 +9,9 @@
 	"types": "./dist/index.d.ts",
 	"files": [
 		"dist/**",
+		"pipes/dist/**",
+		"helpers/dist/**",
+		"react/dist/**",
 		"CHANGELOG.md"
 	],
 	"scripts": {
@@ -63,19 +66,19 @@
 			"import": "./dist/index.mjs"
 		},
 		"./react": {
-			"types": "./dist/react/index.d.ts",
-			"require": "./dist/react/index.js",
-			"import": "./dist/react/index.mjs"
+			"types": "./react/dist/index.d.ts",
+			"require": "./react/dist/index.js",
+			"import": "./react/dist/index.mjs"
 		},
 		"./pipes": {
-			"types": "./dist/pipes/index.d.ts",
-			"require": "./dist/pipes/index.js",
-			"import": "./dist/pipes/index.mjs"
+			"types": "./pipes/dist/index.d.ts",
+			"require": "./pipes/dist/index.js",
+			"import": "./pipes/dist/index.mjs"
 		},
 		"./helpers": {
-			"types": "./dist/helpers/index.d.ts",
-			"require": "./dist/helpers/index.js",
-			"import": "./dist/helpers/index.mjs"
+			"types": "./helpers/dist/index.d.ts",
+			"require": "./helpers/dist/index.js",
+			"import": "./helpers/dist/index.mjs"
 		}
 	},
 	"engines": {
