@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.15
+
+### Patch Changes
+
+-   🐛 FIX: `@baseai/core` build module paths
+
 ## 0.9.14
 
 ### Patch Changes
