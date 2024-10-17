@@ -15,7 +15,7 @@ async function main() {
             messages: [{ role: 'user', content: 'I have attached document in the CONTEXT, proceed with your analysis' }],
         });
         initialSpinner.stop();
-        console.log(chalk.cyan('Product Generator Agent response...'));
+        console.log(chalk.cyan('Product Engineering Agent response...'));
         console.log(initialProductEngAgentResponse);
     } catch (error) {
         initialSpinner.stop();
