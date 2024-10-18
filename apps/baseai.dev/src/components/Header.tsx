@@ -18,7 +18,6 @@ import { IconDocs } from './ui/iconists/icon-docs';
 import { GitHubIcon } from './icons/GitHubIcon';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { DiscordIcon } from './icons/DiscordIcon';
-import { OpenLink } from './icons/OpenLink';
 
 /**
  * Retrieves the section title based on the provided pathname.

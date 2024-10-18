@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
 import navigationData, { navLearn } from '@/data/navigation';
 
-import { GithubIcon } from './icons/GitHubIcon';
+import { GitHubIcon } from './icons/GitHubIcon';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { DiscordIcon } from './icons/DiscordIcon';
 
@@ -102,7 +102,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<GithubIcon className="size-4 text-black/35 dark:text-white/35" />
+				<GitHubIcon className="size-4 text-black/35 dark:text-white/35" />
 			</Link>
 		</>
 	);
