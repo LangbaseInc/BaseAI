@@ -15,7 +15,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import BaseAILogo from './baseai-logo';
 import { Anchor } from './ui/anchor';
 import { IconDocs } from './ui/iconists/icon-docs';
-import { GithubIcon } from './icons/GithubIcon';
+import { GitHubIcon } from './icons/GitHubIcon';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { DiscordIcon } from './icons/DiscordIcon';
 import { OpenLink } from './icons/OpenLink';
@@ -84,7 +84,7 @@ function HeaderLinks() {
 				className="hidden w-auto font-normal outline outline-[1.5px] outline-black/35 lg:flex lg:items-center dark:outline-white/35"
 				variant={'ghost'}
 			>
-				<GithubIcon className="size-4 text-black dark:text-white" />
+				<GitHubIcon className="size-4 text-black dark:text-white" />
 				<span className="leading-none flex-grow truncate">Star us on GitHub</span>
 			</Anchor>
 		</>
@@ -116,7 +116,7 @@ function Socials() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<GithubIcon className="size-4 text-black/75 dark:text-white/75" />
+				<GitHubIcon className="size-4 text-black/75 dark:text-white/75" />
 			</Link>
 		</>
 	);
@@ -143,7 +143,7 @@ export const Header = forwardRef<
 				className,
 				'fixed inset-0 inset-x-0 top-0 z-50 flex h-14 px-4 md:static md:mx-5 md:my-6 md:flex md:h-auto md:items-center md:justify-between md:gap-0 md:px-0 md:transition lg:left-72 lg:z-30 xl:left-80',
 				!isInsideMobileNavigation &&
-					'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
+				'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
 				isInsideMobileNavigation ? 'xbg-background' : 'xbg-background'
 			)}
 			style={

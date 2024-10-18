@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
 import navigationData, { navLearn } from '@/data/navigation';
 
-import { GithubIcon } from './icons/GithubIcon';
+import { GithubIcon } from './icons/GitHubIcon';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { DiscordIcon } from './icons/DiscordIcon';
 
