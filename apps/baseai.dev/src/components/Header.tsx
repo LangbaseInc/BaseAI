@@ -81,11 +81,11 @@ function HeaderLinks() {
 			<Anchor
 				href={'https://github.com/LangbaseInc/baseai'}
 				target="_blank"
-				className="hidden w-auto font-normal outline outline-[1.5px] outline-black/35 lg:flex lg:items-center dark:outline-white/35 "
+				className="hidden w-auto font-normal outline outline-[1.5px] outline-black/35 lg:flex lg:items-center dark:outline-white/35"
 				variant={'ghost'}
 			>
 				<GithubIcon className="size-4 text-black dark:text-white" />
-				<span className="leading-none flex-grow truncate">Star us on Github</span>
+				<span className="leading-none flex-grow truncate">Star us on GitHub</span>
 			</Anchor>
 		</>
 	);
