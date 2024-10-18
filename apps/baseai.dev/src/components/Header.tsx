@@ -15,6 +15,9 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import BaseAILogo from './baseai-logo';
 import { Anchor } from './ui/anchor';
 import { IconDocs } from './ui/iconists/icon-docs';
+import { GitHubIcon } from './icons/GitHubIcon';
+import { TwitterIcon } from './icons/TwitterIcon';
+import { DiscordIcon } from './icons/DiscordIcon';
 
 /**
  * Retrieves the section title based on the provided pathname.
@@ -68,20 +71,52 @@ function HeaderLinks() {
 	return (
 		<>
 			<Anchor
-				href={'https://github.com/LangbaseInc/baseai'}
-				target="_blank"
-				className="hidden w-auto font-semibold lg:flex "
-				variant={'ghost'}
-			>
-				★ BaseAI
-			</Anchor>
-			<Anchor
 				href={href}
 				className="w-28 font-semibold"
 				variant={'default'}
 			>
 				{text}
 			</Anchor>
+			<Anchor
+				href={'https://github.com/LangbaseInc/baseai'}
+				target="_blank"
+				className="hidden xl:flex group border-primary/30"
+				variant={'outline'}
+			>
+				<GitHubIcon className="size-4 text-black dark:text-white group-hover:text-white group-hover:dark:text-black" />
+				<span className="leading-none flex-grow truncate">Star us on GitHub</span>
+			</Anchor>
+		</>
+	);
+}
+
+function Socials() {
+	return (
+		<>
+			<Link
+				className="hidden md:block"
+				href={'https://x.com/langbaseinc'}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<TwitterIcon className="size-4 text-black/75 dark:text-white/75" />
+			</Link>
+			<Link
+				className="hidden md:block"
+				href={'https://langbase.com/discord'}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<DiscordIcon className="size-4 text-black/75 dark:text-white/75" />
+			</Link>
+			<Link
+				className="hidden md:block"
+				href={'https://github.com/LangbaseInc/'}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<GitHubIcon className="size-4 text-black/75 dark:text-white/75" />
+			</Link>
 		</>
 	);
 }
@@ -105,9 +140,9 @@ export const Header = forwardRef<
 			ref={ref}
 			className={clsx(
 				className,
-				'fixed inset-0 inset-x-0 top-0 z-50 flex h-14 px-4 md:static md:mx-5 md:my-6 md:flex md:h-auto md:items-center md:justify-between md:gap-12 md:px-0 md:transition lg:left-72 lg:z-30 xl:left-80',
+				'fixed inset-0 inset-x-0 top-0 z-50 flex h-14 px-4 md:static md:mx-5 md:my-6 md:flex md:h-auto md:items-center md:justify-between md:gap-0 md:px-0 md:transition lg:left-72 lg:z-30 xl:left-80',
 				!isInsideMobileNavigation &&
-					'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
+				'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
 				isInsideMobileNavigation ? 'xbg-background' : 'xbg-background'
 			)}
 			style={
@@ -117,36 +152,44 @@ export const Header = forwardRef<
 				} as React.CSSProperties
 			}
 		>
-			<div className="xbg-zinc-900/7.5 xdark:bg-white/7.5 absolute inset-x-0 top-full h-px transition md:hidden" />
+			<div className="xbg-zinc-900/7.5 absolute inset-x-0 top-full h-px transition md:hidden dark:bg-white/7.5" />
 
-			<div className="hidden md:block">
-				<h2 className="flex items-center text-2xl font-bold leading-7 text-foreground sm:truncate sm:text-3xl sm:tracking-tight">
+			<div className="flex items-center md:w-[30%]">
+				<h2 className="flex items-center text-2xl font-bold leading-7 text-foreground sm:truncate sm:text-2xl sm:tracking-tight">
 					<IconDocs
-						className="mr-4 h-7 w-7 text-muted-foreground/50"
+						className="mr-4 hidden h-7 w-7 text-muted-foreground/50 lg:block"
 						aria-hidden="true"
 					/>
-					{currentTitle}
-				</h2>
-			</div>
-			<div className="flex w-full justify-between md:w-1/2 md:justify-end  md:space-x-6">
-				<Search />
-				<div className="flex items-center gap-5 lg:hidden">
-					<MobileNavigation />
+					<div className="mr-3 md:mr-4 lg:hidden">
+						<MobileNavigation />
+					</div>
+					<div className="hidden md:block">{currentTitle}</div>
 					<Link
 						href="/"
 						aria-label="Home"
-						className="font-bold text-black dark:text-white"
+						className="block w-full font-bold text-black md:hidden dark:text-white"
 					>
-						<BaseAILogo width="30%" />
+						<BaseAILogo className="w-[10rem] " />
 					</Link>
+				</h2>
+			</div>
+			<div className="flex w-full justify-end md:w-[60%] lg:w-[70%] md:space-x-5 lg:space-x-2">
+				<Search />
+				<div className="flex hidden items-center justify-center md:flex xl:hidden">
+					<MobileSearch />
 				</div>
-				<div className="flex items-center justify-end gap-5">
+				<div className="flex items-center justify-end gap-5 lg:gap-3 xl:gap-5">
 					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
 					<div className="flex items-center gap-4">
-						<MobileSearch />
+						<div className="md:hidden">
+							<MobileSearch />
+						</div>
 						<HeaderLinks />
-						<ThemeToggle />
 					</div>
+					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15"></div>
+					<ThemeToggle />
+					<div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15"></div>
+					<Socials />
 				</div>
 			</div>
 		</motion.div>
