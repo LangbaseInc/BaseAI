@@ -111,7 +111,7 @@ function Socials() {
 			</Link>
 			<Link
 				className="hidden md:block"
-				href={'https://github.com/LangbaseInc/'}
+				href={'https://github.com/LangbaseInc/baseai'}
 				target="_blank"
 				rel="noopener noreferrer"
 			>
