@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.16
+
+### Patch Changes
+
+-   📦 NEW: XAI models support
+
 ## 0.9.15
 
 ### Patch Changes
