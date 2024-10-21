@@ -19,7 +19,7 @@ export interface RunOptions {
 }
 
 export interface RunOptionsStream extends RunOptions {
-	stream: true;
+	stream: boolean;
 }
 
 export interface Usage {
