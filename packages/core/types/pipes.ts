@@ -9,6 +9,7 @@ import {
 	OpenAIModels,
 	PerplexityModels,
 	TogetherModels,
+	XAIModels,
 } from './model';
 
 export type MessageRole = 'function' | 'assistant' | 'system' | 'user' | 'tool';
@@ -53,6 +54,7 @@ export type Model =
 	| FireworksAIModels
 	| PerplexityModels
 	| MistralAIModels
+	| XAIModels
 	| OllamaModels;
 
 export interface Pipe {

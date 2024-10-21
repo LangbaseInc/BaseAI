@@ -8,6 +8,7 @@ import {
 	OPEN_AI,
 	PERPLEXITY,
 	TOGETHER_AI,
+	X_AI,
 } from '../data/models';
 
 export function getLLMApiKey(modelProvider: string): string {
@@ -30,6 +31,8 @@ export function getLLMApiKey(modelProvider: string): string {
 			return process.env.PERPLEXITY_API_KEY || '';
 		case modelProvider.includes(OLLAMA):
 			return process.env.OLLAMA_API_KEY || '';
+		case modelProvider.includes(X_AI):
+			return process.env.XAI_API_KEY || '';
 
 		default:
 			throw new Error(`Unsupported model provider: ${modelProvider}`);

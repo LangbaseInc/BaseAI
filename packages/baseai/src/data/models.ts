@@ -90,6 +90,7 @@ export const PERPLEXITY: string = 'Perplexity';
 export const DEEPINFRA: string = 'deepinfra';
 export const BEDROCK: string = 'bedrock';
 export const AZURE_OPEN_AI: string = 'azure-openai';
+export const X_AI: string = 'xAI';
 
 interface Model {
 	id: string;
@@ -569,6 +570,18 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			provider: PERPLEXITY,
 			promptCost: 0.2,
 			completionCost: 0.2
+		}
+	],
+	[X_AI]: [
+		{
+			id: 'grok-beta',
+			provider: X_AI,
+			promptCost: 5,
+			completionCost: 15,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		}
 	]
 };

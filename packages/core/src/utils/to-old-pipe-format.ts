@@ -10,6 +10,7 @@ import {
 	OPEN_AI,
 	PERPLEXITY,
 	TOGETHER_AI,
+	X_AI,
 } from '../data/models';
 
 type Provider =
@@ -81,6 +82,7 @@ function getProvider(providerString: string): Provider {
 		fireworks: FIREWORKS_AI,
 		perplexity: PERPLEXITY,
 		ollama: OLLAMA,
+		xai: X_AI,
 	};
 
 	const provider = providerMap[providerString.toLowerCase()];

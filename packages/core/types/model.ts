@@ -73,5 +73,7 @@ export type MistralAIModels =
 	| 'mistral:open-mistral-nemo'
 	| 'mistral:codestral-latest';
 
+export type XAIModels = 'xai:grok-beta';
+
 // Any string that starts with 'ollama:'
 export type OllamaModels = `ollama:${string}`;
