@@ -6,7 +6,8 @@ import {
 	GROQ,
 	OPEN_AI,
 	PERPLEXITY,
-	TOGETHER_AI
+	TOGETHER_AI,
+	X_AI
 } from '@/dev/data/models';
 
 export function getLLMApiKey(modelProvider: string): string {
@@ -27,6 +28,8 @@ export function getLLMApiKey(modelProvider: string): string {
 			return process.env.FIREWORKS_API_KEY || '';
 		case modelProvider.includes(PERPLEXITY):
 			return process.env.PERPLEXITY_API_KEY || '';
+		case modelProvider.includes(X_AI):
+			return process.env.XAI_API_KEY || '';
 		default:
 			throw new Error(`Unsupported model provider: ${modelProvider}`);
 	}

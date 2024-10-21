@@ -7,7 +7,8 @@ import {
 	OLLAMA,
 	OPEN_AI,
 	PERPLEXITY,
-	TOGETHER_AI
+	TOGETHER_AI,
+	X_AI
 } from '@/dev/data/models';
 
 import { addContextFromMemory } from '@/utils/memory/lib';
@@ -25,6 +26,7 @@ import { callOllama } from './call-ollama';
 import { callOpenAI } from './call-openai';
 import { callPerplexity } from './call-perplexity';
 import { callTogether } from './call-together';
+import { callXAI } from './call-xai';
 
 export async function callLLM({
 	pipe,
@@ -103,6 +105,16 @@ export async function callLLM({
 		if (modelProvider === GOOGLE) {
 			dlog('GOOGLE', '✅');
 			return await callGoogle({
+				pipe,
+				messages,
+				llmApiKey,
+				stream
+			});
+		}
+
+		if (modelProvider === X_AI) {
+			dlog('XAI', '✅');
+			return await callXAI({
 				pipe,
 				messages,
 				llmApiKey,

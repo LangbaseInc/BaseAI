@@ -1,4 +1,3 @@
-import { OLLAMA } from '@/dev/data/models';
 import type { Pipe, PipeOld } from './../../types/pipe';
 import {
 	ANTHROPIC,
@@ -6,9 +5,11 @@ import {
 	FIREWORKS_AI,
 	GOOGLE,
 	GROQ,
+	OLLAMA,
 	OPEN_AI,
 	PERPLEXITY,
-	TOGETHER_AI
+	TOGETHER_AI,
+	X_AI
 } from './../data/models';
 
 type Provider =
@@ -102,7 +103,8 @@ function getProvider(providerString: string): Provider {
 		cohere: COHERE,
 		fireworks: FIREWORKS_AI,
 		perplexity: PERPLEXITY,
-		ollama: OLLAMA
+		ollama: OLLAMA,
+		xai: X_AI
 	};
 
 	const provider = providerMap[providerString.toLowerCase()];
