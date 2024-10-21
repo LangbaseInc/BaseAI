@@ -1,4 +1,3 @@
-import { OLLAMA, X_AI } from '@/dev/data/models';
 import type { Pipe, PipeOld } from './../../types/pipe';
 import {
 	ANTHROPIC,
@@ -6,9 +5,11 @@ import {
 	FIREWORKS_AI,
 	GOOGLE,
 	GROQ,
+	OLLAMA,
 	OPEN_AI,
 	PERPLEXITY,
-	TOGETHER_AI
+	TOGETHER_AI,
+	X_AI
 } from './../data/models';
 
 type Provider =

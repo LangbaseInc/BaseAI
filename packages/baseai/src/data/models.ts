@@ -91,6 +91,7 @@ export const DEEPINFRA: string = 'deepinfra';
 export const BEDROCK: string = 'bedrock';
 export const AZURE_OPEN_AI: string = 'azure-openai';
 export const X_AI: string = 'xAI';
+export const OLLAMA: string = 'ollama';
 
 interface Model {
 	id: string;
