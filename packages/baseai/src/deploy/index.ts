@@ -422,6 +422,7 @@ export async function readMemoryDirectory({
 	spinner.start('Reading memory directory');
 	try {
 		const memory = await fs.readdir(memoryDir);
+		spinner.stop();
 		return memory;
 	} catch (error) {
 		handleDirectoryReadError({ spinner, dir: memoryDir, error });
