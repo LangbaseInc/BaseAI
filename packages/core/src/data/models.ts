@@ -206,6 +206,12 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 	],
 	[ANTHROPIC]: [
 		{
+			id: 'claude-3-5-sonnet-latest',
+			provider: ANTHROPIC,
+			promptCost: 3,
+			completionCost: 15,
+		},
+		{
 			id: 'claude-3-5-sonnet-20240620',
 			provider: ANTHROPIC,
 			promptCost: 3,
