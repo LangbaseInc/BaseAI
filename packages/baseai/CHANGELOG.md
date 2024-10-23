@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.19
+
+### Patch Changes
+
+-   🐛 FIX: BaseAI deploy spinner not stopping
+
 ## 0.9.18
 
 ### Patch Changes
