@@ -263,6 +263,7 @@ export function usePipe({
 			setMessages: updateMessages,
 			threadId: threadIdRef.current,
 			sendMessage,
+			setInput,
 		}),
 		[
 			messages,
