@@ -1,10 +1,10 @@
-import type { ModelParams } from '@/types/providers';
 import {
 	handleNonStreamingMode,
 	handleStreamingMode
 } from './response-handler-utils';
 import Providers from '@/dev/providers';
 import { dlog } from '../dlog';
+import type { ModelParams } from 'types/providers';
 
 /**
  * Handles various types of responses based on the specified parameters
