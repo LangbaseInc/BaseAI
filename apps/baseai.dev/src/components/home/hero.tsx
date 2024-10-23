@@ -123,7 +123,7 @@ function Socials() {
 	return (
 		<>
 			<Link
-				href={'https://github.com/LangbaseInc/'}
+				href={'https://github.com/LangbaseInc/BaseAI'}
 				target="_blank"
 				rel="noopener noreferrer"
 			>
