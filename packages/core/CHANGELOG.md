@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.18
+
+### Patch Changes
+
+-   📦 NEW: Export setInput and handleResponseStream functions
+
 ## 0.9.17
 
 ### Patch Changes
