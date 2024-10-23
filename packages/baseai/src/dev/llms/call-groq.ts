@@ -5,6 +5,7 @@ import transformToProviderRequest from '../utils/provider-handlers/transfrom-to-
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message } from 'types/pipe';
+import { addToolsToParams } from '../utils/add-tools-to-params';
 
 export async function callGroq({
 	pipe,
@@ -24,6 +25,7 @@ export async function callGroq({
 			baseURL: 'https://api.groq.com/openai/v1'
 		});
 		applyJsonModeIfEnabled(modelParams, pipe);
+		addToolsToParams(modelParams, pipe);
 
 		// Transform params according to provider's format
 		const transformedRequestParams = transformToProviderRequest({

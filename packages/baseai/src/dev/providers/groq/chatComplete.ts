@@ -38,5 +38,17 @@ export const GroqChatCompleteConfig: ProviderConfig = {
 		default: 1,
 		max: 1,
 		min: 1
+	},
+	parallel_tool_calls: {
+		param: 'parallel_tool_calls',
+		default: false
+	},
+	tool_choice: {
+		param: 'tool_choice',
+		default: 'none'
+	},
+	tools: {
+		param: 'tools',
+		default: []
 	}
 };
