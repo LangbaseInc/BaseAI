@@ -1,4 +1,4 @@
-import {Stream} from 'openai/streaming';
+import {handleResponseStream} from 'src/helpers';
 import {APIConnectionError, APIError} from './errors';
 
 interface RequestOptions {
@@ -64,7 +64,7 @@ export class Request {
 		const threadId = response.headers.get('lb-thread-id');
 
 		if (options.body?.stream) {
-			return this.handleRunResponseStream({
+			return handleResponseStream({
 				response,
 				rawResponse: options.body.rawResponse,
 			}) as T;
@@ -126,42 +126,6 @@ export class Request {
 			response.statusText,
 			Object.fromEntries(response.headers.entries()),
 		);
-	}
-
-	private handleRunResponseStream({
-		response,
-		rawResponse,
-	}: {
-		response: Response;
-		rawResponse?: boolean;
-	}): {
-		stream: any;
-		threadId: string | null;
-		rawResponse?: {
-			headers: Record<string, string>;
-		};
-	} {
-		const controller = new AbortController();
-		// const stream = Stream.fromSSEResponse(response, controller);
-		const streamSSE = Stream.fromSSEResponse(response, controller);
-		const stream = streamSSE.toReadableStream();
-
-		const result: {
-			stream: ReadableStream<any>;
-			threadId: string | null;
-			rawResponse?: {
-				headers: Record<string, string>;
-			};
-		} = {
-			stream,
-			threadId: response.headers.get('lb-thread-id'),
-		};
-		if (rawResponse) {
-			result.rawResponse = {
-				headers: Object.fromEntries(response.headers.entries()),
-			};
-		}
-		return result;
 	}
 
 	private async handleRunResponse({
