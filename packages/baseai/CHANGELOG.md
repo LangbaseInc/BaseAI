@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.17
+
+### Patch Changes
+
+-   📦 NEW: Add claude-3.5-sonnet-latest
+
 ## 0.9.16
 
 ### Patch Changes
