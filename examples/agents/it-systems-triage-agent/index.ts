@@ -1,57 +1,72 @@
 import 'dotenv/config';
-import { Pipe } from '@baseai/core';
+import {Message, Pipe} from '@baseai/core';
 import inquirer from 'inquirer';
 import ora from 'ora';
 import chalk from 'chalk';
 import pipeItSystemsTriageAgent from './baseai/pipes/it-systems-triage-agent';
 
-
 const pipe = new Pipe(pipeItSystemsTriageAgent());
 
 async function main() {
+	const initialSpinner = ora(
+		'Connecting to it-systems-triage-agent...',
+	).start();
+	// Messages array for keeping track of the conversation
+	const messages: Message[] = [
+		// Initial message to the agent
+		{role: 'user', content: 'Hello how can I use your services?'},
+	];
 
-    const initialSpinner = ora('Connecting to it-systems-triage-agent...').start();
-    try {
-        const { completion: initialItSystemsTriageAgent } = await pipe.run({
-            messages: [{ role: 'user', content: 'Hello how can I user your services?' }],
-        });
-        initialSpinner.stop();
-        console.log(chalk.cyan('Agent response...'));
-        console.log(initialItSystemsTriageAgent);
-    } catch (error) {
-        initialSpinner.stop();
-        console.error(chalk.red('Error processing initial request:'), error);
-    }
+	try {
+		const {completion} = await pipe.run({
+			messages,
+		});
 
-    while (true) {
-        const { userMsg } = await inquirer.prompt([
-            {
-                type: 'input',
-                name: 'userMsg',
-                message: chalk.blue('Enter your query (or type "exit" to quit):'),
-            },
-        ]);
+		// Add the agent response to the messages array
+		messages.push({role: 'assistant', content: completion});
 
-        if (userMsg.toLowerCase() === 'exit') {
-            console.log(chalk.green('Goodbye!'));
-            break;
-        }
+		initialSpinner.stop();
+		console.log(chalk.cyan('Agent response...'));
+		console.log(completion);
+	} catch (error) {
+		initialSpinner.stop();
+		console.error(chalk.red('Error processing initial request:'), error);
+	}
 
-        const spinner = ora('Processing your request...').start();
+	while (true) {
+		const {userMsg} = await inquirer.prompt([
+			{
+				type: 'input',
+				name: 'userMsg',
+				message: chalk.blue(
+					'Enter your query (or type "exit" to quit):',
+				),
+			},
+		]);
 
-        try {
-            const { completion: itSystemsTriageAgentResponse } = await pipe.run({
-                messages: [{ role: 'user', content: userMsg }],
-            });
+		if (userMsg.toLowerCase() === 'exit') {
+			console.log(chalk.green('Goodbye!'));
+			break;
+		}
 
-            spinner.stop();
-            console.log(chalk.cyan('Agent:'));
-            console.log(itSystemsTriageAgentResponse);
-        } catch (error) {
-            spinner.stop();
-            console.error(chalk.red('Error processing your request:'), error);
-        }
-    }
+		const spinner = ora('Processing your request...').start();
+		messages.push({role: 'user', content: userMsg});
+		try {
+			const {completion: itSystemsTriageAgentResponse} = await pipe.run({
+				messages,
+			});
+			messages.push({
+				role: 'assistant',
+				content: itSystemsTriageAgentResponse,
+			});
+			spinner.stop();
+			console.log(chalk.cyan('Agent:'));
+			console.log(itSystemsTriageAgentResponse);
+		} catch (error) {
+			spinner.stop();
+			console.error(chalk.red('Error processing your request:'), error);
+		}
+	}
 }
 
 main();
