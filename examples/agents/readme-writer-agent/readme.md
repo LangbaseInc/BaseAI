@@ -1,68 +1,59 @@
- Agent
+ ![IT Systems Triage Agent by ⌘ BaseAI][cover]
+
+ ![License: MIT][mit] [![Fork on ⌘ Langbase][fork]][pipe]
 
 ## Description
-The README Writer Agent is an AI-powered tool designed to assist developers in creating comprehensive README files for their open-source projects. By leveraging intelligent prompts and structured input, the agent generates clear and standardized documentation, making it easier for users to understand the purpose, installation, usage, and contribution guidelines of a project. This tool aims to enhance developer productivity and improve the quality of documentation across the open-source community.
+The `readme-writer-agent` is an AI-powered tool designed to assist developers in creating comprehensive README files for their open-source projects. This tool simplifies the process of structuring and writing documentation, ensuring that important information is communicated effectively.
 
-## Installation Instructions
-To get started with the README Writer Agent, follow these steps:
+This AI Agent is built using the BaseAI framework. It leverages an agentic pipe that integrates over 30+ LLMs (including OpenAI, Gemini, Mistral, Llama, Gemma, etc.) and can handle any data, with context sizes of up to 10M+ tokens, supported by memory. The framework is compatible with any front-end framework (such as React, Remix, Astro, Next.js), giving you, as a developer, the freedom to tailor your AI application exactly as you envision.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/LangbaseInc/baseai.git
-   ```
+## How to use
 
-2. **Navigate to the project directory**:
-   ```bash
-   cd baseai
-   ```
+Navigate to `examples/agents/readme-writer-agent` and run the following commands:
 
-3. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+```sh
+# Navigate to baseai/examples/agents/readme-writer-agent
+cd examples/agents/readme-writer-agent
 
-4. **Run the application**:
-   ```bash
-   npm run write-readme
-   ```
+# Install the dependencies
+npm install
 
-## Usage
-To generate a README file for your project, simply run the following command in your terminal:
-```bash
+# Run the agent
 npm run write-readme
 ```
+## Learn more
 
-You will be prompted to select the level of detail you want in the README (Simple or Detailed). Based on your selection, the agent will generate the corresponding README content. 
+1. Check the [Learning path to build an agentic AI pipe with ⌘ BaseAI][learn]
+2. Read the [source code on GitHub][gh] for this agent example
+3. Go through Documentaion: [Pipe Quick Start][qs]
+4. Learn more about [Memory features in ⌘ BaseAI][memory]
+5. Learn more about [Tool calls support in ⌘ BaseAI][toolcalls]
 
-Here is an example of how the process works:
-1. Run the command above.
-2. Choose the desired level of detail when prompted.
-3. The agent will copy the required project files and generate the README based on your input and the project's context.
 
-## Contributing
-We welcome contributions from the community! To contribute to the README Writer Agent, please follow these guidelines:
-
-1. **Fork the repository**: Click on the "Fork" button at the top right of the repository page on GitHub.
-2. **Create a new branch**: 
-   ```bash
-   git checkout -b feature/YourFeatureName
-   ```
-3. **Make your changes**: Implement the changes you'd like to contribute. 
-4. **Commit your changes**: 
-   ```bash
-   git commit -m "Add a meaningful commit message"
-   ```
-5. **Push to your branch**: 
-   ```bash
-   git push origin feature/YourFeatureName
-   ```
-6. **Submit a Pull Request**: Go to the original repository and click on the "Pull Requests" tab. Click "New Pull Request," select your branch, and submit your request.
-
-If you find any issues or bugs, please report them using the "Issues" section of the repository.
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+> NOTE:
+> This is a BaseAI project, you can deploy BaseAI pipes, memory and tool calls on Langbase.
 
 ---
 
-Thank you for your interest in the README Writer Agent! We hope it enhances your documentation process and contributes positively to the open-source community. Happy coding!
+## Authors
+
+This project is created by [Langbase][lb] team members, with contributions from:
+
+- [Saad Irfan](https://x.com/mrsaadirfan) - Founding Engineer, [Langbase][lb] <br>
+
+
+
+
+[lb]: https://langbase.com
+[pipe]: https://langbase.com/saadirfan/readme-writer
+[gh]: https://github.com/LangbaseInc/baseai/tree/main/examples/agents/readme-writer-agent
+[cover]:https://raw.githubusercontent.com/LangbaseInc/docs-images/main/baseai/baseai-cover.png
+[learn]:https://baseai.dev/learn
+[memory]:https://baseai.dev/docs/memory/quickstart
+[toolcalls]:https://baseai.dev/docs/tools/quickstart
+[deploy]:https://baseai.dev/docs/deployment/authentication
+[signup]: https://langbase.fyi/io
+[qs]:https://baseai.dev/docs/pipe/quickstart
+[docs]:https://baseai.dev/docs
+[mit]: https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge&color=%23000000
+[fork]: https://img.shields.io/badge/FORK%20ON-%E2%8C%98%20Langbase-000000.svg?style=for-the-badge&logo=%E2%8C%98%20Langbase&logoColor=000000
