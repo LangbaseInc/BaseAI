@@ -155,12 +155,12 @@ export class Pipe {
 	public async run(
 		options: RunOptions | RunOptionsStream,
 	): Promise<RunResponse | RunResponseStream> {
-		console.log('pipe.run', this.pipe.name, 'RUN');
+		// logger('pipe.run', this.pipe.name, 'RUN');
 
 		const endpoint = '/beta/pipes/run';
-		console.log('pipe.run.baseUrl.endpoint', getApiUrl() + endpoint);
-		console.log('pipe.run.options');
-		console.dir(options, {depth: null, colors: true});
+		// logger('pipe.run.baseUrl.endpoint', getApiUrl() + endpoint);
+		// logger('pipe.run.options');
+		// logger(options, {depth: null, colors: true});
 
 		const requestedStream = this.isStreamRequested(options);
 		const stream = this.hasTools ? false : requestedStream;
@@ -175,8 +175,8 @@ export class Pipe {
 			return {} as RunResponse | RunResponseStream;
 		}
 
-		console.log('pipe.run.response');
-		console.dir(response, {depth: null, colors: true});
+		// logger('pipe.run.response');
+		// logger(response, {depth: null, colors: true});
 
 		if (stream) {
 			return response as RunResponseStream;
@@ -190,21 +190,21 @@ export class Pipe {
 			const responseMessage = currentResponse.choices[0].message;
 
 			if (this.hasNoToolCalls(responseMessage)) {
-				console.log('No more tool calls. Returning final response.');
+				// logger('No more tool calls. Returning final response.');
 				return currentResponse;
 			}
 
-			console.log('\npipe.run.response.toolCalls');
-			console.dir(responseMessage.tool_calls, {
-				depth: null,
-				colors: true,
-			});
+			// logger('\npipe.run.response.toolCalls');
+			// logger(responseMessage.tool_calls, {
+			// 	depth: null,
+			// 	colors: true,
+			// });
 
 			const toolResults = await this.runTools(
 				responseMessage.tool_calls as ToolCall[],
 			);
-			console.log('\npipe.run.toolResults');
-			console.dir(toolResults, {depth: null, colors: true});
+			// logger('\npipe.run.toolResults');
+			// logger(toolResults, {depth: null, colors: true});
 
 			messages = this.getMessagesToSend(
 				messages,
@@ -226,9 +226,9 @@ export class Pipe {
 
 			// Explicitly check if the new response has no tool calls
 			if (this.hasNoToolCalls(currentResponse.choices[0].message)) {
-				console.log(
-					'New response has no tool calls. Returning final response.',
-				);
+				// logger(
+				// 	'New response has no tool calls. Returning final response.',
+				// );
 				return currentResponse;
 			}
 		}

@@ -99,7 +99,6 @@ export class Request {
 		options,
 		headers,
 	}: MakeRequestParams): Promise<Response> {
-		// console.log(' =================== REQUEST ===================');
 		const resp = await fetch(url, {
 			method: options.method,
 			headers,
@@ -158,8 +157,8 @@ export class Request {
 	}
 
 	async post<T>(options: Omit<RequestOptions, 'method'>): Promise<T> {
-		console.log('Request.post.options');
-		console.dir(options, {depth: null, colors: true});
+		// logger('Request.post.options');
+		// logger(options, {depth: null, colors: true});
 
 		return this.send<T>({...options, method: 'POST'});
 	}
