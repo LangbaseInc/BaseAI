@@ -11,4 +11,5 @@ export async function exit({path}: {path: string}) {
 			green: true,
 		}),
 	);
+	process.exit(0);
 }

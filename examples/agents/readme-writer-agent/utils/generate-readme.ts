@@ -28,7 +28,7 @@ export async function generateReadme({level}: {level: string}) {
 
 		// Convert the stream to a stream runner.
 		const runner = getRunner(stream);
-		spinner.stop('AI has finished thinking...');
+		spinner.stop(`Let's write the readme docs...`);
 
 		const readmePath = path.join(process.cwd(), 'readme.md');
 
@@ -45,7 +45,7 @@ export async function generateReadme({level}: {level: string}) {
 			fs.writeFileSync(readmePath, readmeContent);
 		}
 
-		spinner.stop('Successfully written readme docs in readme.md file.');
+		spinner.stop('Readme docs written successfully.');
 		return {content: readmeContent, path: readmePath};
 	} catch (error) {
 		handleError({spinner, error});

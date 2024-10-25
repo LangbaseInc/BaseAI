@@ -1,7 +1,7 @@
 import * as p from '@clack/prompts';
 import {spawn} from 'child_process';
 
-export async function killServer() {
+export async function exitServer() {
 	const spinner = p.spinner();
 	spinner.start('Stopping AI server...');
 	// Spawn the server process detached from the parent
