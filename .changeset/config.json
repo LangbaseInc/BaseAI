@@ -12,7 +12,6 @@
 		"example-astro",
 		"example-nextjs",
 		"example-nodejs",
-		"example-remix",
-		"testing"
+		"example-remix"
 	]
 }
