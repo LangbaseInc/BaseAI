@@ -1,0 +1,5 @@
+# baseai
+**/.baseai/
+# env file
+.env
+/baseai/memory/code-files/documents

@@ -1,0 +1,44 @@
+{
+  "name": "readme-writer-agent",
+  "version": "0.1.0",
+  "description": "An AI agent to help you write README files for open-source projects.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "write-readme": "dist/index.js"
+  },
+  "files": [
+    "dist/**",
+    "baseai"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "write-readme": "NODE_NO_WARNINGS=1 npx tsx index.ts",
+    "baseai": "baseai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LangbaseInc/baseai.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Saad Irfan",
+    "url": "https://github.com/msaaddev"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@baseai/core": "^0.9.20",
+    "@clack/prompts": "^0.7.0",
+    "chalk": "^5.3.0",
+    "clear-any-console": "^1.16.2",
+    "figures": "^6.1.0",
+    "picocolors": "^1.1.0",
+    "tsup": "^8.3.0"
+  },
+  "devDependencies": {
+    "baseai": "^0.9.20"
+  }
+}
