@@ -8,6 +8,7 @@ import {generateReadme} from './utils/generate-readme';
 import {killServer} from './utils/kill-server';
 import {exit} from './utils/exit';
 import {generateEmbeddings} from './utils/generate-embeddings';
+import {dirName} from './utils/get-dirname';
 
 (async function () {
 	init({
@@ -19,8 +20,8 @@ import {generateEmbeddings} from './utils/generate-embeddings';
 	});
 	const {level} = await questions();
 	await startBaseAIDevServer();
-	await copyProjectFiles();
-	await generateEmbeddings();
+	await copyProjectFiles({dirName});
+	await generateEmbeddings({dirName});
 	const {path} = await generateReadme({level});
 	await killServer();
 	exit({path});
