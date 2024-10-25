@@ -1,18 +1,18 @@
-import type { BaseAIConfig } from 'baseai';
+import type {BaseAIConfig} from 'baseai';
 
 export const config: BaseAIConfig = {
 	log: {
-		isEnabled: true,
+		isEnabled: false,
 		logSensitiveData: false,
 		pipe: true,
 		'pipe.completion': true,
 		'pipe.request': true,
 		'pipe.response': true,
 		tool: true,
-		memory: true
+		memory: true,
 	},
 	memory: {
-		useLocalEmbeddings: false
+		useLocalEmbeddings: false,
 	},
-	envFilePath: '.env'
+	envFilePath: '.env',
 };

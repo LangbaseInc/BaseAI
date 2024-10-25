@@ -4,8 +4,12 @@
   "main": "index.js",
   "description": "An AI agent to help you write README files for open-source projects.",
   "scripts": {
-    "write-readme": "npx tsx index.ts",
+    "write-readme": "NODE_NO_WARNINGS=1 npx tsx index.ts",
     "baseai": "baseai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LangbaseInc/baseai.git"
   },
   "keywords": [],
   "author": {
@@ -17,7 +21,9 @@
     "@baseai/core": "^0.9.20",
     "@clack/prompts": "^0.7.0",
     "chalk": "^5.3.0",
-    "clear-any-console": "^1.16.2"
+    "clear-any-console": "^1.16.2",
+    "figures": "^6.1.0",
+    "picocolors": "^1.1.0"
   },
   "devDependencies": {
     "baseai": "^0.9.20"

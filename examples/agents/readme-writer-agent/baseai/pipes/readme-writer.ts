@@ -1,5 +1,5 @@
 import {PipeI} from '@baseai/core';
-import memoryProjectFiles from '../memory/project-files';
+import memoryCodeFiles from '../memory/code-files';
 
 const pipeReadmeWriter = (): PipeI => ({
 	// Replace with your API key https://langbase.com/docs/api-reference/api-keys
@@ -41,7 +41,7 @@ const pipeReadmeWriter = (): PipeI => ({
 	],
 	variables: [{name: 'level', value: ''}],
 	tools: [],
-	memory: [memoryProjectFiles()],
+	memory: [memoryCodeFiles()],
 });
 
 export default pipeReadmeWriter;
