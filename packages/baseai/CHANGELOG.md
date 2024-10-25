@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.20
+
+### Patch Changes
+
+-   👌 IMPROVE: logs
+
 ## 0.9.19
 
 ### Patch Changes
