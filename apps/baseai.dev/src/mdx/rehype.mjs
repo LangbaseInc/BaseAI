@@ -8,7 +8,7 @@ import theme from './themes/shades-of-purple.json' assert { type: 'json' };
 import lang from './languages.mjs';
 
 export function rehypeParseCodeBlocks() {
-	return (tree) => {
+	return tree => {
 		visit(tree, 'element', (node, _nodeIndex, parentNode) => {
 			if (node.tagName === 'code' && node.properties.className) {
 				parentNode.properties.language =
@@ -21,10 +21,10 @@ export function rehypeParseCodeBlocks() {
 let highlighter;
 
 export function rehypeShiki() {
-	return async (tree) => {
+	return async tree => {
 		highlighter =
 			highlighter ??
-			(await shiki.getHighlighter({ theme: theme , langs: lang  }));
+			(await shiki.getHighlighter({ theme: theme, langs: lang }));
 
 		visit(tree, 'element', node => {
 			if (
@@ -56,7 +56,7 @@ export function rehypeShiki() {
 }
 
 export function rehypeSlugify() {
-	return (tree) => {
+	return tree => {
 		let slugify = slugifyWithCounter();
 		visit(tree, 'element', node => {
 			if (node.tagName === 'h2' && !node.properties.id) {
@@ -67,7 +67,7 @@ export function rehypeSlugify() {
 }
 
 export function rehypeAddMDXExports(getExports) {
-	return (tree) => {
+	return tree => {
 		let exports = Object.entries(getExports(tree));
 
 		for (let [name, value] of exports) {
@@ -123,7 +123,7 @@ export const rehypePlugins = [
 	rehypeSlugify,
 	[
 		rehypeAddMDXExports,
-		(tree) => ({
+		tree => ({
 			sections: `[${getSections(tree).join()}]`
 		})
 	]

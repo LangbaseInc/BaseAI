@@ -1,3 +1,3 @@
-import shadesOfPurple from './shades-of-purple.json' assert { type: 'json' }
+import shadesOfPurple from './shades-of-purple.json' assert { type: 'json' };
 
-export default { shadesOfPurple }
+export default { shadesOfPurple };
