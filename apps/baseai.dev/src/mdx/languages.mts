@@ -1,20 +1,20 @@
-import langGraphQL from 'shiki/languages/graphql.tmLanguage.json' assert { type: 'json' };
-import langJS from 'shiki/languages/javascript.tmLanguage.json' assert { type: 'json' };
-import langJSX from 'shiki/languages/jsx.tmLanguage.json' assert { type: 'json' };
-import langJSON from 'shiki/languages/json.tmLanguage.json' assert { type: 'json' };
-import langXML from 'shiki/languages/xml.tmLanguage.json' assert { type: 'json' };
-import langYAML from 'shiki/languages/yaml.tmLanguage.json' assert { type: 'json' };
-import langPHP from 'shiki/languages/php.tmLanguage.json' assert { type: 'json' };
-import langHTML from 'shiki/languages/html.tmLanguage.json' assert { type: 'json' };
-import langCSS from 'shiki/languages/css.tmLanguage.json' assert { type: 'json' };
-import langSCSS from 'shiki/languages/scss.tmLanguage.json' assert { type: 'json' };
-import langSASS from 'shiki/languages/sass.tmLanguage.json' assert { type: 'json' };
-import langLESS from 'shiki/languages/less.tmLanguage.json' assert { type: 'json' };
-import langMarkdown from 'shiki/languages/markdown.tmLanguage.json' assert { type: 'json' };
-import langTS from 'shiki/languages/typescript.tmLanguage.json' assert { type: 'json' };
-import langTSX from 'shiki/languages/tsx.tmLanguage.json' assert { type: 'json' };
-import langShell from 'shiki/languages/shellscript.tmLanguage.json' assert { type: 'json' };
-import langPy from 'shiki/languages/python.tmLanguage.json' assert { type: 'json' };
+import langGraphQL from 'shiki/languages/graphql.tmLanguage.json' with { type: 'json' };
+import langJS from 'shiki/languages/javascript.tmLanguage.json' with { type: 'json' };
+import langJSX from 'shiki/languages/jsx.tmLanguage.json' with { type: 'json' };
+import langJSON from 'shiki/languages/json.tmLanguage.json' with { type: 'json' };
+import langXML from 'shiki/languages/xml.tmLanguage.json' with { type: 'json' };
+import langYAML from 'shiki/languages/yaml.tmLanguage.json' with { type: 'json' };
+import langPHP from 'shiki/languages/php.tmLanguage.json' with { type: 'json' };
+import langHTML from 'shiki/languages/html.tmLanguage.json' with { type: 'json' };
+import langCSS from 'shiki/languages/css.tmLanguage.json' with { type: 'json' };
+import langSCSS from 'shiki/languages/scss.tmLanguage.json' with { type: 'json' };
+import langSASS from 'shiki/languages/sass.tmLanguage.json' with { type: 'json' };
+import langLESS from 'shiki/languages/less.tmLanguage.json' with { type: 'json' };
+import langMarkdown from 'shiki/languages/markdown.tmLanguage.json' with { type: 'json' };
+import langTS from 'shiki/languages/typescript.tmLanguage.json' with { type: 'json' };
+import langTSX from 'shiki/languages/tsx.tmLanguage.json' with { type: 'json' };
+import langShell from 'shiki/languages/shellscript.tmLanguage.json' with { type: 'json' };
+import langPy from 'shiki/languages/python.tmLanguage.json' with { type: 'json' };
 
 const lang = [
 	{

@@ -4,7 +4,7 @@ import { toString } from 'mdast-util-to-string';
 import { mdxAnnotations } from 'mdx-annotations';
 import shiki from 'shiki';
 import { visit } from 'unist-util-visit';
-import theme from './themes/shades-of-purple.json' assert { type: 'json' };
+import theme from './themes/shades-of-purple.json' with { type: 'json' };
 import lang from './languages.mjs';
 
 export function rehypeParseCodeBlocks() {
