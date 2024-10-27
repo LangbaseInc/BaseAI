@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Hero({ }) {
 	return (
-		<div className="flex align-center min-h-[95vh] flex-col items-center justify-center relative">
+		<div className="flex align-center min-h-[91vh] flex-col items-center justify-center relative">
 			<div className="xmin-h-screen h-full webgl absolute -top-[18vh] flex w-full sm:top-0">
 				<WebGLInitializer />
 			</div>
