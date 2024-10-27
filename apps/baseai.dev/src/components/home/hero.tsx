@@ -23,7 +23,7 @@ export default function Hero({ }) {
 
 function Content() {
 	return (
-		<div className="z-10 xmt-24 grid min-h-[75vh] w-[90vw] grid-rows-[auto_1fr_auto] gap-4 px-6 sm:p-6 sm:mt-28 sm:min-h-[85vh] sm:w-[76vw]">
+		<div className="z-10 grid min-h-[75vh] w-[90vw] grid-rows-[auto_1fr_auto] gap-4 px-6 sm:p-6 sm:mt-28 sm:min-h-[85vh] sm:w-[76vw]">
 			<div className="col-span-2 flex items-center justify-between">
 				<div className={cn('flex items-center', inter.className)}>
 					<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
