@@ -45,9 +45,9 @@ function Content() {
 			<div className="col-span-2 flex w-full flex-col-reverse items-center justify-between lg:flex-row lg:items-start">
 				<div className={cn('self-end lg:max-w-[60%]', inter.className)}>
 					<div
-						className="text-center text-sm text-sm lg:text-left lg:text-left
+						className="text-center text-sm lg:text-left
 
-					2xl:text-[1vw] 2xl:text-[1vw] 2xl:leading-[1.5vw] 2xl:leading-[1.5vw]"
+					2xl:text-[1vw] 2xl:leading-[1.5vw]"
 					>
 						<div className="flex items-center justify-center lg:justify-start">
 							<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>

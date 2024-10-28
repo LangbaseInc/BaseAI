@@ -29,21 +29,6 @@ const WebGLInitializer = () => {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
-		// const fontFace = new FontFace(
-		// 	'Grotesk',
-		// 	'url(/AlteHaasGroteskBold.ttf)'
-		// );
-		// document.fonts.add(fontFace);
-
-		// const style = document.createElement('style');
-		// style.innerHTML = `
-		// 	  @import url(/AlteHaasGroteskBold.ttf);
-		// 	  body {
-		// 	    font-family: 'Grotesk', sans-serif;
-		// 	  }
-		// 	`;
-		// document.head.appendChild(style);
-
 		const textDiv = document.createElement('div');
 		textDiv.style.position = 'absolute';
 		textDiv.style.left = '0';
@@ -54,7 +39,6 @@ const WebGLInitializer = () => {
 		textDiv.style.fontFamily = 'Grotesk';
 		textDiv.style.color = 'rgba(255,255,255,1)';
 		textDiv.style.display = 'flex';
-		// textDiv.style.lineHeight = '0px';
 		textDiv.style.justifyContent = 'center';
 		textDiv.style.alignItems = 'center';
 		textDiv.textContent = 'BASE AI';
@@ -84,7 +68,6 @@ const WebGLInitializer = () => {
 				logging: false,
 				y: y * 0,
 				x: 0,
-				// foreignObjectRendering: true,
 				onclone: document => {
 					Array.from(document.querySelectorAll('*')).forEach(e => {
 						let existingStyle = e.getAttribute('style') || '';
@@ -133,7 +116,6 @@ const WebGLInitializer = () => {
 			}
 		);
 
-		// Custom shader material for the enhanced liquid wavy effect
 		const material = new THREE.ShaderMaterial({
 			transparent: true,
 			uniforms: {
