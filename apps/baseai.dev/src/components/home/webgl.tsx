@@ -57,7 +57,7 @@ const WebGLInitializer = () => {
 			await document.fonts.ready;
 			document.body.appendChild(textDiv);
 
-			const lineHeight = window.getComputedStyle(textDiv).lineHeight; // e.g., "20px"
+			const lineHeight = window.getComputedStyle(textDiv).lineHeight; 
 			const y = parseFloat(lineHeight);
 
 			const canvas = await html2canvas(textDiv, {
@@ -391,7 +391,6 @@ const WebGLInitializer = () => {
     `
 		});
 
-		// Create a mesh with the geometry and material
 		const sphere = new THREE.Mesh(geometry, material);
 		scene.add(sphere);
 
@@ -400,7 +399,7 @@ const WebGLInitializer = () => {
 		function calculateCameraZ(screenWidth: number, screenHeight: number) {
 			let cameraZ;
 
-			// Breakpoints based on screen width and height
+		
 			if (screenWidth <= 768) {
 				if (screen.availWidth < screen.availHeight) {
 					cameraZ = 4.5;
@@ -409,46 +408,41 @@ const WebGLInitializer = () => {
 				}
 			} else if (screenWidth > 768 && screenWidth <= 1920) {
 				if (screenHeight <= 1080) {
-					cameraZ = 2; // Full HD screens (1920x1080)
+					cameraZ = 2; 
 				} else {
-					cameraZ = 1.9; // Higher aspect ratio or larger height
+					cameraZ = 1.9;
 				}
 			} else if (screenWidth > 1920 && screenWidth <= 2440) {
 				if (screenHeight <= 1080) {
-					cameraZ = 1.75; // Wide screens with Full HD height
+					cameraZ = 1.75;
 				} else {
-					cameraZ = 1.65; // Taller screens with higher resolutions
+					cameraZ = 1.65;
 				}
 			} else if (screenWidth > 2440) {
 				if (screenHeight <= 1440) {
-					cameraZ = 1.5; // Ultra-wide or larger 2K displays
+					cameraZ = 1.5; 
 				} else {
-					cameraZ = 1.4; // 4K and above
+					cameraZ = 1.4; 
 				}
 			}
 
 			return cameraZ;
 		}
 
-		// Get screen width and height
 		const screenWidth = window.innerWidth;
 		const screenHeight = window.innerHeight;
 
-		// Calculate camera Z position based on breakpoints
 		const cameraZ = calculateCameraZ(screenWidth, screenHeight);
 		if (cameraZ) camera.position.z = cameraZ;
 
-		// Raycaster setup
 		const raycaster = new THREE.Raycaster();
 		const mouse = new THREE.Vector2();
 
-		// Animation loop
 		const animate = () => {
 			requestAnimationFrame(animate);
-			material.uniforms.u_time.value += 0.02; // Update time for animation
+			material.uniforms.u_time.value += 0.02; 
 			material.uniforms.u_viewVector.value = camera.position;
 
-			// Update mouse position in the shader
 			raycaster.setFromCamera(mouse, camera);
 			const intersects = raycaster.intersectObject(sphere);
 			if (intersects.length > 0) {
@@ -483,13 +477,6 @@ const WebGLInitializer = () => {
 
 			updateCameraPosition();
 
-			// Update background texture with new dimensions
-			createHighResBackgroundTexture(width, height).then(texture => {
-				scene.background = texture;
-				if (material.uniforms && material.uniforms.u_background) {
-					material.uniforms.u_background.value = texture;
-				}
-			});
 			createHighResBackgroundTexture(width, height).then(texture => {
 				scene.background = texture;
 				if (material.uniforms && material.uniforms.u_background) {
