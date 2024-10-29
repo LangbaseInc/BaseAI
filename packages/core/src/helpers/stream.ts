@@ -1,6 +1,7 @@
 import {ChatCompletionStream} from 'openai/lib/ChatCompletionStream';
 import {ChunkStream} from 'src/pipes';
 import {Stream} from 'openai/streaming';
+import {ToolCall} from 'types/pipes';
 
 export interface Runner extends ChatCompletionStream<null> {}
 
@@ -80,4 +81,57 @@ export function handleResponseStream({
 		};
 	}
 	return result;
+}
+
+/**
+ * Asynchronously retrieves tool calls from a readable stream.
+ *
+ * This function processes a stream of data and extracts tool call information,
+ * organizing it into an array of `ToolCall` objects. Each `ToolCall` object
+ * contains details about a specific tool call, including its ID, type, and
+ * function information.
+ *
+ * @param stream - The readable stream containing the data to be processed.
+ * @returns A promise that resolves to an array of `ToolCall` objects.
+ */
+export async function getToolsFromStream(
+	stream: ReadableStream<any>,
+): Promise<ToolCall[]> {
+	const toolCalls = [] as ToolCall[];
+	let streamText = getRunner(stream);
+
+	for await (const chunk of streamText) {
+		if (chunk.choices[0]?.delta?.tool_calls) {
+			const allToolCalls = chunk.choices[0].delta.tool_calls;
+
+			for (const toolCall of allToolCalls) {
+				const index = toolCall.index;
+
+				if (!toolCalls[index]) {
+					toolCalls[index] = {
+						id: '',
+						type: 'function',
+						function: {name: '', arguments: ''},
+					};
+				}
+				if (toolCall.id) {
+					toolCalls[index].id = toolCall.id;
+				}
+				if (toolCall.type) {
+					toolCalls[index].type = toolCall.type;
+				}
+				if (toolCall.function) {
+					if (toolCall.function.name) {
+						toolCalls[index].function.name = toolCall.function.name;
+					}
+					if (toolCall.function.arguments) {
+						toolCalls[index].function.arguments +=
+							toolCall.function.arguments;
+					}
+				}
+			}
+		}
+	}
+
+	return toolCalls;
 }

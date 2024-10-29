@@ -5,6 +5,7 @@ import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
 import {isLocalServerRunning} from 'src/utils/local-server-running';
+import {getToolsFromStream} from 'src/helpers';
 
 export interface Variable {
 	name: string;
@@ -140,15 +141,79 @@ export class Pipe {
 	}
 
 	private isStreamRequested(options: RunOptions | RunOptionsStream): boolean {
-		return 'stream' in options && options.stream === true;
+		return (
+			('stream' in options && options.stream === true) ||
+			this.pipe.meta.stream
+		);
 	}
 
-	private warnIfToolsWithStream(requestedStream: boolean): void {
-		if (this.hasTools && requestedStream) {
-			console.warn(
-				'Warning: Streaming is not yet supported when tools are present in the pipe. Falling back to non-streaming mode.',
-			);
+	private async handleStreamResponse(
+		options: RunOptionsStream,
+		response: RunResponseStream,
+	): Promise<RunResponseStream> {
+		const endpoint = '/beta/pipes/run';
+		const stream = this.isStreamRequested(options);
+		const body = {...options, stream};
+
+		const [streamForToolCall, streamForReturn] = response.stream.tee();
+		const tools = await getToolsFromStream(streamForToolCall);
+
+		if (tools.length) {
+			let messages = options.messages || [];
+
+			let currentResponse: RunResponseStream = {
+				stream: streamForReturn,
+				threadId: response.threadId,
+				rawResponse: response.rawResponse,
+			};
+
+			let callCount = 0;
+
+			while (callCount < this.maxCalls) {
+				const [streamForToolCall, streamForReturn] =
+					currentResponse.stream.tee();
+
+				const tools = await getToolsFromStream(streamForToolCall);
+
+				if (tools.length === 0) {
+					return {
+						stream: streamForReturn,
+						threadId: currentResponse.threadId,
+						rawResponse: response.rawResponse,
+					};
+				}
+
+				const toolResults = await this.runTools(tools);
+
+				const responseMessage = {
+					role: 'assistant',
+					content: null,
+					tool_calls: tools,
+				} as Message;
+
+				messages = this.getMessagesToSend(
+					messages,
+					responseMessage,
+					toolResults,
+				);
+
+				currentResponse = await this.createRequest<RunResponseStream>(
+					endpoint,
+					{
+						...body,
+						messages,
+						threadId: currentResponse.threadId,
+					},
+				);
+
+				callCount++;
+			}
 		}
+
+		return {
+			...response,
+			stream: streamForReturn,
+		} as RunResponseStream;
 	}
 
 	public async run(options: RunOptionsStream): Promise<RunResponseStream>;
@@ -163,9 +228,7 @@ export class Pipe {
 		// logger('pipe.run.options');
 		// logger(options, {depth: null, colors: true});
 
-		const requestedStream = this.isStreamRequested(options);
-		const stream = this.hasTools ? false : requestedStream;
-		this.warnIfToolsWithStream(requestedStream);
+		const stream = this.isStreamRequested(options);
 
 		const runTools = options.runTools ?? true;
 		delete options.runTools;
@@ -179,10 +242,19 @@ export class Pipe {
 			return {} as RunResponse | RunResponseStream;
 		}
 
-		if (stream || !runTools) {
+		if (!runTools) {
 			return response as RunResponseStream;
 		}
 
+		if (stream) {
+			// return response as RunResponseStream;
+			return await this.handleStreamResponse(
+				options as RunOptionsStream,
+				response as RunResponseStream,
+			);
+		}
+
+		// STREAM IS OFF
 		let messages = options.messages || [];
 		let currentResponse = response as RunResponse;
 		let callCount = 0;

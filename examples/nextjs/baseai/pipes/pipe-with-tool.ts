@@ -8,7 +8,7 @@ const pipeWithTools = (): PipeI => ({
 	description: 'An AI agent pipe that can call tools',
 	status: 'public',
 	model: 'openai:gpt-4o-mini',
-	stream: true,
+	stream: false,
 	json: false,
 	store: true,
 	moderate: true,
