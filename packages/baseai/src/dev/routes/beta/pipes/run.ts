@@ -115,7 +115,15 @@ const handleGenerateError = (c: any, error: unknown) => {
 const handleRun = async (c: any) => {
 	try {
 		const body = await c.req.json();
-		logger('pipe.request', body, 'Pipe Request Body');
+
+		const llmKey = (body.llmApiKey as string) || '';
+		const hiddenChars = new Array(45).fill('*').join('');
+		const redactedKey = llmKey.length
+			? llmKey.slice(0, 8) + hiddenChars
+			: '';
+
+		const logData = { ...body, llmApiKey: redactedKey };
+		logger('pipe.request', logData, 'Pipe Request Body');
 
 		const validatedBody = validateRequestBody(body);
 
