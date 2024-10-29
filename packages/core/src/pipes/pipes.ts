@@ -247,7 +247,6 @@ export class Pipe {
 		}
 
 		if (stream) {
-			// return response as RunResponseStream;
 			return await this.handleStreamResponse(
 				options as RunOptionsStream,
 				response as RunResponseStream,
