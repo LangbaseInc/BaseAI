@@ -4,7 +4,7 @@
 
 ## Build a Talk To Excel Agent with BaseAI framework — ⌘ Langbase
 
-The **Talk To Excel Agent** is an AI-powered data analysis tool that streamlines your Excel workflows by automatically analyzing uploaded files to provide comprehensive overviews and actionable insights. Utilizing BaseAI's memory and tool call features, it delivers detailed summaries of data structure, identifies patterns and trends, and highlights potential data quality issues.
+The **Talk To Excel Agent** is an BaseAI powered data analysis tool that streamlines your Excel workflows by automatically analyzing uploaded files to provide comprehensive overviews and actionable insights. Utilizing BaseAI's memory and tool call features, it delivers detailed summaries of data structure, identifies patterns and trends, and highlights potential data quality issues.
 
 The agent guides you toward meaningful analysis by suggesting key areas for deeper exploration and assisting in refining queries. Additionally, you can combine this agent with the Excel Formula Generation Agent to access a suite of powerful tools for analyzing your financial data effectively without losing sight of the bigger picture. Configurable through the baseai.config.ts file, logging is disabled by default. By bridging the gap between business questions and technical Excel operations, the Talk To Excel Agent empowers you to make data-driven decisions efficiently and effectively.
 
