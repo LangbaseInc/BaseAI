@@ -167,6 +167,9 @@ export class Pipe {
 		const stream = this.hasTools ? false : requestedStream;
 		this.warnIfToolsWithStream(requestedStream);
 
+		const runTools = options.runTools ?? true;
+		delete options.runTools;
+
 		const body = {...options, stream};
 
 		let response = await this.createRequest<
@@ -175,8 +178,6 @@ export class Pipe {
 		if (Object.entries(response).length === 0) {
 			return {} as RunResponse | RunResponseStream;
 		}
-
-		const runTools = options.runTools ?? true;
 
 		if (stream || !runTools) {
 			return response as RunResponseStream;
