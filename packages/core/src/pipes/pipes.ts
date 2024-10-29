@@ -16,6 +16,7 @@ export interface RunOptions {
 	variables?: Variable[];
 	threadId?: string;
 	rawResponse?: boolean;
+	runTools?: boolean;
 }
 
 export interface RunOptionsStream extends RunOptions {
@@ -166,6 +167,9 @@ export class Pipe {
 		const stream = this.hasTools ? false : requestedStream;
 		this.warnIfToolsWithStream(requestedStream);
 
+		const runTools = options.runTools ?? true;
+		delete options.runTools;
+
 		const body = {...options, stream};
 
 		let response = await this.createRequest<
@@ -175,10 +179,7 @@ export class Pipe {
 			return {} as RunResponse | RunResponseStream;
 		}
 
-		// logger('pipe.run.response');
-		// logger(response, {depth: null, colors: true});
-
-		if (stream) {
+		if (stream || !runTools) {
 			return response as RunResponseStream;
 		}
 
