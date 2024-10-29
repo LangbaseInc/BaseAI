@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.21
+
+### Patch Changes
+
+-   👌 IMPROVE: Redact LLM API key
+
 ## 0.9.20
 
 ### Patch Changes
