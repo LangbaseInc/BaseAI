@@ -465,6 +465,7 @@ export const AnthropicChatCompleteStreamChunkTransform: (
 				choices: [
 					{
 						delta: {
+							role: 'assistant',
 							content: ''
 						},
 						index: 0,
