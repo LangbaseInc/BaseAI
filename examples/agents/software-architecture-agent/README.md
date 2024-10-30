@@ -31,6 +31,8 @@ npx baseai@latest dev
 
 # Run the agent
 npx tsx index.ts
+
+# NOTE: BaseAI pipe Logs are switched off by default, you can enable them in baseai config file baseai.config.ts under baseai directory
 ```
 
 ## Features
