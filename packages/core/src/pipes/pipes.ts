@@ -314,7 +314,7 @@ export class Pipe {
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
 		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
-		const hasTools = this.pipe.tools;
+		const hasTools = this.pipe.tools.length > 0;
 		if (isAnthropic && hasTools) {
 			this.pipe.messages.forEach((m: Message, idx: number) => {
 				if (m.role === 'system') {
