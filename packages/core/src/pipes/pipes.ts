@@ -6,6 +6,7 @@ import {getApiUrl, isProd} from '../utils/is-prod';
 import {toOldPipeFormat} from '../utils/to-old-pipe-format';
 import {isLocalServerRunning} from 'src/utils/local-server-running';
 import {getToolsFromStream} from 'src/helpers';
+import {ANTHROPIC} from 'src/data/models';
 
 export interface Variable {
 	name: string;
@@ -312,6 +313,17 @@ export class Pipe {
 	}
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
+		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
+		const hasTools = this.pipe.tools;
+		if (isAnthropic && hasTools) {
+			this.pipe.messages.forEach((m: Message, idx: number) => {
+				if (m.role === 'system') {
+					this.pipe.messages[idx].content =
+						`${m.content} If there is a tool call, only send tool call. Do not send any content. Only send content in final response after tool result`;
+				}
+			});
+		}
+
 		const prodOptions = {
 			endpoint,
 			body: {

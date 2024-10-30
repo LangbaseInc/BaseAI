@@ -6,7 +6,7 @@ export default function Page() {
 		{ title: 'Pipe Run Stream', href: '/demo/pipe-run-stream' },
 		{ title: 'Chat Simple', href: '/demo/chat-simple' },
 		{ title: 'Chat Advanced', href: '/demo/chat-advanced' },
-		{ title: 'Tool Calling Non-stream', href: '/demo/tool-calling' },
+		{ title: 'Tool Calling', href: '/demo/tool-calling' },
 		{ title: 'Tool Calling Stream', href: '/demo/tool-calling-stream' },
 		{
 			title: 'Tool Calling: Pipes as Tools',
