@@ -148,6 +148,14 @@ export class Pipe {
 		);
 	}
 
+	private warnIfToolsWithStream(requestedStream: boolean): void {
+		if (this.hasTools && requestedStream) {
+			console.warn(
+				'Warning: Streaming is not yet supported in Anthropic models when tools are present in the pipe. Falling back to non-streaming mode.',
+			);
+		}
+	}
+
 	private async handleStreamResponse(
 		options: RunOptionsStream,
 		response: RunResponseStream,
@@ -229,7 +237,16 @@ export class Pipe {
 		// logger('pipe.run.options');
 		// logger(options, {depth: null, colors: true});
 
-		const stream = this.isStreamRequested(options);
+		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
+		const hasTools = this.pipe.tools.length > 0;
+
+		let stream = this.isStreamRequested(options);
+
+		// Anthropic models don't support streaming with tools.
+		if (isAnthropic && hasTools && stream) {
+			this.warnIfToolsWithStream(stream);
+			stream = false;
+		}
 
 		const runTools = options.runTools ?? true;
 		delete options.runTools;
@@ -313,17 +330,6 @@ export class Pipe {
 	}
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
-		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
-		const hasTools = this.pipe.tools.length > 0;
-		if (isAnthropic && hasTools) {
-			this.pipe.messages.forEach((m: Message, idx: number) => {
-				if (m.role === 'system') {
-					this.pipe.messages[idx].content =
-						`${m.content} If there is a tool call, only send tool call. Do not send any content. Only send content in final response after tool result`;
-				}
-			});
-		}
-
 		const prodOptions = {
 			endpoint,
 			body: {
