@@ -1,5 +1,5 @@
 import { ApiError } from '@/dev/hono/errors';
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
+import type { Pipe } from '@/dev/routes/v1/pipes/run';
 import type { SimilarChunk } from '@/utils/memory/db/lib';
 import type { Message, VariablesI } from 'types/pipe';
 import { dlog } from '../dlog';
