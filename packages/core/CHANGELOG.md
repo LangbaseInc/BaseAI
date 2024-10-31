@@ -1,5 +1,12 @@
 # `baseai` SDK
 
+## 0.9.22
+
+### Patch Changes
+
+-   🐛 FIX: Anthropic streaming
+-   84d789c: 🐛 FIX: Anthropic streaming
+
 ## 0.9.21
 
 ### Patch Changes
