@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.23
+
+### Patch Changes
+
+-   📦 NEW: setThreadId function in usePipe
+
 ## 0.9.22
 
 ### Patch Changes
