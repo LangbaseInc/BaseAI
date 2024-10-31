@@ -59,10 +59,12 @@ export const MarkdownComponents = () => {
 		},
 		table: (props: any) => {
 			return (
-				<table
-					className="overflow-x-auto whitespace-nowrap"
-					{...props}
-				/>
+				<div className='overflow-x-scroll'>
+					<table
+						className="whitespace-nowrap"
+						{...props}
+					/>
+				</div>
 			);
 		},
 		h2: (props: any) => {
