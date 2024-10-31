@@ -6,6 +6,7 @@ import { FIREWORKS_AI } from '../data/models';
 import { handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message } from 'types/pipe';
+import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callFireworks({
 	pipe,
@@ -13,7 +14,7 @@ export async function callFireworks({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	llmApiKey: string;
 	stream: boolean;
 	messages: Message[];
@@ -30,7 +31,8 @@ export async function callFireworks({
 		dlog('Fireworks request params', transformedRequestParams);
 
 		// Fireworks llama-3.1 405b behaves weirdly with stop value. Bug on their side. Omitting it.
-		if (pipe.model.name === 'llama-v3p1-405b-instruct')
+		const modelName = pipe.model.split(':')[1];
+		if (modelName === 'llama-v3p1-405b-instruct')
 			delete transformedRequestParams['stop'];
 
 		const providerOptions = { provider: FIREWORKS_AI, llmApiKey };
@@ -47,19 +49,33 @@ export async function callFireworks({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
 	// Create model strings for Fireworks AI
-	const modelString =
-		pipe.model.name === 'yi-large'
+	const pipeModel = pipe.model.split(':')[1];
+	const model =
+		pipeModel === 'yi-large'
 			? 'accounts/yi-01-ai/models/yi-large'
-			: `accounts/fireworks/models/${pipe.model.name}`;
+			: `accounts/fireworks/models/${pipeModel}`;
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: modelString,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

@@ -5,6 +5,7 @@ import { COHERE } from '../data/models';
 import { handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message } from 'types/pipe';
+import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callCohere({
 	pipe,
@@ -12,7 +13,7 @@ export async function callCohere({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	llmApiKey: string;
 	messages: Message[];
 	stream: boolean;
@@ -42,14 +43,28 @@ export async function callCohere({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

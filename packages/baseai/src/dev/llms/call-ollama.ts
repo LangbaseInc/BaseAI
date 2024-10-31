@@ -6,6 +6,7 @@ import { OLLAMA } from '../data/models';
 import { handleLlmError } from './utils';
 import type { Message } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
+import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callOllama({
 	pipe,
@@ -13,7 +14,7 @@ export async function callOllama({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	llmApiKey: string;
 	stream: boolean;
 	messages: Message[];
@@ -42,14 +43,28 @@ export async function callOllama({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

@@ -7,6 +7,7 @@ import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { Message } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callOpenAI({
 	pipe,
@@ -14,7 +15,7 @@ export async function callOpenAI({
 	llmApiKey,
 	messages
 }: {
-	pipe: any;
+	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
@@ -22,7 +23,7 @@ export async function callOpenAI({
 	try {
 		validateInput(pipe, messages);
 		const openai = new OpenAI({ apiKey: llmApiKey });
-		await moderateContent(openai, messages, pipe.meta.moderate);
+		await moderateContent(openai, messages, pipe.moderate);
 
 		const modelParams = buildModelParams(pipe, stream, messages);
 		addToolsToParams(modelParams, pipe);
@@ -35,7 +36,7 @@ export async function callOpenAI({
 	}
 }
 
-function validateInput(pipe: any, messages: Message[]) {
+function validateInput(pipe: Pipe, messages: Message[]) {
 	if (!pipe || !pipe.model || !messages || messages.length === 0) {
 		throw new ApiError({
 			code: 'BAD_REQUEST',
@@ -65,14 +66,28 @@ async function moderateContent(
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name || 'gpt-4o-mini',
-		...pipe.model.params
+		model: model || 'gpt-4o-mini',
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

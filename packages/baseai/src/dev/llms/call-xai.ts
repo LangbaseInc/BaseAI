@@ -5,6 +5,7 @@ import { handleLlmError } from './utils';
 import type { Message } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callXAI({
 	pipe,
@@ -12,7 +13,7 @@ export async function callXAI({
 	llmApiKey,
 	messages
 }: {
-	pipe: any;
+	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
@@ -37,14 +38,28 @@ export async function callXAI({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }
