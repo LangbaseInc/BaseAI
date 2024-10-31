@@ -1,4 +1,4 @@
-<p align="center">
+****<p align="center">
   <a href="https://baseai.dev">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-cover.png">
