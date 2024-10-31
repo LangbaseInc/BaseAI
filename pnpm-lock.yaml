@@ -266,8 +266,8 @@ importers:
         specifier: ^7.8.1
         version: 7.8.1(astro@4.15.10(@types/node@22.7.4)(rollup@4.24.0)(terser@5.34.1)(typescript@5.6.2))(next@14.2.5(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@baseai/core':
-        specifier: ^0.9.21
-        version: 0.9.21(react@18.3.1)(zod@3.23.8)
+        specifier: ^0.9.22
+        version: 0.9.22(react@18.3.1)(zod@3.23.8)
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
@@ -315,8 +315,8 @@ importers:
   examples/nextjs:
     dependencies:
       '@baseai/core':
-        specifier: ^0.9.21
-        version: 0.9.21(react@18.3.1)(zod@3.23.8)
+        specifier: ^0.9.22
+        version: 0.9.22(react@18.3.1)(zod@3.23.8)
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
@@ -364,8 +364,8 @@ importers:
         specifier: ^18
         version: 18.3.0
       baseai:
-        specifier: ^0.9.21
-        version: 0.9.21(@types/node@20.16.10)(typescript@5.6.2)
+        specifier: ^0.9.22
+        version: 0.9.22(@types/node@20.16.10)(typescript@5.6.2)
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -388,15 +388,15 @@ importers:
   examples/nodejs:
     dependencies:
       '@baseai/core':
-        specifier: ^0.9.21
-        version: 0.9.21(react@18.3.1)(zod@3.23.8)
+        specifier: ^0.9.22
+        version: 0.9.22(react@18.3.1)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
     devDependencies:
       baseai:
-        specifier: ^0.9.21
-        version: 0.9.21(@types/node@22.7.4)(typescript@5.6.2)
+        specifier: ^0.9.22
+        version: 0.9.22(@types/node@22.7.4)(typescript@5.6.2)
       tsx:
         specifier: ^4.19.0
         version: 4.19.1
@@ -404,8 +404,8 @@ importers:
   examples/remix:
     dependencies:
       '@baseai/core':
-        specifier: ^0.9.21
-        version: 0.9.21(react@18.3.1)(zod@3.23.8)
+        specifier: ^0.9.22
+        version: 0.9.22(react@18.3.1)(zod@3.23.8)
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.11)(react@18.3.1)
@@ -465,8 +465,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
       baseai:
-        specifier: ^0.9.21
-        version: 0.9.21(@types/node@22.7.4)(typescript@5.6.2)
+        specifier: ^0.9.22
+        version: 0.9.22(@types/node@22.7.4)(typescript@5.6.2)
       eslint:
         specifier: ^8.38.0
         version: 8.57.1
@@ -1033,8 +1033,8 @@ packages:
     resolution: {integrity: sha512-vwIVdXG+j+FOpkwqHRcBgHLYNL7XMkufrlaFvL9o6Ai9sJn9+PdyIL5qa0XzTZw084c+u9LOls53eoZWP/W5WQ==}
     engines: {node: '>=6.9.0'}
 
-  '@baseai/core@0.9.21':
-    resolution: {integrity: sha512-73Sbx8s/hyrBdj/ZNqIB/QUw2sBIRMWXh2ZoaL/KTqe5b3cidLTIEtlVEPupZb+MLlPMTkNN5o5LqMJWPju7Bw==}
+  '@baseai/core@0.9.22':
+    resolution: {integrity: sha512-d+9uN6SySlhAJWo3mSPmCk8omXP0A9saUM37dXVe4Nk90FuiB6hsQqYCOC0IF+i+v2XmoIHFggZoxiyKfDqidg==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19
@@ -3700,6 +3700,10 @@ packages:
 
   baseai@0.9.21:
     resolution: {integrity: sha512-zDUzaPJhtjID65N2kpW2Sb7gbb84t+KFUyp9V4fRkvyxjPlASPwNgmVtL7rwqfKUp9mVkatIV9wOqB6xznAHCw==}
+    hasBin: true
+
+  baseai@0.9.22:
+    resolution: {integrity: sha512-/m5Kvpe9yv0HJCaBU/sO6e9V1WsMhuct2er4YU7ZplEgXeShvP3FtaHur73UAGmCQpqJCcHsYGzerlRyvXOKpA==}
     hasBin: true
 
   basic-auth@2.0.1:
@@ -9881,7 +9885,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.25.7
       to-fast-properties: 2.0.0
 
-  '@baseai/core@0.9.21(react@18.3.1)(zod@3.23.8)':
+  '@baseai/core@0.9.22(react@18.3.1)(zod@3.23.8)':
     dependencies:
       openai: 4.67.1(zod@3.23.8)
     optionalDependencies:
@@ -12783,7 +12787,55 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  baseai@0.9.21(@types/node@20.16.10)(typescript@5.6.2):
+  baseai@0.9.21(@types/node@22.7.4)(typescript@5.6.2):
+    dependencies:
+      '@antfu/ni': 0.23.0
+      '@clack/core': 0.3.4
+      '@clack/prompts': 0.7.0
+      '@hono/node-server': 1.13.1(hono@4.6.3)
+      '@hono/zod-openapi': 0.16.2(hono@4.6.3)(zod@3.23.8)
+      '@sindresorhus/slugify': 2.2.1
+      camelcase: 8.0.0
+      chalk: 5.3.0
+      cli-alerts: 2.0.0
+      cli-handle-error: 4.4.0
+      cli-handle-unhandled: 1.1.1
+      cli-meow-help: 4.0.0
+      cli-table3: 0.6.5
+      cli-welcome: 3.0.0
+      compute-cosine-similarity: 1.1.0
+      conf: 13.0.1
+      cosmiconfig: 9.0.0(typescript@5.6.2)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.7.4)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
+      dotenv: 16.4.5
+      execa: 9.4.0
+      figures: 6.1.0
+      get-package-json-file: 2.0.0
+      hono: 4.6.3
+      js-tiktoken: 1.0.14
+      log-symbols: 7.0.0
+      lowdb: 7.0.1
+      meow: 13.2.0
+      node-fetch: 3.3.2
+      open: 10.1.0
+      openai: 4.67.1(zod@3.23.8)
+      p-map: 7.0.2
+      picocolors: 1.1.0
+      prettier: 3.3.3
+      source-map-support: 0.5.21
+      unpdf: 0.11.0
+      uuid: 10.0.0
+      xlsx: 0.18.5
+      zod: 3.23.8
+      zod-error: 1.5.0
+      zod-validation-error: 3.4.0(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@types/node'
+      - encoding
+      - supports-color
+      - typescript
+
+  baseai@0.9.22(@types/node@20.16.10)(typescript@5.6.2):
     dependencies:
       '@antfu/ni': 0.23.0
       '@clack/core': 0.3.4
@@ -12831,7 +12883,7 @@ snapshots:
       - supports-color
       - typescript
 
-  baseai@0.9.21(@types/node@22.7.4)(typescript@5.6.2):
+  baseai@0.9.22(@types/node@22.7.4)(typescript@5.6.2):
     dependencies:
       '@antfu/ni': 0.23.0
       '@clack/core': 0.3.4
