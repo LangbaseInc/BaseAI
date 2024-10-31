@@ -42,7 +42,9 @@ export function usePipe({
 	const [error, setError] = useState<Error | null>(null);
 
 	const abortControllerRef = useRef<AbortController | null>(null);
-	const threadIdRef = useRef<string | null>(initialThreadId || null);
+	const threadIdRef = useRef<string | undefined>(
+		initialThreadId || undefined,
+	);
 	const messagesRef = useRef<Message[]>(initialMessages);
 	const isFirstRequestRef = useRef<boolean>(true);
 
@@ -88,7 +90,7 @@ export function usePipe({
 		[updateMessages, onResponse, onFinish],
 	);
 
-	const setThreadId = useCallback((newThreadId: string) => {
+	const setThreadId = useCallback((newThreadId: string | undefined) => {
 		const isValidThreadId =
 			externalThreadIdSchema.safeParse(newThreadId).success;
 
