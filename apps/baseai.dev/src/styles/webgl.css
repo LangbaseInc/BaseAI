@@ -3,9 +3,6 @@
   img {
     @apply inline-block;
   }
-  img {
-    display: inline-block !important;
-  }
 }
 @tailwind components;
 @tailwind utilities;
