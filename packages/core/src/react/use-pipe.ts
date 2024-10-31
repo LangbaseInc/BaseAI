@@ -24,6 +24,7 @@ interface UsePipeOptions {
 }
 
 const uuidSchema = z.string().uuid();
+const externalThreadIdSchema = uuidSchema.optional();
 
 export function usePipe({
 	apiRoute = '/langbase/pipes/run-stream',
@@ -86,6 +87,17 @@ export function usePipe({
 		},
 		[updateMessages, onResponse, onFinish],
 	);
+
+	const setThreadId = useCallback((newThreadId: string) => {
+		const isValidThreadId =
+			externalThreadIdSchema.safeParse(newThreadId).success;
+
+		if (isValidThreadId) {
+			threadIdRef.current = newThreadId;
+		} else {
+			throw new Error('Invalid thread ID');
+		}
+	}, []);
 
 	const getMessagesToSend = useCallback(
 		(updatedMessages: Message[]): [Message[], boolean] => {
@@ -264,6 +276,7 @@ export function usePipe({
 			threadId: threadIdRef.current,
 			sendMessage,
 			setInput,
+			setThreadId,
 		}),
 		[
 			messages,
