@@ -25,6 +25,19 @@ BaseAI is a TypeScript-first framework. To create a new BaseAI project, run the 
 npx baseai@latest init
 ```
 
+This command will create a `baseai` directory in your project. This is what the directory structure looks like:
+
+```
+ROOT (of your app)
+├── baseai
+|  ├── baseai.config.ts
+|  ├── memory
+|  ├── pipes
+|  └── tools
+├── .env (your env file)
+└── package.json
+```
+
 ### 2. Add API keys
 
 Copy the following in your  `.env` file and add appropriate LLM API keys:
