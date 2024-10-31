@@ -2,16 +2,17 @@ import Link from 'next/link';
 
 export default function Page() {
 	const examples = [
-		{title: 'Pipe Run', href: '/demo/pipe-run'},
-		{title: 'Pipe Run Stream', href: '/demo/pipe-run-stream'},
-		{title: 'Chat Simple', href: '/demo/chat-simple'},
-		{title: 'Chat Advanced', href: '/demo/chat-advanced'},
-		{title: 'Tool Calling', href: '/demo/tool-calling'},
+		{ title: 'Pipe Run', href: '/demo/pipe-run' },
+		{ title: 'Pipe Run Stream', href: '/demo/pipe-run-stream' },
+		{ title: 'Chat Simple', href: '/demo/chat-simple' },
+		{ title: 'Chat Advanced', href: '/demo/chat-advanced' },
+		{ title: 'Tool Calling', href: '/demo/tool-calling' },
+		{ title: 'Tool Calling Stream', href: '/demo/tool-calling-stream' },
 		{
 			title: 'Tool Calling: Pipes as Tools',
 			href: '/demo/pipe-run-pipes-as-tools',
 		},
-		{title: 'Memory', href: '/demo/memory'},
+		{ title: 'Memory', href: '/demo/memory' },
 	];
 
 	return (

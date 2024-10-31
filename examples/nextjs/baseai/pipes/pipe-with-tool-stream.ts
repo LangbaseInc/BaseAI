@@ -2,13 +2,13 @@ import {PipeI} from '@baseai/core';
 import toolCalculator from '../tools/calculator';
 import toolGetWeather from '../tools/weather';
 
-const pipeWithTools = (): PipeI => ({
+const pipeWithToolsStream = (): PipeI => ({
 	apiKey: process.env.LANGBASE_API_KEY!,
 	name: 'pipe-with-tool',
 	description: 'An AI agent pipe that can call tools',
 	status: 'public',
 	model: 'openai:gpt-4o-mini',
-	stream: false,
+	stream: true,
 	json: false,
 	store: true,
 	moderate: true,
@@ -25,4 +25,4 @@ const pipeWithTools = (): PipeI => ({
 	memory: [],
 	tools: [toolGetWeather(), toolCalculator()],
 });
-export default pipeWithTools;
+export default pipeWithToolsStream;

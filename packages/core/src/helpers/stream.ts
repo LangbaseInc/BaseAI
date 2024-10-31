@@ -1,6 +1,7 @@
 import {ChatCompletionStream} from 'openai/lib/ChatCompletionStream';
 import {ChunkStream} from 'src/pipes';
 import {Stream} from 'openai/streaming';
+import {ToolCall} from 'types/pipes';
 
 export interface Runner extends ChatCompletionStream<null> {}
 
@@ -80,4 +81,18 @@ export function handleResponseStream({
 		};
 	}
 	return result;
+}
+
+/**
+ * Retrieves tool calls from a given readable stream.
+ *
+ * @param stream - The readable stream from which to extract tool calls.
+ * @returns A promise that resolves to an array of `ToolCall` objects.
+ */
+export async function getToolsFromStream(
+	stream: ReadableStream<any>,
+): Promise<ToolCall[]> {
+	let run = getRunner(stream);
+	const {choices} = await run.finalChatCompletion();
+	return choices[0].message.tool_calls;
 }
