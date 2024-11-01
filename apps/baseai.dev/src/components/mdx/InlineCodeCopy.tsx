@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { Button } from '../ui/button';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import cn from 'mxcn';
 
 export function InlineCopy({
 	content,
@@ -15,6 +16,7 @@ export function InlineCopy({
 	children: React.ReactNode;
 }) {
 	const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
+	const totalChars = content.length;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(content);
@@ -24,7 +26,7 @@ export function InlineCopy({
 
 	return (
 		<span className="inline-flex items-center gap-1 whitespace-nowrap">
-			<code className='w-[90%] sm:w-full overflow-scroll'>{content}</code>
+			<code className={cn(totalChars > 25 && 'w-[50%] sm:w-full overflow-scroll')}>{content}</code>
 			<Button
 				variant="ghost"
 				className="h-4 w-4 p-0 focus:ring-0"
