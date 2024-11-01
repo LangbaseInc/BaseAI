@@ -234,7 +234,9 @@ export class Pipe {
 		// logger('pipe.run.options');
 		// logger(options, {depth: null, colors: true});
 
-		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
+		const providerString = this.pipe.model.split(':')[0];
+		const modelProvider = getProvider(providerString);
+		const isAnthropic = modelProvider === ANTHROPIC;
 		const hasTools = this.pipe.tools.length > 0;
 
 		let stream = this.isStreamRequested(options);
