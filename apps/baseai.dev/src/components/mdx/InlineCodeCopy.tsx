@@ -24,7 +24,7 @@ export function InlineCopy({
 
 	return (
 		<span className="inline-flex items-center gap-1 whitespace-nowrap">
-			<code>{content}</code>
+			<code className='w-[90%] sm:w-full overflow-scroll'>{content}</code>
 			<Button
 				variant="ghost"
 				className="h-4 w-4 p-0 focus:ring-0"
