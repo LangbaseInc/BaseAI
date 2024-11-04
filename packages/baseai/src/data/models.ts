@@ -414,6 +414,16 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 				toolChoice: true,
 				parallelToolCalls: true
 			}
+		},
+		{
+			id: 'claude-3-5-haiku-20241022',
+			provider: ANTHROPIC,
+			promptCost: 1,
+			completionCost: 5,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		}
 	],
 	[GROQ]: [

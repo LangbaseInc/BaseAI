@@ -235,6 +235,12 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			promptCost: 0.25,
 			completionCost: 1.25,
 		},
+		{
+			id: 'claude-3-5-haiku-20241022',
+			provider: ANTHROPIC,
+			promptCost: 1,
+			completionCost: 5,
+		},
 	],
 	[GROQ]: [
 		{

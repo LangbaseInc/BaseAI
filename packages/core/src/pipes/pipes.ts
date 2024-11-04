@@ -142,10 +142,7 @@ export class Pipe {
 	}
 
 	private isStreamRequested(options: RunOptions | RunOptionsStream): boolean {
-		return (
-			('stream' in options && options.stream === true) ||
-			this.pipe.meta.stream
-		);
+		return 'stream' in options && options.stream === true;
 	}
 
 	private warnIfToolsWithStream(requestedStream: boolean): void {
