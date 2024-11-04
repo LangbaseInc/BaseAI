@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.24
+
+### Patch Changes
+
+-   📦 NEW: claude 3.5 Haiku
+
 ## 0.9.23
 
 ### Patch Changes
