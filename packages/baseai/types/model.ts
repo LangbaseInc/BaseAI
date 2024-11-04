@@ -36,7 +36,8 @@ export type AnthropicModels =
 	| 'anthropic:claude-3-5-sonnet-20240620'
 	| 'anthropic:claude-3-opus-20240229'
 	| 'anthropic:claude-3-sonnet-20240229'
-	| 'anthropic:claude-3-haiku-20240307';
+	| 'anthropic:claude-3-haiku-20240307'
+	| 'anthropic:claude-3-5-haiku-20241022';
 
 export type GroqModels =
 	| 'groq:llama-3.1-70b-versatile'
@@ -73,5 +74,7 @@ export type MistralAIModels =
 	| 'mistral:mistral-large-latest'
 	| 'mistral:open-mistral-nemo'
 	| 'mistral:codestral-latest';
+
+export type XAIModels = 'xai:grok-beta';
 
 export type OllamaModels = `ollama:${string}`;
