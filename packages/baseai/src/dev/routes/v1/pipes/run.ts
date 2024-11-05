@@ -4,34 +4,40 @@ import { dlog } from '@/dev/utils/dlog';
 import { handleStreamingResponse } from '@/dev/utils/provider-handlers/streaming-response-handler';
 import { logger } from '@/utils/logger-utils';
 import { Hono } from 'hono';
-import { schemaMessage, VariablesSchema } from 'types/pipe';
+import {
+	schemaMessage,
+	toolChoiceSchema,
+	VariablesSchema,
+	type PipeModelT
+} from 'types/pipe';
+import { pipeToolSchema } from 'types/tools';
 import { z } from 'zod';
 
 // Schema definitions
 const PipeSchema = z.object({
 	name: z.string(),
-	description: z.string().optional(),
-	status: z.string(),
-	model: z.string().default('openai:gpt-4.0-mini'),
-	stream: z.boolean().optional(),
-	json: z.boolean().optional(),
-	store: z.boolean().optional(),
-	moderate: z.boolean().optional(),
-	top_p: z.number().optional(),
-	max_tokens: z.number().optional(),
-	temperature: z.number().optional(),
-	presence_penalty: z.number().optional(),
-	frequency_penalty: z.number().optional(),
-	stop: z.array(z.string()).optional(),
-	tool_choice: z.string(),
+	description: z.string(),
+	status: z.enum(['public', 'private']),
+	model: z.string(),
+	stream: z.boolean(),
+	json: z.boolean(),
+	store: z.boolean(),
+	moderate: z.boolean(),
+	top_p: z.number(),
+	max_tokens: z.number(),
+	temperature: z.number(),
+	presence_penalty: z.number(),
+	frequency_penalty: z.number(),
+	stop: z.array(z.string()),
+	tool_choice: z
+		.union([z.enum(['auto', 'required', 'none']), toolChoiceSchema])
+		.default('auto'),
 	parallel_tool_calls: z.boolean(),
 	messages: z.array(schemaMessage),
-	tools: z.array(z.unknown()).default([]),
-	memory: z.array(z.object({ name: z.string().trim().min(1) })).default([]),
-	variables: VariablesSchema
+	variables: VariablesSchema,
+	tools: z.array(pipeToolSchema).default([]),
+	memory: z.array(z.object({ name: z.string().trim().min(1) })).default([])
 });
-
-export type Pipe = z.infer<typeof PipeSchema>;
 
 const RequestBodySchema = z.object({
 	pipe: PipeSchema,
@@ -93,9 +99,9 @@ const handleGenerateError = (c: any, error: unknown) => {
 	const errorMessage =
 		error instanceof Error
 			? error.message
-			: 'Unexpected error occurred in beta/generate';
+			: 'Unexpected error occurred in /pipe/v1/run';
 
-	dlog('Error beta/generate.ts:', error);
+	dlog('Error /pipe/v1/run.ts:', error);
 
 	throw new ApiError({
 		status: error instanceof ApiError ? error.status : 500,
@@ -121,7 +127,19 @@ const handleRun = async (c: any) => {
 
 		const validatedBody = validateRequestBody(body);
 
-		const rawLlmResponse = await callLLM(validatedBody);
+		const { pipe, messages, llmApiKey, stream, variables } = validatedBody;
+		const model = pipe.model as PipeModelT;
+
+		const rawLlmResponse = await callLLM({
+			pipe: {
+				...pipe,
+				model
+			},
+			messages,
+			llmApiKey,
+			stream,
+			variables
+		});
 
 		return processLlmResponse(c, validatedBody, rawLlmResponse);
 	} catch (error: unknown) {
