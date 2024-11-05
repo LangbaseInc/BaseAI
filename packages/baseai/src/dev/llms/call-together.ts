@@ -2,10 +2,9 @@ import OpenAI from 'openai';
 import { dlog } from '../utils/dlog';
 import { GROQ } from '../data/models';
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
-import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callTogether({
 	pipe,

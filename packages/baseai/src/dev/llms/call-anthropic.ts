@@ -4,9 +4,8 @@ import { handleProviderRequest } from '../utils/provider-handlers/provider-reque
 import { ANTHROPIC } from '../data/models';
 import { handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import { addToolsToParams } from '../utils/add-tools-to-params';
-import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callAnthropic({
 	pipe,

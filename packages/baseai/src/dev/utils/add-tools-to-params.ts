@@ -1,4 +1,4 @@
-import type { Pipe } from '../routes/v1/pipes/run';
+import type { Pipe } from 'types/pipe';
 import { getProvider } from './get-provider';
 import { getSupportedToolSettings, hasToolSupport } from './has-tool-support';
 import type { ModelParams, Tool } from 'types/providers';

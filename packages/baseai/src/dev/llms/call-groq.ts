@@ -4,8 +4,7 @@ import { GROQ } from '../data/models';
 import transformToProviderRequest from '../utils/provider-handlers/transfrom-to-provider-request';
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
-import type { Message } from 'types/pipe';
-import type { Pipe } from '../routes/v1/pipes/run';
+import type { Message, Pipe } from 'types/pipe';
 
 export async function callGroq({
 	pipe,

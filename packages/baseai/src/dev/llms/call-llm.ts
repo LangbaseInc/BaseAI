@@ -12,9 +12,8 @@ import {
 } from '@/dev/data/models';
 
 import { addContextFromMemory } from '@/utils/memory/lib';
-import type { Message, VariablesI } from 'types/pipe';
+import type { Message, Pipe, VariablesI } from 'types/pipe';
 import { ApiError } from '../hono/errors';
-import type { Pipe } from '../routes/v1/pipes/run';
 import { dlog } from '../utils/dlog';
 import { getRunThread } from '../utils/thread/get-run-thread';
 import { callAnthropic } from './call-anthropic';

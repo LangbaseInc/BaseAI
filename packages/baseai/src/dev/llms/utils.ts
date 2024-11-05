@@ -2,7 +2,7 @@ import type { ModelParams } from 'types/providers';
 import { ApiError } from '../hono/errors';
 import { dlog } from '../utils/dlog';
 import { isJsonModeOn } from '../utils/is-json-mode';
-import type { Pipe } from '../routes/v1/pipes/run';
+import type { Pipe } from 'types/pipe';
 
 export function handleLlmError({
 	error,

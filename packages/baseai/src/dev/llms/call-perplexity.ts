@@ -4,9 +4,8 @@ import { handleProviderRequest } from '../utils/provider-handlers/provider-reque
 
 import { PERPLEXITY } from '../data/models';
 import { handleLlmError } from './utils';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
-import type { Pipe } from '../routes/v1/pipes/run';
 
 export async function callPerplexity({
 	pipe,

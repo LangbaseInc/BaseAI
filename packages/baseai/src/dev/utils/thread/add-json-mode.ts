@@ -8,7 +8,7 @@
 
 import { jsonModeModels } from '@/data/models';
 import { defaultJsonPrompt } from '@/dev/data/globals';
-import type { Pipe } from '@/dev/routes/v1/pipes/run';
+import type { Pipe } from 'types/pipe';
 
 export function addJsonMode({
 	pipe,
