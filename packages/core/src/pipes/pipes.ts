@@ -157,7 +157,7 @@ export class Pipe {
 		options: RunOptionsStream,
 		response: RunResponseStream,
 	): Promise<RunResponseStream> {
-		const endpoint = '/beta/pipes/run';
+		const endpoint = '/v1/pipes/run';
 		const stream = this.isStreamRequested(options);
 		const body = {...options, stream};
 
