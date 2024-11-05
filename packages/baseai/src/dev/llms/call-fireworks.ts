@@ -30,8 +30,7 @@ export async function callFireworks({
 		dlog('Fireworks request params', transformedRequestParams);
 
 		// Fireworks llama-3.1 405b behaves weirdly with stop value. Bug on their side. Omitting it.
-		const modelName = pipe.model.split(':')[1];
-		if (modelName === 'llama-v3p1-405b-instruct')
+		if (modelParams?.model === 'llama-v3p1-405b-instruct')
 			delete transformedRequestParams['stop'];
 
 		const providerOptions = { provider: FIREWORKS_AI, llmApiKey };

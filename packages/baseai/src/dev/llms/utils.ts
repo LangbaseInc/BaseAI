@@ -19,9 +19,8 @@ export function handleLlmError({
 }
 
 export function applyJsonModeIfEnabled(modelParams: ModelParams, pipe: Pipe) {
-	const currentModel = pipe.model.split(':')[1];
 	const hasJsonMode = isJsonModeOn({
-		currentModel,
+		currentModel: modelParams.model as string,
 		jsonMode: pipe.json || false
 	});
 
