@@ -1036,22 +1036,22 @@ export function getMemoryApiUrls({
 	documentName?: string;
 }) {
 	// Base URL
-	const baseUrlV1 = `https://api.langbase.com/v1`;
+	const baseUrl = `https://api.langbase.com/v1`;
 
 	// Create memory URL
-	const createMemory = `${baseUrlV1}/memory`;
+	const createMemory = `${baseUrl}/memory`;
 
 	// Delete memory URL
-	const deleteMemory = `${baseUrlV1}/memory/${memoryName}`;
+	const deleteMemory = `${baseUrl}/memory/${memoryName}`;
 
 	// Upload document URL
-	const uploadDocument = `${baseUrlV1}/memory/documents`;
+	const uploadDocument = `${baseUrl}/memory/documents`;
 
 	// List documents URL
-	const listDocuments = `${baseUrlV1}/memory/${memoryName}/documents`;
+	const listDocuments = `${baseUrl}/memory/${memoryName}/documents`;
 
 	// Delete document URL
-	const deleteDocument = `${baseUrlV1}/memory/${memoryName}/documents/${documentName}`;
+	const deleteDocument = `${baseUrl}/memory/${memoryName}/documents/${documentName}`;
 
 	return {
 		listDocuments,
