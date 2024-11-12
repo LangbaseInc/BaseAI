@@ -1,4 +1,5 @@
 import { Providers } from '@/app/providers';
+import IntercomClient from '@/components/intercom';
 import '@/styles/tailwind.css';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
@@ -13,7 +14,9 @@ export async function generateMetadata() {
 		openGraph: {
 			title: 'BaseAI - The first Web AI Framework',
 			description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-			images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg'],
+			images: [
+				'https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg'
+			],
 			siteName: 'BaseAI'
 		},
 		twitter: {
@@ -21,7 +24,9 @@ export async function generateMetadata() {
 			title: 'BaseAI - The first Web AI Framework',
 			creator: '@LangbaseInc',
 			description: `BaseAI is the first web AI framework. Deployable with Langbase the composable serverless AI cloud. Built with a focus on simplicity and composability. Helping developers build AI agents with memory (RAG), and deploy serverless. It's composable by design and offers a simple API to build and deploy any AI agents (AI features).`,
-			images: ['https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg']
+			images: [
+				'https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-ogg.jpg'
+			]
 		},
 		authors: [{ name: 'Langbase, Inc.' }],
 		robots: {
@@ -29,7 +34,7 @@ export async function generateMetadata() {
 			follow: true,
 			googleBot: {
 				index: true,
-				follow: true,
+				follow: true
 			}
 		},
 		keywords: 'BaseAI, Web AI framework',
@@ -47,7 +52,10 @@ export default async function RootLayout({
 	return (
 		<html lang="en" className="h-full" suppressHydrationWarning>
 			<body className={`${inter.className}`}>
-				<Providers>{children}</Providers>
+				<Providers>
+					<IntercomClient />
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);
