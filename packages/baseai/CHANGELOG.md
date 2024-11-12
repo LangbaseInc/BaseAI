@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.25
+
+### Patch Changes
+
+-   🐛 FIX: Request timeout and special characters in description
+
 ## 0.9.24
 
 ### Patch Changes
