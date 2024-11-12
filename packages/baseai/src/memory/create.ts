@@ -137,7 +137,7 @@ import path from 'path';
 
 const ${memoryNameCamelCase} = (): MemoryI => ({
   name: '${memoryNameSlugified}',
-  description: '${memoryInfo.description || ''}',
+  description: ${JSON.stringify(memoryInfo.description) || ''},
   config: {
 		useGitRepo: ${memoryInfo.useGitRepo},
 		dirToTrack: path.posix.join(${memoryFilesDir
