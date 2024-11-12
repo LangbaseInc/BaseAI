@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.26
+
+### Patch Changes
+
+-   📦 NEW: Allow empty submit with no message
+
 ## 0.9.25
 
 ### Patch Changes
