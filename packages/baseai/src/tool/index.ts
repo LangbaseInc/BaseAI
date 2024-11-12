@@ -110,7 +110,7 @@ const ${camelCaseNameToolName} = (): ToolI => ({
 	type: 'function' as const,
 	function: {
 		name: '${camelCaseNameToolName}',
-		description: '${description}',
+		description: ${JSON.stringify(description) || ''},
 		parameters: {},
 	},
 });

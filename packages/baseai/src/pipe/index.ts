@@ -38,7 +38,7 @@ export async function createPipe() {
 			name: () =>
 				p.text({
 					message: 'Name of the pipe',
-					placeholder: 'AI Pipe Agent',
+					placeholder: 'ai-agent-pipe',
 					validate: value => {
 						const result = pipeNameSchema.safeParse(value);
 						if (!result.success) {
@@ -135,7 +135,7 @@ const ${pipeNameCamelCase} = (): PipeI => ({
     // Replace with your API key https://langbase.com/docs/api-reference/api-keys
 	apiKey: process.env.LANGBASE_API_KEY!,
     name: '${pipeNameSlugified}',
-    description: '${pipeInfo.description || ''}',
+    description: ${JSON.stringify(pipeInfo.description) || ''},
     status: '${pipeInfo.status}',
     model: 'openai:gpt-4o-mini',
     stream: true,
