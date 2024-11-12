@@ -103,7 +103,9 @@ export class Request {
 			method: options.method,
 			headers,
 			body: JSON.stringify(options.body),
-			signal: AbortSignal.timeout(this.config.timeout || 30000),
+			...(this.config.timeout && {
+				signal: AbortSignal.timeout(this.config.timeout),
+			}),
 		});
 		return resp;
 	}
