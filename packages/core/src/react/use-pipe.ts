@@ -155,8 +155,8 @@ export function usePipe({
 				const [messagesToSend, lastMessageOnly] =
 					getMessagesToSend(updatedMessages);
 
-				// Ensure there's at least one message to send
-				if (messagesToSend.length === 0) {
+				// Ensure there's at least one message to send if not allowing empty submit
+				if (messagesToSend.length === 0 && !options.allowEmptySubmit) {
 					throw new Error(
 						'At least one message or initial message is required',
 					);
