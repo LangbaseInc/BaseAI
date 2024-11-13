@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.28
+
+### Patch Changes
+
+-   📦 NEW: Pipe v1 support
+
 ## 0.9.27
 
 ### Patch Changes
