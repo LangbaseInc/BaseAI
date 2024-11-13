@@ -1,6 +1,6 @@
 import { modelsByProvider } from '@/data/models';
 
-export function hasToolSupport({
+export function hasModelToolSupport({
 	provider,
 	modelName
 }: {
@@ -10,23 +10,7 @@ export function hasToolSupport({
 	const toolSupportedModels = modelsByProvider[provider].filter(
 		model => model.toolSupport
 	);
-	const hasToolCallSupport = toolSupportedModels
-		.flatMap(model => model.id)
-		.includes(modelName);
 
-	return hasToolCallSupport;
-}
-
-export function getSupportedToolSettings({
-	provider,
-	modelName
-}: {
-	modelName: string;
-	provider: string;
-}) {
-	const toolSupportedModels = modelsByProvider[provider].filter(
-		model => model.toolSupport
-	);
 	const providerModel = toolSupportedModels.find(
 		model => model.id === modelName
 	);

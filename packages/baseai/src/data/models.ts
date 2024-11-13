@@ -431,43 +431,71 @@ export const modelsByProvider: ModelsByProviderInclCosts = {
 			id: 'llama-3.1-70b-versatile',
 			provider: GROQ,
 			promptCost: 0.59,
-			completionCost: 0.79
+			completionCost: 0.79,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'llama-3.1-8b-instant',
 			provider: GROQ,
 			promptCost: 0.59,
-			completionCost: 0.79
+			completionCost: 0.79,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'llama3-70b-8192',
 			provider: GROQ,
 			promptCost: 0.59,
-			completionCost: 0.79
+			completionCost: 0.79,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'llama3-8b-8192',
 			provider: GROQ,
 			promptCost: 0.05,
-			completionCost: 0.1
+			completionCost: 0.1,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: true
+			}
 		},
 		{
 			id: 'mixtral-8x7b-32768',
 			provider: GROQ,
 			promptCost: 0.27,
-			completionCost: 0.27
+			completionCost: 0.27,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'gemma2-9b-it',
 			provider: GROQ,
 			promptCost: 0.2,
-			completionCost: 0.2
+			completionCost: 0.2,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		},
 		{
 			id: 'gemma-7b-it',
 			provider: GROQ,
 			promptCost: 0.07,
-			completionCost: 0.07
+			completionCost: 0.07,
+			toolSupport: {
+				toolChoice: true,
+				parallelToolCalls: false
+			}
 		}
 	],
 	[GOOGLE]: [
