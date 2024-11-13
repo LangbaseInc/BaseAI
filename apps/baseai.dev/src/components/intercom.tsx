@@ -16,7 +16,9 @@ const IntercomClient = () => {
 		}
 
 		Intercom({
-			app_id: process.env.NEXT_PUBLIC_INTERCOM_APP_ID
+			app_id: process.env.NEXT_PUBLIC_INTERCOM_APP_ID,
+			source: 'BaseAI',
+			created_at: new Date().getTime(),
 		});
 	};
 
