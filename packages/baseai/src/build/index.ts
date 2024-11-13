@@ -32,7 +32,7 @@ const buildPipes = async () => {
 	p.intro(heading({ text: 'PIPES', sub: '', dim: true }));
 
 	const sourcePath = path.join(process.cwd(), 'baseai', 'pipes');
-	const outputPath = path.join(process.cwd(), '.baseai/pipes');
+	const outputPath = path.join(process.cwd(), '.baseai', 'pipes');
 
 	const builtPipes = await buildTypeScriptFiles(
 		sourcePath,
@@ -47,7 +47,7 @@ const buildTools = async () => {
 	p.intro(heading({ text: 'TOOLS', sub: '', dim: true }));
 
 	const sourcePath = path.join(process.cwd(), 'baseai', 'tools');
-	const outputPath = path.join(process.cwd(), '.baseai/tools');
+	const outputPath = path.join(process.cwd(), '.baseai', 'tools');
 
 	const builtTools = await buildTypeScriptFiles(
 		sourcePath,
