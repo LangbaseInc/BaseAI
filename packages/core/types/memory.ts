@@ -6,8 +6,12 @@ export interface Memory {
 
 interface MemoryConfig {
 	useGitRepo: boolean;
-	include: string;
-	extensions: string[];
-	deployedCommitHash?: string;
-	embeddedCommitHash?: string;
+	include: string[];
+	gitignore?: boolean | undefined;
+	git?:
+		| {
+				deployedAt?: string | undefined;
+				embeddedAt?: string | undefined;
+		  }
+		| undefined;
 }

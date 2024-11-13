@@ -72,8 +72,8 @@ export async function handleGitSyncMemories({
 	// If there's no deployedCommitHash, user is deploying for the first time
 	// Deploy all files in the directory
 	const lastHashUsed = isEmbed
-		? config.embeddedCommitHash
-		: config.deployedCommitHash;
+		? config.git?.embeddedAt
+		: config.git?.deployedAt;
 
 	if (!lastHashUsed) {
 		filesToDeploy = allFiles;
