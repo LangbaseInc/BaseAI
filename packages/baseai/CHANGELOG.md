@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.29
+
+### Patch Changes
+
+-   🐛 FIX: execAsync breaking paths in Windows
+
 ## 0.9.28
 
 ### Patch Changes
