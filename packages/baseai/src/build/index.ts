@@ -109,7 +109,7 @@ export const buildMemory = async ({
 		const displayName = path.dirname(file); // This is the last directory name
 		try {
 			const { stdout } = await execAsync(
-				`npx tsx -e "import memoryConfig from '${inputFile}'; console.log(JSON.stringify(memoryConfig()))"`
+				`npx tsx -e "import memoryConfig from '${JSON.stringify(inputFile)}'; console.log(JSON.stringify(memoryConfig()))"`
 			);
 
 			await fs.writeFile(outputFile, stdout);
@@ -160,7 +160,7 @@ const buildTypeScriptFiles = async (
 
 		try {
 			const { stdout } = await execAsync(
-				`npx tsx -e "import config from '${inputFile}'; console.log(JSON.stringify(config()))"`
+				`npx tsx -e "import config from '${JSON.stringify(inputFile)}'; console.log(JSON.stringify(config()))"`
 			);
 
 			// Parse the JSON output
