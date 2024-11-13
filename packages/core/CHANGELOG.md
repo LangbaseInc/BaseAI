@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.27
+
+### Patch Changes
+
+-   🐛 FIX: Broken pipes and tools build paths in Windows
+
 ## 0.9.26
 
 ### Patch Changes
