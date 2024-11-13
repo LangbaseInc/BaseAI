@@ -1,7 +1,6 @@
 import { ApiError } from '@/dev/hono/errors';
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
 import type { SimilarChunk } from '@/utils/memory/db/lib';
-import type { Message, VariablesI } from 'types/pipe';
+import type { Message, Pipe, VariablesI } from 'types/pipe';
 import { dlog } from '../dlog';
 import { getPipeFewShotsMessages } from './get-few-shot-messages';
 import { getSystemPromptMessage } from './get-system-prompt';

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface Tool {
 	run: (...args: any[]) => Promise<any> | any;
 	type: 'function';
@@ -16,3 +18,11 @@ export interface PipeTool {
 		parameters?: Record<string, any>;
 	};
 }
+export const pipeToolSchema = z.object({
+	type: z.literal('function'),
+	function: z.object({
+		name: z.string(),
+		description: z.string().optional(),
+		parameters: z.record(z.any()).optional()
+	})
+});

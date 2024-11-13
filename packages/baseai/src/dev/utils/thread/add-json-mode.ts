@@ -8,7 +8,7 @@
 
 import { jsonModeModels } from '@/data/models';
 import { defaultJsonPrompt } from '@/dev/data/globals';
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
+import type { Pipe } from 'types/pipe';
 
 export function addJsonMode({
 	pipe,
@@ -18,9 +18,11 @@ export function addJsonMode({
 	systemPrompt: string;
 }) {
 	// Return the system prompt if JSON mode is not enabled
-	if (!pipe.meta?.json) return systemPrompt;
+	if (!pipe?.json) return systemPrompt;
+
+	const modelName = pipe.model.split(':')[1];
 	// Return the system prompt if JSON mode is not supported by the current model
-	if (!jsonModeModels.includes(pipe.model.name)) return systemPrompt;
+	if (!jsonModeModels.includes(modelName)) return systemPrompt;
 
 	const jsonModePrompt = getJsonPrompt(pipe);
 

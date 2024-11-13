@@ -7,7 +7,6 @@ import * as p from '@clack/prompts';
 import fs from 'fs';
 import type { Message } from 'types/pipe';
 import { fromZodError } from 'zod-validation-error';
-import type { Pipe } from '../../dev/routes/beta/pipes/run';
 import { defaultRagPrompt, MEMORYSETS } from './constants';
 import {
 	cosineSimilaritySearch,
@@ -135,11 +134,9 @@ export const getAugmentedContext = ({
 };
 
 export const addContextFromMemory = async ({
-	pipe,
 	messages,
 	memoryNames
 }: {
-	pipe: Pipe;
 	messages: Message[];
 	memoryNames: string[];
 }) => {

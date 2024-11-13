@@ -1,30 +1,35 @@
+import type { Pipe } from 'types/pipe';
+import { getProvider } from './get-provider';
 import { getSupportedToolSettings, hasToolSupport } from './has-tool-support';
-import type { ModelParams } from 'types/providers';
+import type { ModelParams, Tool } from 'types/providers';
 
-export function addToolsToParams(modelParams: ModelParams, pipe: any) {
-	if (!pipe.functions.length) return;
+export function addToolsToParams(modelParams: ModelParams, pipe: Pipe) {
+	if (!pipe.tools.length) return;
+
+	const [providerString, modelName] = pipe.model.split(':');
+	const provider = getProvider(providerString);
 
 	// Check if the model supports tool calls
 	const hasToolCallSupport = hasToolSupport({
-		modelName: pipe.model.name,
-		provider: pipe.model.provider
+		modelName,
+		provider
 	});
 
 	if (hasToolCallSupport) {
 		const { hasParallelToolCallSupport, hasToolChoiceSupport } =
 			getSupportedToolSettings({
-				modelName: pipe.model.name,
-				provider: pipe.model.provider
+				modelName,
+				provider
 			});
 
 		if (hasParallelToolCallSupport) {
-			modelParams.parallel_tool_calls = pipe.model.parallel_tool_calls;
+			modelParams.parallel_tool_calls = pipe.parallel_tool_calls;
 		}
 
 		if (hasToolChoiceSupport) {
-			modelParams.tool_choice = pipe.model.tool_choice;
+			modelParams.tool_choice = pipe.tool_choice;
 		}
 
-		modelParams.tools = pipe.functions;
+		modelParams.tools = pipe.tools as Tool[];
 	}
 }

@@ -2,6 +2,7 @@ import type { ModelParams } from 'types/providers';
 import { ApiError } from '../hono/errors';
 import { dlog } from '../utils/dlog';
 import { isJsonModeOn } from '../utils/is-json-mode';
+import type { Pipe } from 'types/pipe';
 
 export function handleLlmError({
 	error,
@@ -17,10 +18,10 @@ export function handleLlmError({
 	});
 }
 
-export function applyJsonModeIfEnabled(modelParams: ModelParams, pipe: any) {
+export function applyJsonModeIfEnabled(modelParams: ModelParams, pipe: Pipe) {
 	const hasJsonMode = isJsonModeOn({
-		currentModel: pipe.model.name,
-		jsonMode: pipe.meta.json || false
+		currentModel: modelParams.model as string,
+		jsonMode: pipe.json || false
 	});
 
 	if (hasJsonMode) {
@@ -30,11 +31,12 @@ export function applyJsonModeIfEnabled(modelParams: ModelParams, pipe: any) {
 
 export function applyJsonModeIfEnabledForGoogle(
 	transformedRequestParams: any,
-	pipe: any
+	pipe: Pipe
 ) {
+	const currentModel = pipe.model.split(':')[1];
 	const hasJsonMode = isJsonModeOn({
-		currentModel: pipe.model.name,
-		jsonMode: pipe.meta.json || false
+		currentModel,
+		jsonMode: pipe.json || false
 	});
 
 	if (hasJsonMode) {

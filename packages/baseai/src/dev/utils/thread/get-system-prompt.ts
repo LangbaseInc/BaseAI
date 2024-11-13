@@ -1,7 +1,6 @@
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
 import { defaultRagPrompt } from '@/utils/memory/constants';
 import type { SimilarChunk } from '@/utils/memory/db/lib';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import { addJsonMode } from './add-json-mode';
 
 export function getSystemPromptMessage({

@@ -4,7 +4,7 @@ import { GROQ } from '../data/models';
 import transformToProviderRequest from '../utils/provider-handlers/transfrom-to-provider-request';
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 
 export async function callGroq({
 	pipe,
@@ -12,7 +12,7 @@ export async function callGroq({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	llmApiKey: string;
 	stream: boolean;
 	messages: Message[];
@@ -42,14 +42,28 @@ export async function callGroq({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

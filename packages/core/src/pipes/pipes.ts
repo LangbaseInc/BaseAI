@@ -3,10 +3,10 @@ import {Message, MessageRole, Pipe as PipeI, ToolCall} from '../../types/pipes';
 import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
-import {toOldPipeFormat} from '../utils/to-old-pipe-format';
 import {isLocalServerRunning} from 'src/utils/local-server-running';
 import {getToolsFromStream} from 'src/helpers';
 import {ANTHROPIC} from 'src/data/models';
+import {getProvider} from 'src/utils/get-provider';
 
 export interface Variable {
 	name: string;
@@ -84,7 +84,7 @@ export class Pipe {
 	constructor(options: PipeOptions) {
 		const baseUrl = getApiUrl();
 		this.request = new Request({apiKey: options.apiKey, baseUrl});
-		this.pipe = toOldPipeFormat(options);
+		this.pipe = options;
 		delete this.pipe.apiKey;
 
 		this.tools = this.getToolsFromPipe(this.pipe);
@@ -93,7 +93,7 @@ export class Pipe {
 	}
 
 	private getToolsFromPipe(
-		pipe: any,
+		pipe: Pipe,
 	): Record<string, (...args: any[]) => Promise<any>> {
 		const tools: Record<string, (...args: any[]) => Promise<any>> = {};
 		if (pipe.tools && Array.isArray(pipe.tools)) {
@@ -157,7 +157,7 @@ export class Pipe {
 		options: RunOptionsStream,
 		response: RunResponseStream,
 	): Promise<RunResponseStream> {
-		const endpoint = '/beta/pipes/run';
+		const endpoint = '/v1/pipes/run';
 		const stream = this.isStreamRequested(options);
 		const body = {...options, stream};
 
@@ -229,12 +229,14 @@ export class Pipe {
 	): Promise<RunResponse | RunResponseStream> {
 		// logger('pipe.run', this.pipe.name, 'RUN');
 
-		const endpoint = '/beta/pipes/run';
+		const endpoint = '/v1/pipes/run';
 		// logger('pipe.run.baseUrl.endpoint', getApiUrl() + endpoint);
 		// logger('pipe.run.options');
 		// logger(options, {depth: null, colors: true});
 
-		const isAnthropic = this.pipe.model.provider === ANTHROPIC;
+		const providerString = this.pipe.model.split(':')[0];
+		const modelProvider = getProvider(providerString);
+		const isAnthropic = modelProvider === ANTHROPIC;
 		const hasTools = this.pipe.tools.length > 0;
 
 		let stream = this.isStreamRequested(options);
@@ -334,12 +336,14 @@ export class Pipe {
 				name: this.pipe.name,
 			},
 		};
+		const providerString = this.pipe.model.split(':')[0];
+		const modelProvider = getProvider(providerString);
 		const localOptions = {
 			endpoint,
 			body: {
 				...body,
 				pipe: this.pipe,
-				llmApiKey: getLLMApiKey(this.pipe.model.provider),
+				llmApiKey: getLLMApiKey(modelProvider),
 			},
 		};
 

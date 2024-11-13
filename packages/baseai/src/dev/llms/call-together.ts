@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { dlog } from '../utils/dlog';
 import { GROQ } from '../data/models';
 import { applyJsonModeIfEnabled, handleLlmError } from './utils';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
 
@@ -12,7 +12,7 @@ export async function callTogether({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	llmApiKey: string;
 	stream: boolean;
 	messages: Message[];
@@ -39,14 +39,28 @@ export async function callTogether({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }

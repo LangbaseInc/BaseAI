@@ -1,5 +1,4 @@
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
-import type { Message, VariableI, VariablesI } from 'types/pipe';
+import type { Message, Pipe, VariableI, VariablesI } from 'types/pipe';
 import { dlog } from '../dlog';
 
 /**

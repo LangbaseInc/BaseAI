@@ -153,3 +153,14 @@ export interface ToolCall {
 		arguments: string;
 	};
 }
+
+const functionNameRegex = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
+
+export const toolChoiceSchema = z
+	.object({
+		type: z.enum(['function']).default('function'),
+		function: z.object({
+			name: z.string().refine(value => functionNameRegex.test(value))
+		})
+	})
+	.optional();

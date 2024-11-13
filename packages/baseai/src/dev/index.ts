@@ -13,7 +13,7 @@ import { customCors } from './middleware/custom-cors';
 import { poweredBy } from './middleware/powered-by';
 import { preFlight } from './middleware/pre-flight';
 import { registerRoot } from './routes/base';
-import { registerBetaPipesRun } from './routes/beta/pipes/run';
+import { registerV1PipesRun } from './routes/v1/pipes/run';
 
 export async function runBaseServer() {
 	const app = new Hono();
@@ -29,7 +29,7 @@ export async function runBaseServer() {
 
 	// Routes.
 	registerRoot(app);
-	registerBetaPipesRun(app);
+	registerV1PipesRun(app);
 
 	const port = 9000;
 

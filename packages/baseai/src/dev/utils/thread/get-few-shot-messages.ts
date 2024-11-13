@@ -1,5 +1,4 @@
-import type { Pipe } from '@/dev/routes/beta/pipes/run';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 
 export function getPipeFewShotsMessages(pipe: Pipe): Message[] {
 	const fewShotMessages: Message[] = pipe.messages.filter(

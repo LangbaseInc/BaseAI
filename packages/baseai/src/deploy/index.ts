@@ -566,7 +566,6 @@ export async function upsertMemory({
 	docsToDelete?: string[];
 }): Promise<void> {
 	const { createMemory } = getMemoryApiUrls({
-		account,
 		memoryName: memory.name
 	});
 
@@ -872,7 +871,6 @@ export async function listMemoryDocuments({
 	memoryName: string;
 }) {
 	const { listDocuments } = getMemoryApiUrls({
-		account,
 		memoryName: memoryName
 	});
 
@@ -901,8 +899,8 @@ export async function listMemoryDocuments({
 		);
 	}
 
-	const res = (await listResponse.json()) as { docs: { name: string }[] };
-	const documents = res.docs.map((doc: { name: string }) => doc.name);
+	const res = (await listResponse.json()) as { name: string }[];
+	const documents = res.map((doc: { name: string }) => doc.name);
 	return documents;
 }
 
@@ -916,7 +914,6 @@ async function getSignedUploadUrl({
 	account: Account;
 }): Promise<string> {
 	const { uploadDocument } = getMemoryApiUrls({
-		account,
 		memoryName
 	});
 
@@ -968,7 +965,6 @@ async function deleteDocument({
 	account: Account;
 }) {
 	const { deleteDocument } = getMemoryApiUrls({
-		account,
 		memoryName,
 		documentName
 	});
@@ -1033,44 +1029,36 @@ async function uploadDocument(signedUrl: string, document: Blob) {
 }
 
 export function getMemoryApiUrls({
-	account,
 	memoryName,
 	documentName
 }: {
-	account: Account;
 	memoryName: string;
 	documentName?: string;
 }) {
-	const isOrgAccount = account.apiKey.includes(':');
-	const ownerLogin = isOrgAccount
-		? account.apiKey.split(':')[0]
-		: account.login;
-	const baseUrl = `https://api.langbase.com/beta`;
-	const baseUrlV1 = `https://api.langbase.com/v1`;
+	// Base URL
+	const baseUrl = `https://api.langbase.com/v1`;
 
 	// Create memory URL
-	const createUrlOrg = `${baseUrl}/org/${ownerLogin}/memorysets`;
-	const createUrlUser = `${baseUrl}/user/memorysets`;
-
-	// Upload document URL
-	const uploadDocumentOrg = `${baseUrl}/org/${ownerLogin}/memorysets/documents`;
-	const uploadDocumentUser = `${baseUrl}/user/memorysets/documents`;
-
-	// List documents URL
-	const listDocuments = `${baseUrl}/memorysets/${ownerLogin}/${memoryName}/documents`;
+	const createMemory = `${baseUrl}/memory`;
 
 	// Delete memory URL
-	const deleteMemory = `${baseUrl}/memorysets/${ownerLogin}/${memoryName}`;
+	const deleteMemory = `${baseUrl}/memory/${memoryName}`;
+
+	// Upload document URL
+	const uploadDocument = `${baseUrl}/memory/documents`;
+
+	// List documents URL
+	const listDocuments = `${baseUrl}/memory/${memoryName}/documents`;
 
 	// Delete document URL
-	const deleteDocument = `${baseUrlV1}/memory/${memoryName}/documents/${documentName}`;
+	const deleteDocument = `${baseUrl}/memory/${memoryName}/documents/${documentName}`;
 
 	return {
 		listDocuments,
 		deleteMemory,
 		deleteDocument,
-		createMemory: isOrgAccount ? createUrlOrg : createUrlUser,
-		uploadDocument: isOrgAccount ? uploadDocumentOrg : uploadDocumentUser
+		createMemory,
+		uploadDocument
 	};
 }
 
@@ -1090,7 +1078,6 @@ async function overwriteMemory({
 	// Delete old memory.
 	dlog(`Deleting old memory: ${memory.name}`);
 	const { deleteMemory } = getMemoryApiUrls({
-		account,
 		memoryName: memory.name
 	});
 

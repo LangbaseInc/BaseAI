@@ -4,7 +4,7 @@ import { handleProviderRequest } from '../utils/provider-handlers/provider-reque
 import { GOOGLE } from '../data/models';
 import { applyJsonModeIfEnabledForGoogle, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
-import type { Message } from 'types/pipe';
+import type { Message, Pipe } from 'types/pipe';
 import { addToolsToParams } from '../utils/add-tools-to-params';
 
 export async function callGoogle({
@@ -13,7 +13,7 @@ export async function callGoogle({
 	llmApiKey,
 	stream
 }: {
-	pipe: any;
+	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
@@ -48,15 +48,29 @@ export async function callGoogle({
 }
 
 function buildModelParams(
-	pipe: any,
+	pipe: Pipe,
 	stream: boolean,
 	messages: Message[]
 ): ModelParams {
+	const model = pipe.model.split(':')[1];
+	const {
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
+	} = pipe;
 	return {
 		messages,
 		stream,
-		model: pipe.model.name,
-		...pipe.model.params
+		model,
+		top_p,
+		max_tokens,
+		temperature,
+		presence_penalty,
+		frequency_penalty,
+		stop
 	};
 }
 

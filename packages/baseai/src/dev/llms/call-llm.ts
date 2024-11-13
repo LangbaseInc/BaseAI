@@ -12,9 +12,8 @@ import {
 } from '@/dev/data/models';
 
 import { addContextFromMemory } from '@/utils/memory/lib';
-import type { Message, VariablesI } from 'types/pipe';
+import type { Message, Pipe, VariablesI } from 'types/pipe';
 import { ApiError } from '../hono/errors';
-import type { Pipe } from '../routes/beta/pipes/run';
 import { dlog } from '../utils/dlog';
 import { getRunThread } from '../utils/thread/get-run-thread';
 import { callAnthropic } from './call-anthropic';
@@ -27,6 +26,7 @@ import { callOpenAI } from './call-openai';
 import { callPerplexity } from './call-perplexity';
 import { callTogether } from './call-together';
 import { callXAI } from './call-xai';
+import { getProvider } from '../utils/get-provider';
 
 export async function callLLM({
 	pipe,
@@ -42,13 +42,15 @@ export async function callLLM({
 	variables?: VariablesI;
 }) {
 	try {
-		// Get the model provider from the pipe config.
-		const modelProvider = pipe.model.provider;
+		// Get the model provider from the pipe.
+		const providerString = pipe.model.split(':')[0];
+		const modelProvider = getProvider(providerString);
+
+		const memoryNames = pipe.memory.map(memory => memory.name);
 
 		const similarChunks = await addContextFromMemory({
-			pipe,
 			messages,
-			memoryNames: pipe.memorysets
+			memoryNames
 		});
 
 		// Process the messages to be sent to the model provider.
