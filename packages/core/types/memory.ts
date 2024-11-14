@@ -1,11 +1,10 @@
-export interface Memory {
+export interface Memory extends MemoryConfig {
 	name: string;
 	description?: string;
-	config?: MemoryConfig;
 }
 
 interface MemoryConfig {
-	useGitRepo: boolean;
+	useGit: boolean;
 	include: string[];
 	gitignore?: boolean | undefined;
 	git?:

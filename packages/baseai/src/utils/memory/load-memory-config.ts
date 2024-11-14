@@ -1,36 +1,59 @@
 import fs from 'fs/promises';
 import path from 'path';
 import * as p from '@clack/prompts';
-import { memoryConfigSchema } from 'types/memory';
+import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
 
 function extractConfigObject(fileContents: string): unknown {
 	try {
-		// Match everything between config: { and the closing }
-		const match = fileContents.match(
-			/config:\s*({[\s\S]*?})(?=,\s*\}|\s*\})/
+		// Remove import statements
+		const cleanedContent = fileContents
+			.replace(/import\s+.*?['"];?\s*/g, '')
+			.replace(/export\s+default\s+/, '');
+
+		// First try to match a function that returns the memory object
+		let match = cleanedContent.match(
+			/(?:const\s+)?(\w+)\s*=\s*\(\s*\)\s*:\s*MemoryI\s*=>\s*\(({[\s\S]*?})\)/
 		);
+
+		// If no function match, try to match direct object assignment
 		if (!match) {
-			throw new Error('Unable to find config object');
+			match = cleanedContent.match(
+				/(?:const\s+)?memory\s*=\s*({[\s\S]*?});?$/m
+			);
 		}
 
-		const configStr = match[1];
+		if (!match) {
+			throw new Error('Unable to find memory object definition');
+		}
+
+		// The object literal will be in the last capture group
+		const memoryObjStr = match[match.length - 1];
 
 		// Create a new Function that returns the object literal
-		const fn = new Function(`return ${configStr}`);
-		return fn();
+		const fn = new Function(`return ${memoryObjStr}`);
+		const memoryObj = fn();
+
+		// Extract only the config-related properties
+		const configObj: MemoryConfigI = {
+			useGit: memoryObj.useGit,
+			include: memoryObj.include,
+			gitignore: memoryObj.gitignore,
+			git: memoryObj.git
+		};
+
+		return configObj;
 	} catch (error) {
 		console.error('Parsing error:', error);
-		console.error(
-			'Matched config:',
-			fileContents.match(/config:\s*({[\s\S]*?})(?=,\s*\}|\s*\})/)?.[1]
-		);
+		console.error('File contents:', fileContents);
 		throw new Error(
 			`Failed to extract config: ${error instanceof Error ? error.message : 'Unknown error'}`
 		);
 	}
 }
 
-export default async function loadMemoryConfig(memoryName: string) {
+export default async function loadMemoryConfig(
+	memoryName: string
+): Promise<MemoryConfigI> {
 	try {
 		const memoryDir = path.join(
 			process.cwd(),

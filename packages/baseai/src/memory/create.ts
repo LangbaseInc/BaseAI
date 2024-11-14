@@ -48,7 +48,7 @@ export async function createMemory() {
 					message: 'Description of the memory',
 					placeholder: defaultConfig.description
 				}),
-			useGitRepo: () =>
+			useGit: () =>
 				p.confirm({
 					message:
 						'Do you want to create memory from current project git repository?',
@@ -70,8 +70,7 @@ export async function createMemory() {
 	const filePath = path.join(memoryDir, 'index.ts');
 	const dbDir = path.join(process.cwd(), '.baseai', 'db');
 
-	if (memoryInfo.useGitRepo) {
-		// Check if the current directory is a Git repository
+	if (memoryInfo.useGit) {
 		try {
 			await execAsync('git rev-parse --is-inside-work-tree');
 		} catch (error) {
@@ -84,15 +83,13 @@ export async function createMemory() {
 
 const ${memoryNameCamelCase} = (): MemoryI => ({
 	name: '${memoryNameSlugified}',
-	description: ${JSON.stringify(memoryInfo.description) || ''},
-	config: {
-		useGitRepo: ${memoryInfo.useGitRepo},
-		${
-			memoryInfo.useGitRepo
-				? `include: ['**/*'],
-		gitignore: true,`
-				: `include: ['${MEMORY_CONSTANTS.documentsDir}/**/*'],`
-		}
+	description: ${JSON.stringify(memoryInfo.description || '') || ''},
+	useGit: ${memoryInfo.useGit},
+	${
+		memoryInfo.useGit
+			? `include: ['**/*'],
+	gitignore: true,`
+			: `include: ['${MEMORY_CONSTANTS.documentsDir}/**/*'],`
 	}
 });
 
@@ -105,7 +102,7 @@ export default ${memoryNameCamelCase};
 		await fs.promises.writeFile(filePath, memoryContent);
 		await fs.promises.mkdir(dbDir, { recursive: true });
 
-		if (!memoryInfo.useGitRepo) {
+		if (!memoryInfo.useGit) {
 			const memoryDocumentsPath = path.join(
 				memoryDir,
 				MEMORY_CONSTANTS.documentsDir

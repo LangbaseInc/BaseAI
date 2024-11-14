@@ -23,7 +23,7 @@ export const loadMemoryFiles = async (
 	const memoryConfig = await checkMemoryConfig(memoryName);
 
 	// useDocumentsDir
-	const useDocumentsDir = !memoryConfig || !memoryConfig?.useGitRepo;
+	const useDocumentsDir = !memoryConfig || !memoryConfig?.useGit;
 
 	// Load files from documents directory.
 	if (useDocumentsDir) {

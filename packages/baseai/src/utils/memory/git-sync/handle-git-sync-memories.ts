@@ -32,7 +32,7 @@ export async function handleGitSyncMemories({
 			p.log.info(
 				`Please commit these changes before ${isEmbed ? 'embedding' : 'deploying'}. Aborting.`
 			);
-			process.exit(1);
+			// process.exit(1);
 		}
 	} catch (error) {
 		p.log.error(

@@ -21,26 +21,51 @@ export async function saveEmbeddedCommitHashInMemoryConfig({
 
 		// Check if the git config exists
 		if (fileContents.includes('git:')) {
-			// Check if embeddedAt exists in git config
-			if (fileContents.match(/git:\s*{[^}]*embeddedAt:/)) {
-				// Update existing embeddedAt
+			// Find the git block content
+			const gitMatch = fileContents.match(/git:\s*{([^}]*?)}/);
+			if (gitMatch) {
+				const existingGitContent = gitMatch[1].trim();
+				let newGitContent: string;
+
+				// If embeddedAt exists, update it
+				if (existingGitContent.includes('embeddedAt:')) {
+					newGitContent = existingGitContent.replace(
+						/(embeddedAt:\s*['"])([^'"]*)(['"])/,
+						`$1${embeddedCommitHash}$3`
+					);
+				} else {
+					// For empty or minimal content, just add embeddedAt
+					if (!existingGitContent || existingGitContent === '') {
+						newGitContent = `\n\t\tembeddedAt: '${embeddedCommitHash}'\n\t`;
+					} else {
+						// Add embeddedAt to existing content
+						newGitContent =
+							existingGitContent.replace(/,\s*$/, '') + // Remove trailing comma if exists
+							`,\n\t\tembeddedAt: '${embeddedCommitHash}'`;
+					}
+				}
+
+				// Replace the old git block with the new one
 				fileContents = fileContents.replace(
-					/(git:\s*{[^}]*embeddedAt:\s*['"])([^'"]*)/,
-					`$1${embeddedCommitHash}`
-				);
-			} else {
-				// Add embeddedAt to existing git config
-				fileContents = fileContents.replace(
-					/(git:\s*{)/,
-					`$1\n        embeddedAt: '${embeddedCommitHash}',`
+					/git:\s*{[^}]*?}/,
+					`git: {${newGitContent}}`
 				);
 			}
 		} else {
-			// Add entire git config with embeddedAt
-			fileContents = fileContents.replace(
-				/config:\s*{/,
-				`config: {\n        git: {\n            embeddedAt: '${embeddedCommitHash}'\n        },`
+			// Add new git config block
+			const insertAfterUseGit = fileContents.replace(
+				/(useGit:\s*true,?)(\s*\n)/,
+				`$1\n\tgit: {\n\t\tembeddedAt: '${embeddedCommitHash}'\n\t},$2`
 			);
+
+			// Only update if the replacement was successful
+			if (insertAfterUseGit !== fileContents) {
+				fileContents = insertAfterUseGit;
+			} else {
+				throw new Error(
+					'Could not find appropriate location to insert git config'
+				);
+			}
 		}
 
 		// Write the updated contents back to the file
