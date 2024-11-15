@@ -1,5 +1,12 @@
 # `baseai` SDK
 
+## 0.9.31
+
+### Patch Changes
+
+-   98f2d7c: 🐛 FIX: Local development server
+-   👌 IMPROVE: Local development server
+
 ## 0.9.30
 
 ### Patch Changes
