@@ -10,8 +10,11 @@ export function isLocal() {
 	return process.env.NODE_ENV !== 'production';
 }
 
-export function getApiUrl() {
+export function getApiUrl(prod?: boolean) {
+	if (prod) return 'https://api.langbase.com';
+	else return 'http://localhost:9000';
+
 	// TODO: Make local port configurable.
-	return isProd() ? 'https://api.langbase.com' : 'http://localhost:9000';
+	// return isProd() ? 'https://api.langbase.com' : 'http://localhost:9000';
 	// return isProd() ? 'http://localhost:8787' : 'http://localhost:9000';
 }

@@ -22,7 +22,7 @@ export interface RunOptions {
 }
 
 export interface RunOptionsStream extends RunOptions {
-	stream: true;
+	stream: boolean;
 }
 
 export interface Usage {
@@ -56,6 +56,7 @@ export interface RunResponseStream {
 
 export interface PipeOptions extends PipeI {
 	maxCalls?: number;
+	prod?: boolean;
 }
 
 interface ChoiceGenerate {
@@ -80,11 +81,16 @@ export class Pipe {
 	private tools: Record<string, (...args: any[]) => Promise<any>>;
 	private maxCalls: number;
 	private hasTools: boolean;
+	private prod: boolean;
 
 	constructor(options: PipeOptions) {
-		const baseUrl = getApiUrl();
+		this.prod = options.prod ?? isProd();
+		const baseUrl = getApiUrl(this.prod);
+
 		this.request = new Request({apiKey: options.apiKey, baseUrl});
 		this.pipe = options;
+
+		delete this.pipe.prod;
 		delete this.pipe.apiKey;
 
 		this.tools = this.getToolsFromPipe(this.pipe);
@@ -136,7 +142,7 @@ export class Pipe {
 		responseMessage: Message,
 		toolResults: Message[],
 	): Message[] {
-		return isProd()
+		return this.prod
 			? toolResults
 			: [...messages, responseMessage, ...toolResults];
 	}
@@ -260,6 +266,10 @@ export class Pipe {
 		}
 
 		if (!runTools) {
+			if (!stream) {
+				return response as RunResponse;
+			}
+
 			return response as RunResponseStream;
 		}
 
@@ -347,7 +357,8 @@ export class Pipe {
 			},
 		};
 
-		const isProdEnv = isProd();
+		const isProdEnv = this.prod;
+
 		if (!isProdEnv) {
 			const isServerRunning = await isLocalServerRunning();
 			if (!isServerRunning) return {} as T;
