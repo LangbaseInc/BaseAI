@@ -1,8 +1,9 @@
-import {getApiUrl} from './is-prod';
+import {getApiUrl, isProd} from './is-prod';
 
 export async function isLocalServerRunning(): Promise<Boolean> {
 	try {
-		const endpoint = getApiUrl();
+		const prod = isProd();
+		const endpoint = getApiUrl(prod);
 
 		const response = await fetch(endpoint, {
 			mode: 'no-cors',
