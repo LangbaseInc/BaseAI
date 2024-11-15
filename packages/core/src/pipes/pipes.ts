@@ -339,6 +339,7 @@ export class Pipe {
 	}
 
 	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
+		const isProdEnv = this.prod;
 		const prodOptions = {
 			endpoint,
 			body: {
@@ -346,18 +347,20 @@ export class Pipe {
 				name: this.pipe.name,
 			},
 		};
-		const providerString = this.pipe.model.split(':')[0];
-		const modelProvider = getProvider(providerString);
-		const localOptions = {
-			endpoint,
-			body: {
-				...body,
-				pipe: this.pipe,
-				llmApiKey: getLLMApiKey(modelProvider),
-			},
-		};
 
-		const isProdEnv = this.prod;
+		let localOptions = {} as any;
+		if (!isProdEnv) {
+			const providerString = this.pipe.model.split(':')[0];
+			const modelProvider = getProvider(providerString);
+			localOptions = {
+				endpoint,
+				body: {
+					...body,
+					pipe: this.pipe,
+					llmApiKey: getLLMApiKey(modelProvider),
+				},
+			};
+		}
 
 		if (!isProdEnv) {
 			const isServerRunning = await isLocalServerRunning();
