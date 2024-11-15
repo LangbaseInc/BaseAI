@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.30
+
+### Patch Changes
+
+-   📦 NEW: Request production AI agent pipe
+
 ## 0.9.29
 
 ### Patch Changes
