@@ -9,8 +9,24 @@ export async function POST(req: NextRequest) {
 	const pipe = new Pipe(pipeSummary());
 
 	// 2. Run the pipe
-	const result = await pipe.run(runOptions);
+	try {
+		const result = await pipe.run(runOptions);
 
-	// 3. Return the response stringified.
-	return new Response(JSON.stringify(result));
+		// 3. Return the response stringified.
+		return new Response(JSON.stringify(result));
+	} catch (error: any) {
+		// 4. Return the error response
+
+		return new Response(
+			JSON.stringify({
+				error,
+			}),
+			{
+				status: error.status || 500,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+	}
 }

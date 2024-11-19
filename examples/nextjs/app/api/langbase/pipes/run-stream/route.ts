@@ -9,14 +9,27 @@ export async function POST(req: NextRequest) {
 	const pipe = new Pipe(pipeSummary());
 
 	// 2. Run the Pipe.
-	const {stream, threadId} = await pipe.run(runOptions);
-
-	// 3. Return the ReadableStream directly with the threadId in the headers
-	//  to be used on the client side to mainain a single chat thread.
-	return new Response(stream, {
-		status: 200,
-		headers: {
-			'lb-thread-id': threadId ?? '',
-		},
-	});
+	try {
+		const {stream, threadId} = await pipe.run(runOptions);
+		// 3. Return the ReadableStream directly with the threadId in the headers
+		//  to be used on the client side to mainain a single chat thread.
+		return new Response(stream, {
+			status: 200,
+			headers: {
+				'lb-thread-id': threadId ?? '',
+			},
+		});
+	} catch (error: any) {
+		return new Response(
+			JSON.stringify({
+				error,
+			}),
+			{
+				status: error.status || 500,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+	}
 }
