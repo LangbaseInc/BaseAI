@@ -21,7 +21,7 @@
 		"dotenv": "^16.4.5"
 	},
 	"devDependencies": {
-		"baseai": "^0.9.31",
+		"baseai": "0.9.29-snapshot.0",
 		"tsx": "^4.19.0"
 	}
 }
