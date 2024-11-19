@@ -79,3 +79,7 @@ assets/img/.DS_Store
 **/.baseai/
 # env file
 .env
+# baseai
+**/.baseai/
+# env file
+.env
