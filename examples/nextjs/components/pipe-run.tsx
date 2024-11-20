@@ -25,15 +25,19 @@ export default function PipeRunExample() {
 			});
 
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				const res = await response.json();
+				throw new Error(res.error.error.message);
 			}
 
 			// Parse the JSON response.
 			const data = await response.json();
 			setCompletion(data.completion);
-		} catch (error) {
-			console.error('Error:', error);
-			setCompletion('An error occurred while generating the completion.');
+		} catch (error: any) {
+			if (error.message) setCompletion(error.message);
+			else
+				setCompletion(
+					'An error occurred while generating the completion.',
+				);
 		} finally {
 			setLoading(false);
 		}
