@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.32
+
+### Patch Changes
+
+-   👌 IMPROVE: Error handling in usePipe
+
 ## 0.9.31
 
 ### Patch Changes
