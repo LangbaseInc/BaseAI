@@ -186,7 +186,7 @@ export function usePipe({
 					signal,
 				});
 
-				if (!response.ok) throw new Error('Failed to send message');
+				if (!response.ok) await processErrorResponse(response);
 
 				const newThreadId = response.headers.get('lb-thread-id');
 				if (newThreadId) threadIdRef.current = newThreadId;
@@ -197,10 +197,12 @@ export function usePipe({
 					const result: RunResponse = await response.json();
 					processNonStreamResponse(result);
 				}
-			} catch (err) {
+			} catch (err: any) {
 				if (err instanceof Error && err.name !== 'AbortError') {
 					setError(err);
 					onError?.(err);
+				} else if (err.name !== 'AbortError') {
+					throw new Error('Failed to send message');
 				}
 			} finally {
 				setIsLoading(false);
@@ -263,6 +265,16 @@ export function usePipe({
 		abortControllerRef.current?.abort();
 		setIsLoading(false);
 	}, []);
+
+	const processErrorResponse = async (response: Response) => {
+		const res = await response.json();
+		if (res.error.error) {
+			// Throw error object if it exists
+			throw new Error(res.error.error.message);
+		} else {
+			throw new Error('Failed to send message');
+		}
+	};
 
 	return useMemo(
 		() => ({
