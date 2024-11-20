@@ -3704,11 +3704,6 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-
-  baseai@0.9.32:
-    resolution: {integrity: sha512-hTSUD/x/89CEgFDqfDwAT4zGODGzB4RZuNBu/S8ZKUuyU244Op6YqfbfPahTD7vpKljf7M9kXH1UL/heR7KXOA==}
-    hasBin: true
-
   baseai@0.9.32:
     resolution: {integrity: sha512-hTSUD/x/89CEgFDqfDwAT4zGODGzB4RZuNBu/S8ZKUuyU244Op6YqfbfPahTD7vpKljf7M9kXH1UL/heR7KXOA==}
     hasBin: true
@@ -12815,7 +12810,7 @@ snapshots:
       compute-cosine-similarity: 1.1.0
       conf: 13.0.1
       cosmiconfig: 9.0.0(typescript@5.6.2)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.7.4)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.16.10)(cosmiconfig@9.0.0(typescript@5.6.2))(typescript@5.6.2)
       dotenv: 16.4.5
       execa: 9.4.0
       figures: 6.1.0
@@ -12844,8 +12839,7 @@ snapshots:
       - supports-color
       - typescript
 
-
-    baseai@0.9.32(@types/node@22.7.4)(typescript@5.6.2):
+  baseai@0.9.32(@types/node@22.7.4)(typescript@5.6.2):
     dependencies:
       '@antfu/ni': 0.23.0
       '@clack/core': 0.3.4
