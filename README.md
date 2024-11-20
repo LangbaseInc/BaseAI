@@ -42,7 +42,7 @@ ROOT (of your app)
 
 Copy the following in your  `.env` file and add appropriate LLM API keys:
 
-```
+```bash
 # !! SERVER SIDE ONLY !!
 # Keep all your API keys secret — use only on the server side.
 
