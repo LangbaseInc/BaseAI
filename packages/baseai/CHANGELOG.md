@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.33
+
+### Patch Changes
+
+-   📦 NEW: Params for pipe.run() sdk support
+
 ## 0.9.32
 
 ### Patch Changes
