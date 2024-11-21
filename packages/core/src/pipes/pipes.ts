@@ -19,6 +19,7 @@ export interface RunOptions {
 	threadId?: string;
 	rawResponse?: boolean;
 	runTools?: boolean;
+	name?: string; // Pipe name for SDK
 }
 
 export interface RunOptionsStream extends RunOptions {
@@ -162,6 +163,7 @@ export class Pipe {
 	private async handleStreamResponse(
 		options: RunOptionsStream,
 		response: RunResponseStream,
+		pipeName: string,
 	): Promise<RunResponseStream> {
 		const endpoint = '/v1/pipes/run';
 		const stream = this.isStreamRequested(options);
@@ -216,6 +218,7 @@ export class Pipe {
 						messages,
 						threadId: currentResponse.threadId,
 					},
+					pipeName
 				);
 
 				callCount++;
@@ -244,6 +247,7 @@ export class Pipe {
 		const modelProvider = getProvider(providerString);
 		const isAnthropic = modelProvider === ANTHROPIC;
 		const hasTools = this.pipe.tools.length > 0;
+		const pipeName = options.name || this.pipe.name;
 
 		let stream = this.isStreamRequested(options);
 
@@ -260,7 +264,7 @@ export class Pipe {
 
 		let response = await this.createRequest<
 			RunResponse | RunResponseStream
-		>(endpoint, body);
+		>(endpoint, body, pipeName);
 		if (Object.entries(response).length === 0) {
 			return {} as RunResponse | RunResponseStream;
 		}
@@ -277,6 +281,7 @@ export class Pipe {
 			return await this.handleStreamResponse(
 				options as RunOptionsStream,
 				response as RunResponseStream,
+				pipeName
 			);
 		}
 
@@ -319,7 +324,7 @@ export class Pipe {
 				messages,
 				stream: false,
 				threadId: currentResponse.threadId,
-			});
+			}, pipeName);
 
 			callCount++;
 
@@ -338,17 +343,22 @@ export class Pipe {
 		return currentResponse;
 	}
 
-	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
+	private async createRequest<T>(
+		endpoint: string,
+		body: any,
+		pipeName?: string,
+	): Promise<T> {
 		const isProdEnv = this.prod;
 		const prodOptions = {
 			endpoint,
 			body: {
 				...body,
-				name: this.pipe.name,
+				name: pipeName || this.pipe.name,
 			},
 		};
 
 		let localOptions = {} as any;
+
 		if (!isProdEnv) {
 			const providerString = this.pipe.model.split(':')[0];
 			const modelProvider = getProvider(providerString);
@@ -360,9 +370,7 @@ export class Pipe {
 					llmApiKey: getLLMApiKey(modelProvider),
 				},
 			};
-		}
 
-		if (!isProdEnv) {
 			const isServerRunning = await isLocalServerRunning();
 			if (!isServerRunning) return {} as T;
 		}
