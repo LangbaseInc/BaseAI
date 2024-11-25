@@ -5,20 +5,27 @@ import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
 
 function extractConfigObject(fileContents: string): unknown {
 	try {
-		// Remove import statements
+		// Remove import statements and exports
 		const cleanedContent = fileContents
 			.replace(/import\s+.*?['"];?\s*/g, '')
 			.replace(/export\s+default\s+/, '');
 
-		// First try to match a function that returns the memory object
+		// First try to match a function that returns an object directly with parentheses
 		let match = cleanedContent.match(
-			/(?:const\s+)?(\w+)\s*=\s*\(\s*\)\s*:\s*MemoryI\s*=>\s*\(({[\s\S]*?})\)/
+			/(?:const\s+)?(\w+)\s*=\s*\(\s*\)\s*(?::\s*\w+)?\s*=>\s*\(({[\s\S]*?})\)/
 		);
 
-		// If no function match, try to match direct object assignment
+		// If no direct parentheses match, try to match function with return statement
 		if (!match) {
 			match = cleanedContent.match(
-				/(?:const\s+)?memory\s*=\s*({[\s\S]*?});?$/m
+				/(?:const\s+)?(\w+)\s*=\s*\(\s*\)\s*(?::\s*\w+)?\s*=>\s*\{[\s\S]*?return\s+({[\s\S]*?})\s*;\s*\}/
+			);
+		}
+
+		// If still no match, try to match direct object assignment
+		if (!match) {
+			match = cleanedContent.match(
+				/(?:const\s+)?(?:memory|\w+)\s*=\s*({[\s\S]*?});?$/m
 			);
 		}
 
@@ -33,12 +40,17 @@ function extractConfigObject(fileContents: string): unknown {
 		const fn = new Function(`return ${memoryObjStr}`);
 		const memoryObj = fn();
 
-		// Extract only the config-related properties
+		// Extract memory config properties
 		const configObj: MemoryConfigI = {
-			useGit: memoryObj.useGit,
-			include: memoryObj.include,
-			gitignore: memoryObj.gitignore,
-			git: memoryObj.git
+			name: memoryObj.name,
+			description: memoryObj.description,
+			git: {
+				enabled: memoryObj.git.enabled,
+				include: memoryObj.git.include,
+				gitignore: memoryObj.git.gitignore,
+				deployedAt: memoryObj.git.deployedAt || '',
+				embeddedAt: memoryObj.git.embeddedAt || ''
+			}
 		};
 
 		return configObj;

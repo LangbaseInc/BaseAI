@@ -487,7 +487,7 @@ export async function deployMemory({
 		let memoryDocs: MemoryDocumentI[] = [];
 
 		// Git sync memories
-		if (memoryObject.useGit) {
+		if (memoryObject.git.enabled) {
 			// Get names of files to deploy, i.e., changed or new files
 			const {
 				filesToDeploy: gitFilesToDeploy,
@@ -530,7 +530,7 @@ export async function deployMemory({
 				documents: memoryDocs,
 				account,
 				overwrite,
-				isGitSync: memoryObject.useGit,
+				isGitSync: memoryObject.git.enabled,
 				docsToDelete: filesToDelete
 			});
 			spinner.stop(`Deployment finished memory: ${memoryObject.name}`);

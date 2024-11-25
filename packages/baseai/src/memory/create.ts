@@ -83,18 +83,23 @@ export async function createMemory() {
 
 const ${memoryNameCamelCase} = (): MemoryI => ({
 	name: '${memoryNameSlugified}',
-	description: ${JSON.stringify(memoryInfo.description || '') || ''},
-	useGit: ${memoryInfo.useGit},
-	${
-		memoryInfo.useGit
-			? `include: ['**/*'],
-	gitignore: true,`
-			: `include: ['${MEMORY_CONSTANTS.documentsDir}/**/*'],`
+	description: ${JSON.stringify(memoryInfo.description || '')},
+	git: {
+		enabled: ${memoryInfo.useGit},${
+			memoryInfo.useGit
+				? `
+		include: ['**/*'],
+		gitignore: true,`
+				: `
+		include: ['${MEMORY_CONSTANTS.documentsDir}/**/*'],
+		gitignore: false,`
+		}
+		deployedAt: '',
+		embeddedAt: ''
 	}
 });
 
-export default ${memoryNameCamelCase};
-`;
+export default ${memoryNameCamelCase};`;
 
 	try {
 		await fs.promises.mkdir(baseDir, { recursive: true });
@@ -115,7 +120,7 @@ export default ${memoryNameCamelCase};
 			p.note(
 				[
 					'All files in this Git repository will be tracked by default.',
-					'', // This adds a blank line for better spacing
+					'',
 					`To modify which files are being tracked, update the config at:`,
 					cyan(filePath)
 				].join('\n')

@@ -23,7 +23,7 @@ export const loadMemoryFiles = async (
 	const memoryConfig = await checkMemoryConfig(memoryName);
 
 	// useDocumentsDir
-	const useDocumentsDir = !memoryConfig || !memoryConfig?.useGit;
+	const useDocumentsDir = !memoryConfig || !memoryConfig.git.enabled;
 
 	// Load files from documents directory.
 	if (useDocumentsDir) {
@@ -51,7 +51,7 @@ export const loadMemoryFilesFromCustomDir = async ({
 	memoryName: string;
 	memoryConfig: MemoryConfigI;
 }): Promise<MemoryDocumentI[]> => {
-	const includePatterns = memoryConfig.include;
+	const includePatterns = memoryConfig.git.include;
 
 	if (!Array.isArray(includePatterns) || includePatterns.length === 0) {
 		p.cancel(`No include patterns specified for memory '${memoryName}'`);
@@ -64,17 +64,25 @@ export const loadMemoryFilesFromCustomDir = async ({
 	let allFiles: string[];
 	try {
 		// First get all git tracked files
-		const gitFiles = new Set(
-			execSync('git ls-files', { encoding: 'utf-8' })
+		const gitFiles = new Set([
+			...execSync('git ls-files', { encoding: 'utf-8' })
+				.split('\n')
+				.filter(Boolean),
+			...execSync('git ls-files --others --exclude-standard', {
+				encoding: 'utf-8'
+			})
+				.split('\n')
+				.filter(Boolean),
+			...execSync('git diff --name-only', { encoding: 'utf-8' })
 				.split('\n')
 				.filter(Boolean)
-		);
+		]);
 
 		// Then match against glob patterns
 		const matchedFiles = await fg(includePatterns, {
 			ignore: ['node_modules/**'],
 			dot: true,
-			gitignore: memoryConfig.gitignore
+			gitignore: memoryConfig.git.gitignore || true
 		});
 
 		// Only keep files that are both tracked by git and match the patterns

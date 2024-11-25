@@ -32,7 +32,7 @@ export async function handleGitSyncMemories({
 			p.log.info(
 				`Please commit these changes before ${isEmbed ? 'embedding' : 'deploying'}. Aborting.`
 			);
-			// process.exit(1);
+			process.exit(1);
 		}
 	} catch (error) {
 		p.log.error(
@@ -87,7 +87,7 @@ export async function handleGitSyncMemories({
 			await getChangedAndDeletedFilesBetweenCommits({
 				oldCommit: lastHashUsed,
 				latestCommit: 'HEAD',
-				include: config.include
+				include: config.git.include
 			});
 
 		filesToDeploy = changedFiles;

@@ -3,8 +3,13 @@ import type {MemoryI} from '@baseai/core';
 const buidMemory = (): MemoryI => ({
 	name: 'chat-with-docs',
 	description: 'Chat with given docs',
-	useGit: false,
-	include: ['documents/**/*'],
+	git: {
+		enabled: false,
+		include: ['documents/**/*'],
+		gitignore: true,
+		deployedAt: '',
+		embeddedAt: '',
+	},
 });
 
 export default buidMemory;

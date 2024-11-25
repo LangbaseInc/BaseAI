@@ -1,16 +1,13 @@
-export interface Memory extends MemoryConfig {
-	name: string;
-	description?: string;
+export interface GitConfig {
+	enabled: boolean;
+	include: string[];
+	gitignore?: boolean;
+	deployedAt?: string;
+	embeddedAt?: string;
 }
 
-interface MemoryConfig {
-	useGit: boolean;
-	include: string[];
-	gitignore?: boolean | undefined;
-	git?:
-		| {
-				deployedAt?: string | undefined;
-				embeddedAt?: string | undefined;
-		  }
-		| undefined;
+export interface Memory {
+	name: string;
+	description?: string;
+	git: GitConfig;
 }
