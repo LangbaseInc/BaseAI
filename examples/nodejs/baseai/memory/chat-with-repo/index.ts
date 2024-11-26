@@ -1,14 +1,15 @@
-import { MemoryI } from '@baseai/core';
-import path from 'path';
+import {MemoryI} from '@baseai/core';
 
 const memoryChatWithRepo = (): MemoryI => ({
-  name: 'chat-with-repo',
-  description: '',
-  config: {
-		useGitRepo: true,
-		dirToTrack: path.posix.join('examples'),
-		extToTrack: ["*"]
-  }
+	name: 'chat-with-repo',
+	description: '',
+	git: {
+		enabled: true,
+		include: ['examples/**/*'],
+		gitignore: true,
+		deployedAt: '',
+		embeddedAt: '',
+	},
 });
 
 export default memoryChatWithRepo;

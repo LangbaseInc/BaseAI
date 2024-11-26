@@ -72,13 +72,13 @@ export async function handleGitSyncMemories({
 	// If there's no deployedCommitHash, user is deploying for the first time
 	// Deploy all files in the directory
 	const lastHashUsed = isEmbed
-		? config.embeddedCommitHash
-		: config.deployedCommitHash;
+		? config.git?.embeddedAt
+		: config.git?.deployedAt;
 
 	if (!lastHashUsed) {
 		filesToDeploy = allFiles;
 		p.log.info(
-			`Found no previous deployed commit. Deploying all ${filesToDeploy.length} files in memory "${memoryName}":`
+			`Found no previous ${isEmbed ? 'deployed' : 'embedded'} commit. ${isEmbed ? 'Deploying' : 'Embedding'} all ${filesToDeploy.length} files in memory "${memoryName}":`
 		);
 	}
 	// Step 2.2: Otherwise, get changed files between commits
@@ -87,7 +87,7 @@ export async function handleGitSyncMemories({
 			await getChangedAndDeletedFilesBetweenCommits({
 				oldCommit: lastHashUsed,
 				latestCommit: 'HEAD',
-				dirToTrack: config.dirToTrack
+				include: config.git.include
 			});
 
 		filesToDeploy = changedFiles;

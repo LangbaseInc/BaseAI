@@ -7,6 +7,7 @@ import { formatDocSize } from './lib';
 import loadMemoryConfig from './load-memory-config';
 import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
 import { execSync } from 'child_process';
+import fg from 'fast-glob';
 
 export interface MemoryDocumentI {
 	name: string;
@@ -22,7 +23,7 @@ export const loadMemoryFiles = async (
 	const memoryConfig = await checkMemoryConfig(memoryName);
 
 	// useDocumentsDir
-	const useDocumentsDir = !memoryConfig || !memoryConfig?.useGitRepo;
+	const useDocumentsDir = !memoryConfig || !memoryConfig.git.enabled;
 
 	// Load files from documents directory.
 	if (useDocumentsDir) {
@@ -50,46 +51,52 @@ export const loadMemoryFilesFromCustomDir = async ({
 	memoryName: string;
 	memoryConfig: MemoryConfigI;
 }): Promise<MemoryDocumentI[]> => {
-	const memoryFilesPath = memoryConfig.dirToTrack;
+	const includePatterns = memoryConfig.git.include;
 
-	try {
-		await fs.access(memoryFilesPath);
-	} catch (error) {
-		p.cancel(
-			`Documents directory for memory '${memoryName}' does not exist.`
-		);
+	if (!Array.isArray(includePatterns) || includePatterns.length === 0) {
+		p.cancel(`No include patterns specified for memory '${memoryName}'`);
 		process.exit(1);
 	}
 
 	console.log('Reading documents in memory...');
 
+	// Get all files that match the glob patterns and are tracked by git
 	let allFiles: string[];
 	try {
-		allFiles = execSync(`git ls-files ${memoryFilesPath}`, {
-			encoding: 'utf-8'
-		})
-			.split('\n')
-			.filter(Boolean);
+		// First get all git tracked files
+		const gitFiles = new Set([
+			...execSync('git ls-files', { encoding: 'utf-8' })
+				.split('\n')
+				.filter(Boolean),
+			...execSync('git ls-files --others --exclude-standard', {
+				encoding: 'utf-8'
+			})
+				.split('\n')
+				.filter(Boolean),
+			...execSync('git diff --name-only', { encoding: 'utf-8' })
+				.split('\n')
+				.filter(Boolean)
+		]);
+
+		// Then match against glob patterns
+		const matchedFiles = await fg(includePatterns, {
+			ignore: ['node_modules/**'],
+			dot: true,
+			gitignore: memoryConfig.git.gitignore || true
+		});
+
+		// Only keep files that are both tracked by git and match the patterns
+		allFiles = matchedFiles.filter((file: string) => gitFiles.has(file));
 	} catch (error) {
 		p.cancel(`Failed to read documents in memory '${memoryName}'.`);
 		process.exit(1);
 	}
 
-	// Check if all extensions are allowed.
-	const allExtensionsAllowed = memoryConfig.extToTrack[0] === '*';
-
-	// Filter files based on allowed extensions.
-	const extensionsToUse = allExtensionsAllowed
-		? allSupportedExtensions
-		: memoryConfig.extToTrack.filter(ext =>
-				allSupportedExtensions.includes(ext)
-			);
-
 	const memoryFilesContent = await Promise.all(
 		allFiles.map(async filePath => {
-			// Check if the file is allowed.
-			const isSupportedExtension = extensionsToUse.some(extension =>
-				filePath.endsWith(extension)
+			// Check if the file is allowed
+			const isSupportedExtension = allSupportedExtensions.some(
+				extension => filePath.endsWith(extension)
 			);
 
 			if (!isSupportedExtension) {
@@ -262,28 +269,6 @@ async function checkMemoryConfig(
 		...memoryConfig
 	};
 }
-
-/**
- * Recursively traverses a directory and returns a list of all file paths.
- *
- * @param dir - The directory to traverse.
- * @returns A promise that resolves to an array of file paths.
- */
-const traverseDirectory = async (dir: string): Promise<string[]> => {
-	const files: string[] = [];
-	const entries = await fs.readdir(dir, { withFileTypes: true });
-
-	for (const entry of entries) {
-		const fullPath = path.join(dir, entry.name);
-		if (entry.isDirectory()) {
-			files.push(...(await traverseDirectory(fullPath)));
-		} else {
-			files.push(fullPath);
-		}
-	}
-
-	return files;
-};
 
 export const getMemoryFileNames = async (
 	memoryName: string

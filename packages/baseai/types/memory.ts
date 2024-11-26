@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-export interface MemoryI {
-	name: string;
-	description?: string;
-	config?: MemoryConfigI;
-}
-
 export const memoryNameSchema = z
 	.string()
 	.min(3, 'Memory name must be at least 3 characters long')
@@ -22,28 +16,25 @@ export const memoryDocSchema = z.object({
 	documentName: docNameSchema
 });
 
-export const memoryConfigSchema = z.object({
-	useGitRepo: z.boolean(),
-	dirToTrack: z
-		.string()
-		.trim()
-		.min(1, 'Directory to track must not be empty'),
-	extToTrack: z.union([
-		z.tuple([z.literal('*')]),
-		z
-			.array(
-				z
-					.string()
-					.trim()
-					.regex(
-						/^\.\w+$/,
-						'File extension must start with a dot followed by alphanumeric characters'
-					)
-			)
-			.min(1, 'At least one file extension must be specified')
-	]),
-	deployedCommitHash: z.string().optional(),
-	embeddedCommitHash: z.string().optional()
+export const gitConfigSchema = z.object({
+	enabled: z.boolean(),
+	include: z
+		.array(z.string().trim().min(1, 'Include pattern must not be empty'))
+		.min(1, 'At least one include pattern must be specified')
+		.describe('Glob patterns to include files in the memory'),
+	gitignore: z.boolean().optional().default(true),
+	deployedAt: z.string().trim().optional().default(''),
+	embeddedAt: z.string().trim().optional().default('')
 });
 
+export const memoryConfigSchema = z.object({
+	name: z.string(),
+	description: z.string().optional(),
+	git: gitConfigSchema
+});
+
+export type GitConfigI = z.infer<typeof gitConfigSchema>;
+
 export type MemoryConfigI = z.infer<typeof memoryConfigSchema>;
+
+export type MemoryI = MemoryConfigI;

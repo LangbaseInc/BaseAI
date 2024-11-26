@@ -20,7 +20,7 @@ const defaultConfig = {
 };
 
 const MEMORY_CONSTANTS = {
-	documentsDir: 'documents' // Path to store documents
+	documentsDir: 'documents'
 };
 
 export async function createMemory() {
@@ -48,7 +48,7 @@ export async function createMemory() {
 					message: 'Description of the memory',
 					placeholder: defaultConfig.description
 				}),
-			useGitRepo: () =>
+			useGit: () =>
 				p.confirm({
 					message:
 						'Do you want to create memory from current project git repository?',
@@ -63,114 +63,71 @@ export async function createMemory() {
 		}
 	);
 
-	let memoryFilesDir = '.';
-	let fileExtensions: string[] = ['*'];
+	const memoryNameSlugified = slugify(memoryInfo.name);
+	const memoryNameCamelCase = camelCase('memory-' + memoryNameSlugified);
+	const baseDir = path.join(process.cwd(), 'baseai', 'memory');
+	const memoryDir = path.join(baseDir, memoryNameSlugified);
+	const filePath = path.join(memoryDir, 'index.ts');
+	const dbDir = path.join(process.cwd(), '.baseai', 'db');
 
-	if (memoryInfo.useGitRepo) {
-		// Check if the current directory is a Git repository
+	if (memoryInfo.useGit) {
 		try {
 			await execAsync('git rev-parse --is-inside-work-tree');
 		} catch (error) {
 			p.cancel('The current directory is not a Git repository.');
 			process.exit(1);
 		}
-
-		memoryFilesDir = (await p.text({
-			message:
-				'Enter the path to the directory to track (relative to current directory):',
-			initialValue: '.',
-			validate: value => {
-				if (!value.trim()) {
-					return 'The path cannot be empty.';
-				}
-				const fullPath = path.resolve(process.cwd(), value);
-				if (!fs.existsSync(fullPath)) {
-					return 'The specified path does not exist.';
-				}
-				if (!fs.lstatSync(fullPath).isDirectory()) {
-					return 'The specified path is not a directory.';
-				}
-				return;
-			}
-		})) as string;
-
-		const extensionsInput = (await p.text({
-			message:
-				'Enter file extensions to track (use * for all, or comma-separated list, e.g., .md,.mdx):',
-			validate: value => {
-				if (value.trim() === '') {
-					return 'Please enter at least one file extension or *';
-				}
-				if (value !== '*') {
-					const extensions = value.split(',').map(ext => ext.trim());
-					const invalidExtensions = extensions.filter(
-						ext => !/^\.\w+$/.test(ext)
-					);
-					if (invalidExtensions.length > 0) {
-						return `Invalid extension(s): ${invalidExtensions.join(', ')}. Extensions should start with a dot followed by alphanumeric characters.`;
-					}
-				}
-				return;
-			}
-		})) as string;
-
-		fileExtensions =
-			extensionsInput === '*'
-				? ['*']
-				: extensionsInput.split(',').map(ext => ext.trim());
 	}
 
-	const memoryNameSlugified = slugify(memoryInfo.name);
-	const memoryNameCamelCase = camelCase('memory-' + memoryNameSlugified);
-
-	const baseDir = path.join(process.cwd(), 'baseai', 'memory');
-	const memoryDir = path.join(baseDir, memoryNameSlugified);
-	const filePath = path.join(memoryDir, 'index.ts');
-	const memoryDocumentsPath = path.join(
-		memoryDir,
-		MEMORY_CONSTANTS.documentsDir
-	);
-	const dbDir = path.join(process.cwd(), '.baseai', 'db');
-
-	const memoryContent = `import { MemoryI } from '@baseai/core';
-import path from 'path';
+	const memoryContent = `import {MemoryI} from '@baseai/core';
 
 const ${memoryNameCamelCase} = (): MemoryI => ({
-  name: '${memoryNameSlugified}',
-  description: ${JSON.stringify(memoryInfo.description) || ''},
-  config: {
-		useGitRepo: ${memoryInfo.useGitRepo},
-		dirToTrack: path.posix.join(${memoryFilesDir
-			.split(path.sep)
-			.map(segment => `'${segment}'`)
-			.join(', ')}),
-		extToTrack: ${JSON.stringify(fileExtensions)}
-  }
+	name: '${memoryNameSlugified}',
+	description: ${JSON.stringify(memoryInfo.description || '')},
+	git: {
+		enabled: ${memoryInfo.useGit},${
+			memoryInfo.useGit
+				? `
+		include: ['**/*'],
+		gitignore: true,`
+				: `
+		include: ['${MEMORY_CONSTANTS.documentsDir}/**/*'],
+		gitignore: false,`
+		}
+		deployedAt: '',
+		embeddedAt: ''
+	}
 });
 
-export default ${memoryNameCamelCase};
-`;
+export default ${memoryNameCamelCase};`;
 
 	try {
 		await fs.promises.mkdir(baseDir, { recursive: true });
 		await fs.promises.mkdir(memoryDir, { recursive: true });
 		await fs.promises.writeFile(filePath, memoryContent);
 		await fs.promises.mkdir(dbDir, { recursive: true });
-		await createDb(memoryNameSlugified);
 
-		if (!memoryInfo.useGitRepo) {
+		if (!memoryInfo.useGit) {
+			const memoryDocumentsPath = path.join(
+				memoryDir,
+				MEMORY_CONSTANTS.documentsDir
+			);
 			await fs.promises.mkdir(memoryDocumentsPath, { recursive: true });
 			p.note(
 				`Add documents in baseai/memory/${memoryNameSlugified}/${cyan(`documents`)} to use them in the memory.`
 			);
 		} else {
-			const extensionsMsg = fileExtensions.includes('*')
-				? 'all file types'
-				: `files with extensions: ${cyan(fileExtensions.join(', '))}`;
 			p.note(
-				`All ${extensionsMsg} under ${cyan(memoryFilesDir)} will be tracked and used in the memory.`
+				[
+					'All files in this Git repository will be tracked by default.',
+					'',
+					`To modify which files are being tracked, update the config at:`,
+					cyan(filePath)
+				].join('\n')
 			);
 		}
+
+		await createDb(memoryNameSlugified);
 
 		p.outro(
 			heading({

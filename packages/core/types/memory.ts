@@ -1,13 +1,13 @@
+export interface GitConfig {
+	enabled: boolean;
+	include: string[];
+	gitignore?: boolean;
+	deployedAt?: string;
+	embeddedAt?: string;
+}
+
 export interface Memory {
 	name: string;
 	description?: string;
-	config?: MemoryConfig;
-}
-
-interface MemoryConfig {
-	useGitRepo: boolean;
-	dirToTrack: string;
-	extToTrack: string[];
-	deployedCommitHash?: string;
-	embeddedCommitHash?: string;
+	git: GitConfig;
 }

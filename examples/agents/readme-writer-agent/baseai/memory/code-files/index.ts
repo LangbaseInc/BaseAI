@@ -1,13 +1,14 @@
 import {MemoryI} from '@baseai/core';
-import path from 'path';
 
 const memoryCodeFiles = (): MemoryI => ({
 	name: 'code-files',
 	description: 'Memory that contains project files',
-	config: {
-		useGitRepo: false,
-		dirToTrack: path.posix.join('.'),
-		extToTrack: ['*'],
+	git: {
+		enabled: false,
+		include: ['documents/**/*'],
+		gitignore: true,
+		deployedAt: '',
+		embeddedAt: '',
 	},
 });
 

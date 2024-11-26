@@ -58,7 +58,7 @@ export async function embedMemory({
 		let filesToEmbed: string[] = [];
 		let filesToDelete: string[] = [];
 
-		if (memoryConfig?.useGitRepo) {
+		if (memoryConfig.git.enabled) {
 			const { filesToDeploy, filesToDelete: gitFilesToDelete } =
 				await handleGitSyncMemories({
 					memoryName: memoryName,
@@ -78,7 +78,7 @@ export async function embedMemory({
 		let embedResult = 'Embeddings updated.';
 		if (memoryFiles && memoryFiles.length > 0) {
 			s.message('Generating embeddings...');
-			const shouldOverwrite = memoryConfig?.useGitRepo ? true : overwrite;
+			const shouldOverwrite = memoryConfig.git.enabled ? true : overwrite;
 			embedResult = await generateEmbeddings({
 				memoryFiles,
 				memoryName,
@@ -87,7 +87,7 @@ export async function embedMemory({
 			});
 		}
 
-		if (memoryConfig?.useGitRepo) {
+		if (memoryConfig.git.enabled) {
 			if (filesToDelete.length > 0) {
 				await deleteDocumentsFromDB({
 					memoryName,

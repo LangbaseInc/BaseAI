@@ -1,23 +1,23 @@
 import { execSync } from 'child_process';
 
 /**
- * Retrieves the list of changed and deleted files between two Git commits within a specified directory.
+ * Retrieves the list of changed and deleted files between two Git commits matching specified glob patterns.
  *
  * @param {Object} params - The parameters for the function.
  * @param {string} params.oldCommit - The old commit reference to compare from.
  * @param {string} [params.latestCommit='HEAD'] - The latest commit reference to compare to. Defaults to 'HEAD'.
- * @param {string} params.dirToTrack - The directory to track for changes.
+ * @param {string[]} params.include - Array of glob patterns to track for changes.
  * @returns {Promise<{ changedFiles: string[]; deletedFiles: string[] }>} - A promise that resolves to an object containing arrays of changed and deleted files.
  * @throws {Error} - Throws an error if the Git command execution fails or if the commit references are invalid.
  */
 export async function getChangedAndDeletedFilesBetweenCommits({
 	oldCommit,
 	latestCommit = 'HEAD',
-	dirToTrack
+	include
 }: {
 	oldCommit: string;
 	latestCommit: string;
-	dirToTrack: string;
+	include: string[];
 }): Promise<{ changedFiles: string[]; deletedFiles: string[] }> {
 	try {
 		// Validate inputs
@@ -25,30 +25,53 @@ export async function getChangedAndDeletedFilesBetweenCommits({
 			throw new Error('Invalid commit references');
 		}
 
+		if (!Array.isArray(include) || include.length === 0) {
+			throw new Error('Include patterns must be a non-empty array');
+		}
+
 		const repoPath = process.cwd();
 
-		// Construct the Git commands to get changed and deleted files in the specific directory
-		const changedCommand = `git diff --diff-filter=ACMRT --name-only ${oldCommit} ${latestCommit} -- ${dirToTrack}`;
-		const deletedCommand = `git diff --diff-filter=D --name-only ${oldCommit} ${latestCommit} -- ${dirToTrack}`;
+		// Execute the Git commands for changed and deleted files
+		const changedResult = execSync(
+			constructGitCommand({
+				include,
+				oldCommit,
+				diffFilter: 'ACMRT',
+				latestCommit
+			}),
+			{
+				encoding: 'utf-8',
+				cwd: repoPath
+			}
+		).trim();
 
-		// Execute the Git commands
-		const changedResult = execSync(changedCommand, {
-			encoding: 'utf-8',
-			cwd: repoPath
-		}).trim();
-
-		const deletedResult = execSync(deletedCommand, {
-			encoding: 'utf-8',
-			cwd: repoPath
-		}).trim();
+		const deletedResult = execSync(
+			constructGitCommand({
+				include,
+				oldCommit,
+				diffFilter: 'D',
+				latestCommit
+			}),
+			{
+				encoding: 'utf-8',
+				cwd: repoPath
+			}
+		).trim();
 
 		// Process the results
-		let changedFiles = changedResult.split('\n').filter(Boolean);
-		let deletedFiles = deletedResult.split('\n').filter(Boolean);
+		const changedFiles = changedResult
+			? changedResult
+					.split('\n')
+					.filter(Boolean)
+					.map(file => file.replace(/\//g, '-'))
+			: [];
 
-		// Resolve full paths
-		changedFiles = changedFiles.map(file => file.replace(/\//g, '-'));
-		deletedFiles = deletedFiles.map(file => file.replace(/\//g, '-'));
+		const deletedFiles = deletedResult
+			? deletedResult
+					.split('\n')
+					.filter(Boolean)
+					.map(file => file.replace(/\//g, '-'))
+			: [];
 
 		return { changedFiles, deletedFiles };
 	} catch (error) {
@@ -56,3 +79,27 @@ export async function getChangedAndDeletedFilesBetweenCommits({
 		throw error;
 	}
 }
+
+// Helper function to construct the Git command for changed files
+const constructGitCommand = ({
+	include,
+	oldCommit,
+	diffFilter,
+	latestCommit
+}: {
+	include: string[];
+	oldCommit: string;
+	diffFilter: 'ACMRT' | 'D';
+	latestCommit: string;
+}) => {
+	const baseCommand = `git diff --diff-filter=${diffFilter} --name-only ${oldCommit} ${latestCommit}`;
+
+	// If there's only one pattern, use it directly
+	if (include.length === 1) {
+		return `${baseCommand} -- "${include[0]}"`;
+	}
+
+	// For multiple patterns, use brace expansion
+	const patterns = include.map(pattern => `"${pattern}"`).join(' ');
+	return `${baseCommand} -- ${patterns}`;
+};
