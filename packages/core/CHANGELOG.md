@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.34
+
+### Patch Changes
+
+-   👌 IMPROVE: Memory config with new features and better UX
+
 ## 0.9.33
 
 ### Patch Changes

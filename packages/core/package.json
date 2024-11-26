@@ -1,7 +1,7 @@
 {
 	"name": "@baseai/core",
 	"description": "The Web AI Framework's core - BaseAI.dev",
-	"version": "0.9.33",
+	"version": "0.9.34",
 	"license": "Apache-2.0",
 	"sideEffects": false,
 	"main": "./dist/index.js",
