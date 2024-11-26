@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://baseai.dev">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-cover.png">
-      <img src="https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/baseai/baseai-cover.png">
-    </picture>
+      <img src="https://github.com/user-attachments/assets/6d447930-e347-4ce3-908f-0d6d676c517e">
     <h1 align="center">BaseAI</h1>
   </a>
 </p>
