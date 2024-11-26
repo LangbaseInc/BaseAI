@@ -487,7 +487,6 @@ export async function deployMemory({
 		p.log.step(`Processing documents for memory: ${memoryNameWithoutExt}`);
 
 		if (isOldMemoryConfigFormat(memoryObject)) {
-			// spinner.stop();
 			p.note(generateUpgradeInstructions(memoryObject));
 			p.cancel(
 				'Deployment cancelled. Please update your memory config file to the new format.'
