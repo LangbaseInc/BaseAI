@@ -15,7 +15,12 @@
 
 ## Getting Started
 
-BaseAI is the AI framework for building declarative and composable AI-powered LLM products. It allows you to develop AI agent pipes on your local machine with integrated agentic tools and memory (RAG). Visit our [learn](https://baseai.dev/learn) guide to get started with BaseAI.
+BaseAI is the AI framework for building serverless and composable AI agents with memory and tools. It allows you to develop AI agent pipes on your local machine with integrated agentic tools and memory (RAG). Visit our [BaseAI.dev/learn](https://baseai.dev/learn) guide to start with BaseAI.
+
+### Documentation (recommended)
+
+Please check [BaseAI.dev/docs](https://baseai.dev/docs) and [BaseAI.dev/learn](https://baseai.dev/learn) to get started with full documentation.
+
 
 ### 1. Initialize a new BaseAI project
 
@@ -199,11 +204,7 @@ Key Features:
 Stream ended.
 ```
 > [!TIP]
-> You can also run RAG locally with BaseAI. Check out memory quickstart [guide](https://baseai.dev/docs/memory/quickstart) for more details.
-
-## Documentation
-
-Visit [baseai.dev/docs](https://baseai.dev/docs) for the full documentation.
+> You can also run RAG locally with BaseAI. Check out the memory agent quickstart [guide](https://baseai.dev/docs/memory/quickstart) for more details.
 
 ## Contributing
 
