@@ -8,7 +8,7 @@ tags:
     - langbase
 section: 'Memory'
 published: 2024-10-08
-modified: 2024-10-08
+modified: 2024-11-26
 ---
 
 # Create a Memory from git Repository
@@ -34,27 +34,37 @@ It will also prompt you if you want to create a memory from the current project 
 Do you want to create memory from current project git repository? (yes/no) yes
 ```
 
-## Step #3 Provide directory 
+It will create a memory at `baseai/memory/chat-with-repo` and track files in the current git repository. It prints the path of the memory created. 
 
-Next, it will ask you which directory or subdirectory you want to use for the memory. You can select the current directory or any subdirectory.
+Open that file in your editor, it looks like this:
 
+```ts 
+import {MemoryI} from '@baseai/core';
+
+const chatWithRepoMemory = (): MemoryI => ({
+	name: 'chat-with-repo',
+	description: "My list of docs as memory for an AI agent pipe",
+	git: {
+		enabled: true,
+		include: ['**/*'],
+		gitignore: true,
+		deployedAt: '',
+		embeddedAt: ''
+	}
+});
+
+export default chatWithRepoMemory;
 ```
-Enter the path to the directory to track (relative to current directory): 
-```
 
-Provide the path relative to the root of the project directory that you want to use for the memory. E.g., `src/content/docs`, to use the `docs` directory in the `src/content` directory.
+Below is the explanation of the fields in the memory file:
 
-## Step #4 Provide file extensions
+- `enabled`: Set to `true` to enable tracking of git repository.
+- `include`: Follows glob pattern to include files from the git repository. You can change the pattern to include only specific files or directories.
+- `gitignore`: Set to `true` to include `.gitignore` file in the memory.
+- `deployedAt`: Set to the commit hash where the memory was last deployed. It is used to track the changes in the memory for deployment. Try to avoid changing this field manually.
+- `embeddedAt`: Set to the commit hash where the memory was last embedded. It is used to track the changes in the memory for local development. Try to avoid changing this field manually.
 
-Next, it will ask you which files extensions you want to track. You can provide a comma-separated list of file extensions. E.g., `.mdx,.md` to track markdown files. Alternatively, you can provide `*` to track all files.
-
-```
-Enter file extensions to track (use * for all, or comma-separated list, e.g., .md,.mdx)
-```
-
-That's it! It creates a memory at `baseai/memory/chat-with-repo` in your current directory that tracks the git repository directory and file extensions you provided.
-
-## Step #5 Deploy the memory
+## Step #3 Deploy the memory
 
 Commit all the changes to git and deploy. 
 
@@ -62,12 +72,13 @@ Commit all the changes to git and deploy.
 npx baseai@latest deploy -m chat-with-repo
 ```
 
-Next time you want to update the memory with the latest changes from the git repository, you can run the `deploy` command again. Make sure to commit all the changes before deploying.
+---
+
+## Tracking changes from Git Repository
+
+That's it! Next time you make changes to the git repository, you can run the `deploy` command again to update the memory. Make sure to commit all the changes before deploying.
+
+Similarly, if you are using memory locally, make sure to `embed` the memory again after commit before running the AI agent pipe. As a result, it automatically updates the memory with the latest changes and record the hashes in the memory file.
 
 ---
 
-## Running the memory locally
-
-You can embed the memory locally using the `embed` command. Just like any other memory and use it with a Pipe. Follow the [quickstart guide](/docs/memory/quickstart) to see how to embed and use the memory.
-
----
