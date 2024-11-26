@@ -2,6 +2,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import * as p from '@clack/prompts';
 import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
+import {
+	generateUpgradeInstructions,
+	isOldMemoryConfigFormat,
+	type OldMemoryConfig
+} from './handle-old-memory-config';
 
 function extractConfigObject(fileContents: string): unknown {
 	try {
@@ -38,22 +43,7 @@ function extractConfigObject(fileContents: string): unknown {
 
 		// Create a new Function that returns the object literal
 		const fn = new Function(`return ${memoryObjStr}`);
-		const memoryObj = fn();
-
-		// Extract memory config properties
-		const configObj: MemoryConfigI = {
-			name: memoryObj.name,
-			description: memoryObj.description,
-			git: {
-				enabled: memoryObj.git.enabled,
-				include: memoryObj.git.include,
-				gitignore: memoryObj.git.gitignore,
-				deployedAt: memoryObj.git.deployedAt || '',
-				embeddedAt: memoryObj.git.embeddedAt || ''
-			}
-		};
-
-		return configObj;
+		return fn();
 	} catch (error) {
 		console.error('Parsing error:', error);
 		console.error('File contents:', fileContents);
@@ -79,7 +69,26 @@ export default async function loadMemoryConfig(
 		const fileContents = await fs.readFile(indexFilePath, 'utf-8');
 		const configObj = extractConfigObject(fileContents);
 
-		return memoryConfigSchema.parse(configObj);
+		// Try to parse with new schema first
+		try {
+			return memoryConfigSchema.parse(configObj);
+		} catch (parseError) {
+			if (!configObj) throw parseError;
+
+			// If parsing fails, check if it's an old format
+			if (isOldMemoryConfigFormat(configObj)) {
+				p.note(
+					generateUpgradeInstructions(configObj as OldMemoryConfig)
+				);
+				p.cancel(
+					'Deployment cancelled. Please update your memory config file to the new format.'
+				);
+				process.exit(1);
+			}
+
+			// If it's neither new nor old format, throw the original error
+			throw parseError;
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			p.cancel(`Failed to load memory '${memoryName}': ${error.message}`);

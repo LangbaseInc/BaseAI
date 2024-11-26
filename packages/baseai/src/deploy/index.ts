@@ -24,6 +24,10 @@ import {
 	updateDeployedCommitHash
 } from '@/utils/memory/git-sync/handle-git-sync-memories';
 import { handleSingleDocDeploy } from './document';
+import {
+	generateUpgradeInstructions,
+	isOldMemoryConfigFormat
+} from '@/utils/memory/handle-old-memory-config';
 
 export interface Account {
 	login: string;
@@ -481,6 +485,14 @@ export async function deployMemory({
 		}
 
 		p.log.step(`Processing documents for memory: ${memoryNameWithoutExt}`);
+
+		if (isOldMemoryConfigFormat(memoryObject)) {
+			p.note(generateUpgradeInstructions(memoryObject));
+			p.cancel(
+				'Deployment cancelled. Please update your memory config file to the new format.'
+			);
+			process.exit(1);
+		}
 
 		let filesToDeploy: string[] = [];
 		let filesToDelete: string[] = [];
@@ -1184,7 +1196,7 @@ export async function deploySingleMemory({
 		});
 
 		p.outro(`Successfully deployed memory: ${memoryName}`);
-		process.exit(1);
+		process.exit(0);
 	} catch (error) {
 		if (error instanceof Error) {
 			if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
