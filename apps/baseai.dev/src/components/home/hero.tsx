@@ -10,12 +10,9 @@ import WebGLInitializer from './webgl';
 import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Hero({ }) {
+export default function Hero({}) {
 	return (
-		<div className="flex h-full flex-col items-center justify-between relative mt-[74px] sm:mt-0">
-			<div className="h-full webgl absolute -top-[26vh] flex w-full sm:-top-16">
-				<WebGLInitializer />
-			</div>
+		<div className="relative flex flex-col items-center justify-between bg-black sm:mt-0">
 			<Content />
 		</div>
 	);
@@ -23,7 +20,7 @@ export default function Hero({ }) {
 
 function Content() {
 	return (
-		<div className="z-10 grid min-h-[80vh] w-[90vw] grid-rows-[auto_1fr_auto] gap-4 px-6 sm:p-6 sm:mt-[104px] sm:min-h-[85vh] sm:w-[76vw]">
+		<div className="z-10 grid min-h-[80vh] w-[90vw] grid-rows-[auto_1fr_auto] gap-4 px-6 -mt-12 sm:mt-[104px] sm:min-h-[85vh] sm:w-[76vw] sm:p-6">
 			<div className="col-span-2 flex items-center justify-between">
 				<div className={cn('flex items-center', inter.className)}>
 					<div className="mr-4 hidden size-4 rounded-full bg-muted-foreground/70 sm:block"></div>
@@ -40,9 +37,11 @@ function Content() {
 				</div>
 			</div>
 
-			<div className="col-span-2"></div>
+			<div className="relative col-span-2">
+				<WebGLInitializer />
+			</div>
 
-			<div className="col-span-2 flex w-full flex-col-reverse items-center justify-between lg:flex-row lg:items-start">
+			<div className="col-span-2 flex w-full flex-col-reverse items-center justify-between pb-6 lg:flex-row lg:items-start">
 				<div className={cn('self-end lg:max-w-[60%]', inter.className)}>
 					<div
 						className="text-center text-sm lg:text-left

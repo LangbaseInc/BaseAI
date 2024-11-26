@@ -10,9 +10,12 @@ const WebGLInitializer = () => {
 
 	useEffect(() => {
 		const scene = new THREE.Scene();
+
+		const canvas = document.createElement('canvas');
+		const parent = document.getElementById('container');
 		const camera = new THREE.PerspectiveCamera(
 			75,
-			window.innerWidth / window.innerHeight,
+			parent!.clientWidth / parent!.clientHeight,
 			0.1,
 			1000
 		);
@@ -20,14 +23,12 @@ const WebGLInitializer = () => {
 			alpha: true,
 			antialias: true
 		});
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.setSize(parent!.clientWidth, parent!.clientHeight);
 		if (mountRef.current) {
 			mountRef.current.appendChild(renderer.domElement);
 		}
-
-		const canvas = document.createElement('canvas');
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+		canvas.width = parent!.clientWidth;
+		canvas.height = parent!.clientHeight;
 
 		const textDiv = document.createElement('div');
 		textDiv.style.position = 'absolute';
@@ -52,12 +53,12 @@ const WebGLInitializer = () => {
 			const scale = PIXEL_RATIO;
 			textDiv.style.width = `${width}px`;
 			textDiv.style.height = `${height}px`;
-			textDiv.style.fontSize = `${width * 0.192}px`;
+			textDiv.style.fontSize = `${width * 0.218}px`;
 
 			await document.fonts.ready;
 			document.body.appendChild(textDiv);
 
-			const lineHeight = window.getComputedStyle(textDiv).lineHeight; 
+			const lineHeight = window.getComputedStyle(textDiv).lineHeight;
 			const y = parseFloat(lineHeight);
 
 			const canvas = await html2canvas(textDiv, {
@@ -88,8 +89,8 @@ const WebGLInitializer = () => {
 
 		const createInitialTexture = async () => {
 			const texture = await createHighResBackgroundTexture(
-				window.innerWidth,
-				window.innerHeight
+				parent!.clientWidth,
+				parent!.clientHeight
 			);
 			scene.background = texture;
 			if (material.uniforms && material.uniforms.u_background) {
@@ -102,7 +103,8 @@ const WebGLInitializer = () => {
 		const geometry = new THREE.SphereGeometry(0.75, 256, 256);
 
 		const textureLoader = new THREE.TextureLoader();
-		const envMapSize = Math.max(window.innerWidth, window.innerHeight) * 2;
+		const envMapSize =
+			Math.max(parent!.clientWidth, parent!.clientHeight) * 2;
 		const envMap = textureLoader.load(
 			'https://raw.githubusercontent.com/LangbaseInc/docs-images/refs/heads/main/www/hero/water-optim.jpg',
 			undefined,
@@ -122,8 +124,8 @@ const WebGLInitializer = () => {
 				u_time: { value: 0.0 },
 				u_resolution: {
 					value: new THREE.Vector2(
-						window.innerWidth,
-						window.innerHeight
+						parent!.clientWidth,
+						parent!.clientHeight
 					)
 				},
 				u_background: { value: null },
@@ -398,32 +400,21 @@ const WebGLInitializer = () => {
 
 		function calculateCameraZ(screenWidth: number, screenHeight: number) {
 			let cameraZ;
-
-		
+			console.log(screenWidth, screenHeight);
 			if (screenWidth <= 768) {
 				if (screen.availWidth < screen.availHeight) {
-					cameraZ = 4.5;
+					cameraZ = 1.8;
 				} else {
-					cameraZ = 2;
+					cameraZ = 1.3;
 				}
 			} else if (screenWidth > 768 && screenWidth <= 1920) {
 				if (screenHeight <= 1080) {
-					cameraZ = 2; 
+					cameraZ = 1.3;
 				} else {
-					cameraZ = 1.9;
+					cameraZ = 1.4;
 				}
-			} else if (screenWidth > 1920 && screenWidth <= 2440) {
-				if (screenHeight <= 1080) {
-					cameraZ = 1.75;
-				} else {
-					cameraZ = 1.65;
-				}
-			} else if (screenWidth > 2440) {
-				if (screenHeight <= 1440) {
-					cameraZ = 1.5; 
-				} else {
-					cameraZ = 1.4; 
-				}
+			} else if (screenWidth > 1920) {
+				cameraZ = 1.3;
 			}
 
 			return cameraZ;
@@ -431,7 +422,6 @@ const WebGLInitializer = () => {
 
 		const screenWidth = window.innerWidth;
 		const screenHeight = window.innerHeight;
-
 		const cameraZ = calculateCameraZ(screenWidth, screenHeight);
 		if (cameraZ) camera.position.z = cameraZ;
 
@@ -440,7 +430,7 @@ const WebGLInitializer = () => {
 
 		const animate = () => {
 			requestAnimationFrame(animate);
-			material.uniforms.u_time.value += 0.02; 
+			material.uniforms.u_time.value += 0.02;
 			material.uniforms.u_viewVector.value = camera.position;
 
 			raycaster.setFromCamera(mouse, camera);
@@ -449,6 +439,7 @@ const WebGLInitializer = () => {
 				material.uniforms.u_mouse.value = intersects[0].point;
 			}
 
+			renderer.clear();
 			renderer.render(scene, camera);
 		};
 
@@ -464,8 +455,8 @@ const WebGLInitializer = () => {
 		updateCameraPosition();
 
 		const onWindowResize = () => {
-			const width = window.innerWidth;
-			const height = window.innerHeight;
+			const width = parent!.clientWidth;
+			const height = parent!.clientHeight;
 
 			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
@@ -495,7 +486,19 @@ const WebGLInitializer = () => {
 		};
 	}, []);
 
-	return <div ref={mountRef} />;
+	return (
+		<div
+			style={{
+				width: '100%',
+				height: '100%',
+				position: 'relative',
+				transform: 'scale(1.2)',
+				zIndex: '-1'
+			}}
+			id="container"
+			ref={mountRef}
+		/>
+	);
 };
 
 export default WebGLInitializer;
