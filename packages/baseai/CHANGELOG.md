@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.35
+
+### Patch Changes
+
+-   📦 NEW: Pipe API key support in pipe.run()
+
 ## 0.9.34
 
 ### Patch Changes
