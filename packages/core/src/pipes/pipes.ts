@@ -19,7 +19,8 @@ export interface RunOptions {
 	threadId?: string;
 	rawResponse?: boolean;
 	runTools?: boolean;
-	name?: string; // Pipe name for SDK
+	name?: string; // Pipe name for SDK,
+	apiKey?: string; // pipe level key for SDK
 }
 
 export interface RunOptionsStream extends RunOptions {
@@ -83,12 +84,16 @@ export class Pipe {
 	private maxCalls: number;
 	private hasTools: boolean;
 	private prod: boolean;
+	private baseUrl: string;
 
 	constructor(options: PipeOptions) {
 		this.prod = options.prod ?? isProd();
-		const baseUrl = getApiUrl(this.prod);
+		this.baseUrl = getApiUrl(this.prod);
 
-		this.request = new Request({apiKey: options.apiKey, baseUrl});
+		this.request = new Request({
+			apiKey: options.apiKey,
+			baseUrl: this.baseUrl,
+		});
 		this.pipe = options;
 
 		delete this.pipe.prod;
@@ -163,7 +168,6 @@ export class Pipe {
 	private async handleStreamResponse(
 		options: RunOptionsStream,
 		response: RunResponseStream,
-		pipeName: string,
 	): Promise<RunResponseStream> {
 		const endpoint = '/v1/pipes/run';
 		const stream = this.isStreamRequested(options);
@@ -218,7 +222,6 @@ export class Pipe {
 						messages,
 						threadId: currentResponse.threadId,
 					},
-					pipeName
 				);
 
 				callCount++;
@@ -247,7 +250,21 @@ export class Pipe {
 		const modelProvider = getProvider(providerString);
 		const isAnthropic = modelProvider === ANTHROPIC;
 		const hasTools = this.pipe.tools.length > 0;
-		const pipeName = options.name || this.pipe.name;
+
+		// For SDK
+		// Run the given pipe name
+		if (options.name) {
+			this.pipe = {...this.pipe, name: options.name};
+		}
+
+		// For SDK
+		// Run the pipe against the given Pipe API key
+		if (options.apiKey) {
+			this.request = new Request({
+				apiKey: options.apiKey,
+				baseUrl: this.baseUrl,
+			});
+		}
 
 		let stream = this.isStreamRequested(options);
 
@@ -264,7 +281,7 @@ export class Pipe {
 
 		let response = await this.createRequest<
 			RunResponse | RunResponseStream
-		>(endpoint, body, pipeName);
+		>(endpoint, body);
 		if (Object.entries(response).length === 0) {
 			return {} as RunResponse | RunResponseStream;
 		}
@@ -281,7 +298,6 @@ export class Pipe {
 			return await this.handleStreamResponse(
 				options as RunOptionsStream,
 				response as RunResponseStream,
-				pipeName
 			);
 		}
 
@@ -324,7 +340,7 @@ export class Pipe {
 				messages,
 				stream: false,
 				threadId: currentResponse.threadId,
-			}, pipeName);
+			});
 
 			callCount++;
 
@@ -343,17 +359,13 @@ export class Pipe {
 		return currentResponse;
 	}
 
-	private async createRequest<T>(
-		endpoint: string,
-		body: any,
-		pipeName?: string,
-	): Promise<T> {
+	private async createRequest<T>(endpoint: string, body: any): Promise<T> {
 		const isProdEnv = this.prod;
 		const prodOptions = {
 			endpoint,
 			body: {
 				...body,
-				name: pipeName || this.pipe.name,
+				name: this.pipe.name,
 			},
 		};
 
