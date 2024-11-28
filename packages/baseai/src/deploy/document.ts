@@ -7,9 +7,7 @@ import {
 	handleError,
 	handleInvalidConfig,
 	listMemoryDocuments,
-	retrieveAuthentication,
 	uploadDocumentsToMemory,
-	type Account
 } from '.';
 import path from 'path';
 import fs from 'fs/promises';
@@ -21,6 +19,7 @@ import {
 } from '@/utils/memory/load-memory-files';
 import type { MemoryI } from 'types/memory';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
+import { retrieveAuthentication, type Account } from '@/utils/retrieve-credentials';
 
 type Spinner = ReturnType<typeof p.spinner>;
 

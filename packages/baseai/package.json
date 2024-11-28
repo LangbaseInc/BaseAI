@@ -60,7 +60,6 @@
 		"cli-table3": "^0.6.5",
 		"cli-welcome": "^3.0.0",
 		"compute-cosine-similarity": "^1.1.0",
-		"conf": "^13.0.1",
 		"cosmiconfig": "^9.0.0",
 		"cosmiconfig-typescript-loader": "^5.0.0",
 		"dotenv": "^16.4.5",

@@ -1,10 +1,10 @@
-import { getStoredAuth } from '@/auth';
 import { dim, dimItalic } from '@/utils/formatting';
 import { getAvailablePipes } from '@/utils/get-available-pipes';
 import { getAvailableTools } from '@/utils/get-available-tools';
 import { heading } from '@/utils/heading';
 import icons from '@/utils/icons';
 import { isToolPresent } from '@/utils/is-tool-present';
+import { retrieveAuthentication } from '@/utils/retrieve-credentials';
 import { formatCode } from '@/utils/ts-format-code';
 import * as p from '@clack/prompts';
 import slugify from '@sindresorhus/slugify';
@@ -43,37 +43,6 @@ function extractLoginName(loginAndPipe: string) {
 	};
 }
 
-/**
- * Represents an account with login credentials and an API key.
- */
-interface Account {
-	login: string;
-	apiKey: string;
-}
-
-/**
- * Retrieves the stored authentication account.
- *
- * This function attempts to retrieve the stored authentication account
- * asynchronously. If the account is found, it is returned. If no account
- * is found or an error occurs during retrieval, `null` is returned.
- *
- * @returns {Promise<Account | null>} A promise that resolves to the stored
- * authentication account, or `null` if no account is found or an error occurs.
- */
-async function retrieveAuthentication(): Promise<Account | null> {
-	try {
-		const account = await getStoredAuth();
-		if (!account) return null;
-
-		return account;
-	} catch (error) {
-		p.log.error(
-			`Error retrieving stored auth: ${(error as Error).message}`
-		);
-		return null;
-	}
-}
 
 /**
  * Fetches a pipe from Langbase using the provided login and name.
@@ -93,9 +62,17 @@ async function getPipe({
 	name: string;
 	spinner: Spinner;
 }) {
-	spinner.start('Fetching pipe from Langbase');
 	try {
-		const account = await retrieveAuthentication();
+		const account = await retrieveAuthentication({ spinner });
+		if (!account) {
+			p.log.error(
+				'Authentication failed. Please run "npx baseai auth" to authenticate.'
+			);
+			return;
+		}
+
+		spinner.start('Fetching pipe from Langbase');
+
 		const API_URL = `https://api.langbase.com/v1/pipes/${login}/${name}`;
 
 		const createResponse = await fetch(API_URL, {
