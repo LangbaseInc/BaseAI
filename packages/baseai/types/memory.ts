@@ -27,14 +27,32 @@ export const gitConfigSchema = z.object({
 	embeddedAt: z.string().trim().optional().default('')
 });
 
+export const documentSchema = z.object({
+	meta: z
+		.function()
+		.args(
+			z.object({
+				name: z.string(),
+				size: z.string(),
+				content: z.string(),
+				blob: z.instanceof(Blob),
+				path: z.string(),
+			})
+		)
+		.returns(z.record(z.string()))
+		.optional()
+});
+
 export const memoryConfigSchema = z.object({
 	name: z.string(),
 	description: z.string().optional(),
-	git: gitConfigSchema
+	git: gitConfigSchema,
+	document: documentSchema.optional()
 });
 
 export type GitConfigI = z.infer<typeof gitConfigSchema>;
 
 export type MemoryConfigI = z.infer<typeof memoryConfigSchema>;
+export type DocumentConfigI = z.infer<typeof documentSchema>;
 
 export type MemoryI = MemoryConfigI;

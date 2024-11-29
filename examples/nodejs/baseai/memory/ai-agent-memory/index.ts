@@ -10,6 +10,14 @@ const memoryAiAgentMemory = (): MemoryI => ({
 		deployedAt: '',
 		embeddedAt: '',
 	},
+	document: {
+		meta: doc => {
+			return {
+				name: doc.name,
+				path: doc.path,
+			};
+		},
+	},
 });
 
 export default memoryAiAgentMemory;
