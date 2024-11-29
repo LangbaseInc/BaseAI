@@ -47,7 +47,7 @@ export const memoryConfigSchema = z.object({
 	name: z.string(),
 	description: z.string().optional(),
 	git: gitConfigSchema,
-	document: documentSchema.optional()
+	documents: documentSchema.optional()
 });
 
 export type GitConfigI = z.infer<typeof gitConfigSchema>;

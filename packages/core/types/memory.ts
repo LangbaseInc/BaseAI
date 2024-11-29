@@ -23,5 +23,5 @@ export interface Memory {
 	name: string;
 	description?: string;
 	git: GitConfig;
-	document?: Document;
+	documents?: Document;
 }

@@ -10,11 +10,13 @@ const memoryAiAgentMemory = (): MemoryI => ({
 		deployedAt: '',
 		embeddedAt: '',
 	},
-	document: {
+	documents: {
 		meta: doc => {
+			// generate a URL for each document
+			const url = `https://example.com/${doc.path}`;
 			return {
+				url,
 				name: doc.name,
-				path: doc.path,
 			};
 		},
 	},
