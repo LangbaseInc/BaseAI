@@ -30,11 +30,11 @@ export const loadMemoryFiles = async (
 
 	// useDocumentsDir
 	const useDocumentsDir = !memoryConfig || !memoryConfig.git.enabled;
-	const documentMeta = memoryConfig?.document;
+	const documentConfig = memoryConfig?.documents;
 
 	// Load files from documents directory.
 	if (useDocumentsDir) {
-		return await loadMemoryFilesFromDocsDir({ memoryName, documentMeta });
+		return await loadMemoryFilesFromDocsDir({ memoryName, documentConfig });
 	}
 
 	// Load files from the repo.
@@ -138,8 +138,8 @@ export const loadMemoryFilesFromCustomDir = async ({
 
 			let meta = {};
 
-			if (memoryConfig?.document?.meta) {
-				meta = memoryConfig.document.meta(memoryFile) || {};
+			if (memoryConfig?.documents?.meta) {
+				meta = memoryConfig.documents.meta(memoryFile) || {};
 			}
 
 			return { ...memoryFile, meta };
@@ -177,10 +177,10 @@ export const loadMemoryFilesFromCustomDir = async ({
  */
 export const loadMemoryFilesFromDocsDir = async ({
 	memoryName,
-	documentMeta
+	documentConfig
 }: {
 	memoryName: string;
-	documentMeta?: DocumentConfigI;
+	documentConfig?: DocumentConfigI;
 }): Promise<MemoryDocumentI[]> => {
 	const memoryDir = path.join(process.cwd(), 'baseai', 'memory', memoryName);
 	const memoryFilesPath = path.join(memoryDir, 'documents');
@@ -244,8 +244,8 @@ export const loadMemoryFilesFromDocsDir = async ({
 
 			let meta = {};
 
-			if (documentMeta?.meta) {
-				meta = documentMeta.meta(memoryFile) || {};
+			if (documentConfig?.meta) {
+				meta = documentConfig.meta(memoryFile) || {};
 			}
 
 			return { ...memoryFile, meta };
