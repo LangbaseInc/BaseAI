@@ -689,7 +689,8 @@ export async function uploadDocumentsToMemory({
 			const signedUrl = await getSignedUploadUrl({
 				documentName: doc.name,
 				memoryName: name,
-				account
+				account,
+				meta: doc.meta
 			});
 
 			const uploadResponse = await uploadDocument(signedUrl, doc.blob);
@@ -919,11 +920,13 @@ export async function listMemoryDocuments({
 async function getSignedUploadUrl({
 	documentName,
 	memoryName,
-	account
+	account,
+	meta
 }: {
 	documentName: string;
 	memoryName: string;
 	account: Account;
+	meta: Record<string, string>;
 }): Promise<string> {
 	const { uploadDocument } = getMemoryApiUrls({
 		memoryName
@@ -942,6 +945,7 @@ async function getSignedUploadUrl({
 				Authorization: `Bearer ${account.apiKey}`
 			},
 			body: JSON.stringify({
+				meta,
 				memoryName,
 				ownerLogin,
 				fileName: documentName

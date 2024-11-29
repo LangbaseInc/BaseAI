@@ -5,7 +5,11 @@ import { allSupportedExtensions, MEMORYSETS } from './constants';
 import { getDocumentContent } from './get-document-content';
 import { formatDocSize } from './lib';
 import loadMemoryConfig from './load-memory-config';
-import { memoryConfigSchema, type MemoryConfigI } from 'types/memory';
+import {
+	memoryConfigSchema,
+	type DocumentConfigI,
+	type MemoryConfigI
+} from 'types/memory';
 import { execSync } from 'child_process';
 import fg from 'fast-glob';
 
@@ -14,6 +18,8 @@ export interface MemoryDocumentI {
 	size: string;
 	content: string;
 	blob: Blob;
+	path: string;
+	meta: Record<string, string>;
 }
 
 export const loadMemoryFiles = async (
@@ -24,10 +30,11 @@ export const loadMemoryFiles = async (
 
 	// useDocumentsDir
 	const useDocumentsDir = !memoryConfig || !memoryConfig.git.enabled;
+	const documentConfig = memoryConfig?.documents;
 
 	// Load files from documents directory.
 	if (useDocumentsDir) {
-		return await loadMemoryFilesFromDocsDir(memoryName);
+		return await loadMemoryFilesFromDocsDir({ memoryName, documentConfig });
 	}
 
 	// Load files from the repo.
@@ -121,12 +128,21 @@ export const loadMemoryFilesFromCustomDir = async ({
 				return null;
 			}
 
-			return {
+			const memoryFile = {
+				path: filePath,
 				name: path.basename(filePath.replace(/\//g, '-')),
 				size: formatDocSize(fileContentBlob.size),
 				content: await getDocumentContent(fileContentBlob),
 				blob: fileContentBlob
 			};
+
+			let meta = {};
+
+			if (memoryConfig?.documents?.meta) {
+				meta = memoryConfig.documents.meta(memoryFile) || {};
+			}
+
+			return { ...memoryFile, meta };
 		})
 	);
 
@@ -159,9 +175,13 @@ export const loadMemoryFilesFromCustomDir = async ({
  *    - Have unsupported file extensions.
  * 5. Returns an array of `MemoryDocumentI` objects representing the valid memory files.
  */
-export const loadMemoryFilesFromDocsDir = async (
-	memoryName: string
-): Promise<MemoryDocumentI[]> => {
+export const loadMemoryFilesFromDocsDir = async ({
+	memoryName,
+	documentConfig
+}: {
+	memoryName: string;
+	documentConfig?: DocumentConfigI;
+}): Promise<MemoryDocumentI[]> => {
 	const memoryDir = path.join(process.cwd(), 'baseai', 'memory', memoryName);
 	const memoryFilesPath = path.join(memoryDir, 'documents');
 
@@ -214,12 +234,21 @@ export const loadMemoryFilesFromDocsDir = async (
 				return null;
 			}
 
-			return {
+			const memoryFile = {
 				name: file,
+				path: filePath,
 				size: formatDocSize(fileContentBlob.size),
 				content: await getDocumentContent(fileContentBlob),
 				blob: fileContentBlob
 			};
+
+			let meta = {};
+
+			if (documentConfig?.meta) {
+				meta = documentConfig.meta(memoryFile) || {};
+			}
+
+			return { ...memoryFile, meta };
 		})
 	);
 
