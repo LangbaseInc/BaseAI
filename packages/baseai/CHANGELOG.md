@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.36
+
+### Patch Changes
+
+-   📦 NEW: Dynamically set document metadata
+
 ## 0.9.35
 
 ### Patch Changes
