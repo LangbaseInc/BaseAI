@@ -1,0 +1,57 @@
+## Product Information
+
+1. Product Name: CleanSweep Pro X3
+2. Category: Smart Home Appliances - Robot Vacuum Cleaners
+3. Launch Date: September 1, 2023
+4. Current Version: 1.2 (Software), Model 2024A (Hardware)
+5. Key Features:
+   - LiDAR navigation and mapping
+   - App control via smartphone
+   - Voice assistant compatibility (Alexa, Google Assistant)
+   - 3-stage cleaning system (dual brushes + suction)
+   - Automatic dirt disposal base (holds up to 30 days of debris)
+   - 120-minute battery life
+   - Carpet boost function
+   - Multi-floor mapping (up to 4 floors)
+6. Target Market: Busy professionals and tech-savvy homeowners, ages 25-55
+7. Price Point: $499.99 (with self-emptying base)
+8. Current Market Share: 12%
+
+## User Feedback
+
+1. "Great suction power, but it sometimes misses corners in my home." - James L.
+2. "The app is intuitive, but it occasionally loses connection to the vacuum." - Maria S.
+3. "Battery life seems shorter than advertised, especially on carpet." - Tom R.
+4. "Love the self-emptying feature, but the disposal bags are expensive." - Sarah K.
+5. "It gets stuck on the transition from hardwood to my high-pile carpet." - Ahmed M.
+6. "Excellent on hard floors, but not as effective on pet hair on carpets." - Emily W.
+7. "The LiDAR navigation is precise, but I wish it had a camera for remote viewing." - Carlos B.
+8. "It's louder than I expected, especially when on maximum suction." - Lisa T.
+
+## Market Trends
+
+1. Growing demand for eco-friendly and energy-efficient cleaning solutions
+2. Increased interest in air purification features in robot vacuums
+3. Rising popularity of combo robot vacuums and mops
+4. Emphasis on smart home integration and scene-based cleaning routines
+5. Trend towards using AI for personalized cleaning schedules and wear-and-tear diagnostics
+
+## Competitor Information
+
+1. Main Competitor: SwiftClean UltraGlide
+   - Market Share: 18%
+   - Unique Feature: Built-in mop function with electronic water flow control
+   - Price Point: $599.99
+
+2. Up-and-Coming Competitor: EcoVac Green
+   - Market Share: 7%
+   - Unique Feature: Made from 70% recycled materials, biodegradable dust bags
+   - Price Point: $449.99
+
+## Additional Context
+
+1. Recent study shows increasing concern about indoor air quality among homeowners
+2. Upcoming holiday shopping season in 2 months
+3. Company's goal to expand product line to include a handheld vacuum accessory
+4. Industry shift towards more repairable and modular designs to reduce e-waste
+5. Growing market for pet-specific cleaning solutions
