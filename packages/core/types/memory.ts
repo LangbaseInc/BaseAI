@@ -12,11 +12,10 @@ export interface MemoryDocumentI {
 	content: string;
 	blob: Blob;
 	path: string;
-	originalName: string;
 }
 
 export interface Document {
-	meta?: (documnet: MemoryDocumentI) => Record<string, string>;
+	meta?: (doc: MemoryDocumentI) => Record<string, string>;
 }
 
 export interface Memory {
