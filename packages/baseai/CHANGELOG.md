@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.37
+
+### Patch Changes
+
+-   👌 IMPROVE: Remove unused type
+
 ## 0.9.36
 
 ### Patch Changes
