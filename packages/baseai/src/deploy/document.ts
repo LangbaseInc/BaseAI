@@ -114,11 +114,18 @@ async function deployDocument({
 			process.exit(1);
 		}
 
+		// Fetch the existing documents
+		const prodDocs = await listMemoryDocuments({
+			account,
+			memoryName
+		});
+
 		await handleSingleDocDeploy({
 			memory: memoryObject,
 			account,
 			document,
-			overwrite
+			overwrite,
+			prodDocs
 		});
 
 		spinner.stop(
@@ -139,22 +146,18 @@ export async function handleSingleDocDeploy({
 	memory,
 	account,
 	document,
-	overwrite
+	overwrite,
+	prodDocs
 }: {
 	memory: MemoryI;
 	account: Account;
 	document: MemoryDocumentI;
 	overwrite: boolean;
+	prodDocs: string[];
 }) {
 	p.log.info(
 		`Checking "${memory.name}" memory for document "${document.name}".`
 	);
-
-	// Fetch the existing documents
-	const prodDocs = await listMemoryDocuments({
-		account,
-		memoryName: memory.name
-	});
 
 	// If overwrite is present, deploy.
 	if (overwrite) {
