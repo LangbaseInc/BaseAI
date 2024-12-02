@@ -616,12 +616,6 @@ export async function upsertMemory({
 					p.log.info(
 						`Memory "${memory.name}" already exists. Updating changed documents.`
 					);
-					await handleGitSyncMemoryDeploy({
-						memory,
-						account,
-						documents,
-						overwrite
-					});
 
 					if (docsToDelete?.length > 0) {
 						await deleteDocumentsFromMemory({
@@ -630,6 +624,13 @@ export async function upsertMemory({
 							account
 						});
 					}
+
+					await handleGitSyncMemoryDeploy({
+						memory,
+						account,
+						documents,
+						overwrite
+					});
 
 					await updateDeployedCommitHash(memory.name);
 
