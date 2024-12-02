@@ -643,23 +643,42 @@ export async function uploadDocumentsToMemory({
 	name: string;
 	account: Account;
 }) {
-	for (const doc of documents) {
-		try {
-			p.log.message(`Uploading document: ${doc.name} ....`);
-			await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
-			const signedUrl = await getSignedUploadUrl({
-				documentName: doc.name,
-				memoryName: name,
-				account
-			});
+	const BATCH_SIZE = 5; // Number of concurrent uploads
+	const RATE_LIMIT_DELAY = 1000; // 1 second delay between requests
 
-			const uploadResponse = await uploadDocument(signedUrl, doc.blob);
-			dlog(`Upload response status: ${uploadResponse.status}`);
+	// Process documents in batches to avoid rate limiting
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
 
-			p.log.message(`Uploaded document: ${doc.name}`);
-		} catch (error) {
-			throw error;
-		}
+		const batchUploadPromises = batch.map(async (doc, index) => {
+			try {
+				// Stagger requests within batch
+				await new Promise(resolve =>
+					setTimeout(resolve, index * RATE_LIMIT_DELAY)
+				);
+
+				// p.log.message(`Uploading document: ${doc.name} ....`);
+				const signedUrl = await getSignedUploadUrl({
+					documentName: doc.name,
+					memoryName: name,
+					account
+				});
+
+				const uploadResponse = await uploadDocument(
+					signedUrl,
+					doc.blob
+				);
+				dlog(`Upload response status: ${uploadResponse.status}`);
+
+				p.log.message(`Uploaded document: ${doc.name}`);
+			} catch (error: any) {
+				throw new Error(
+					`Failed to upload ${doc.name}: ${error.message ?? error}`
+				);
+			}
+		});
+
+		await Promise.all(batchUploadPromises);
 	}
 }
 
