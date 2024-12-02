@@ -643,42 +643,23 @@ export async function uploadDocumentsToMemory({
 	name: string;
 	account: Account;
 }) {
-	const BATCH_SIZE = 5; // Number of concurrent uploads
-	const RATE_LIMIT_DELAY = 1000; // 1 second delay between requests
+	for (const doc of documents) {
+		try {
+			p.log.message(`Uploading document: ${doc.name} ....`);
+			await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
+			const signedUrl = await getSignedUploadUrl({
+				documentName: doc.name,
+				memoryName: name,
+				account
+			});
 
-	// Process documents in batches to avoid rate limiting
-	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
-		const batch = documents.slice(i, i + BATCH_SIZE);
+			const uploadResponse = await uploadDocument(signedUrl, doc.blob);
+			dlog(`Upload response status: ${uploadResponse.status}`);
 
-		const batchUploadPromises = batch.map(async (doc, index) => {
-			try {
-				// Stagger requests within batch
-				await new Promise(resolve =>
-					setTimeout(resolve, index * RATE_LIMIT_DELAY)
-				);
-
-				// p.log.message(`Uploading document: ${doc.name} ....`);
-				const signedUrl = await getSignedUploadUrl({
-					documentName: doc.name,
-					memoryName: name,
-					account
-				});
-
-				const uploadResponse = await uploadDocument(
-					signedUrl,
-					doc.blob
-				);
-				dlog(`Upload response status: ${uploadResponse.status}`);
-
-				p.log.message(`Uploaded document: ${doc.name}`);
-			} catch (error: any) {
-				throw new Error(
-					`Failed to upload ${doc.name}: ${error.message ?? error}`
-				);
-			}
-		});
-
-		await Promise.all(batchUploadPromises);
+			p.log.message(`Uploaded document: ${doc.name}`);
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 
@@ -691,25 +672,37 @@ export async function deleteDocumentsFromMemory({
 	name: string;
 	account: Account;
 }) {
-	p.log.info(`Deleting documents from memory: ${name}`);
+	const BATCH_SIZE = 5; // Number of concurrent uploads
+	const RATE_LIMIT_DELAY = 1000; // 1 second delay between requests
 
-	for (const doc of documents) {
-		try {
-			p.log.message(`Deleting document: ${doc} ....`);
-			await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
+	p.log.info(`Deleting ${documents.length} documents from memory: ${name}`);
 
-			const deleteResponse = await deleteDocument({
-				documentName: doc,
-				memoryName: name,
-				account
-			});
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
+		const batchPromises = batch.map(async (doc, index) => {
+			try {
+				await new Promise(resolve =>
+					setTimeout(resolve, index * RATE_LIMIT_DELAY)
+				);
 
-			dlog(`Delete response status: ${deleteResponse.status}`);
+				// p.log.message(`Deleting document: ${doc}`);
+				const deleteResponse = await deleteDocument({
+					documentName: doc,
+					memoryName: name,
+					account
+				});
 
-			p.log.message(`Deleted document: ${doc}`);
-		} catch (error) {
-			throw error;
-		}
+				dlog(`Delete response status: ${deleteResponse.status}`);
+				p.log.message(`Deleted document: ${doc}`);
+				return deleteResponse;
+			} catch (error: any) {
+				throw new Error(
+					`Failed to delete ${doc}: ${error.message ?? error}`
+				);
+			}
+		});
+
+		await Promise.all(batchPromises);
 	}
 	p.log.info(`Deleted documents from memory: ${name}`);
 }
