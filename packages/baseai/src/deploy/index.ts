@@ -1122,14 +1122,32 @@ export async function handleGitSyncMemoryDeploy({
 	documents: MemoryDocumentI[];
 	overwrite: boolean;
 }) {
-	for (const doc in documents) {
-		await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
-		await handleSingleDocDeploy({
-			memory,
-			account,
-			document: documents[doc],
-			overwrite: true // TODO: Implement overwrite for git-sync memories
+	const BATCH_SIZE = 5;
+	const RATE_LIMIT_DELAY = 1000;
+
+	// Fetch existing documents once
+	const prodDocs = await listMemoryDocuments({
+		account,
+		memoryName: memory.name
+	});
+
+	// Process in batches
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
+		const batchPromises = batch.map(async (doc, index) => {
+			await new Promise(resolve =>
+				setTimeout(resolve, index * RATE_LIMIT_DELAY)
+			);
+			return handleSingleDocDeploy({
+				memory,
+				account,
+				document: doc,
+				overwrite: true,
+				prodDocs
+			});
 		});
+
+		await Promise.all(batchPromises);
 	}
 }
 
