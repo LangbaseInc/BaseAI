@@ -7,17 +7,20 @@ import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { PipeTool } from 'types/tools';
 
 export async function callOpenAI({
 	pipe,
 	stream,
 	llmApiKey,
-	messages
+	messages,
+	paramsTools
 }: {
 	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
+	paramsTools: PipeTool[] | undefined;
 }) {
 	try {
 		validateInput(pipe, messages);
@@ -25,7 +28,7 @@ export async function callOpenAI({
 		await moderateContent(openai, messages, pipe.moderate);
 
 		const modelParams = buildModelParams(pipe, stream, messages);
-		addToolsToParams(modelParams, pipe);
+		addToolsToParams(modelParams, pipe, paramsTools);
 		applyJsonModeIfEnabled(modelParams, pipe);
 
 		dlog('modelParams', modelParams);

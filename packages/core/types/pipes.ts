@@ -19,7 +19,7 @@ export interface Function {
 	arguments: string;
 }
 
-export interface ToolCall {
+export interface ToolCallResult {
 	id: string;
 	type: 'function';
 	function: Function;
@@ -30,7 +30,7 @@ export interface Message {
 	content: string | null;
 	name?: string;
 	tool_call_id?: string;
-	tool_calls?: ToolCall[];
+	tool_calls?: ToolCallResult[];
 }
 
 interface ToolFunction {
@@ -43,6 +43,15 @@ interface ToolChoiceFunction {
 }
 
 type ToolChoice = 'auto' | 'required' | ToolChoiceFunction;
+
+export interface Tools {
+	type: 'function';
+	function: {
+		name: string;
+		description?: string;
+		parameters?: Record<string, any>;
+	};
+}
 
 export type Model =
 	| OpenAIModels

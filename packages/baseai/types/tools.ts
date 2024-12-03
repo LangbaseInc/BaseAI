@@ -10,14 +10,6 @@ export interface Tool {
 	};
 }
 
-export interface PipeTool {
-	type: 'function';
-	function: {
-		name: string;
-		description?: string;
-		parameters?: Record<string, any>;
-	};
-}
 export const pipeToolSchema = z.object({
 	type: z.literal('function'),
 	function: z.object({
@@ -26,3 +18,5 @@ export const pipeToolSchema = z.object({
 		parameters: z.record(z.any()).optional()
 	})
 });
+
+export type PipeTool = z.infer<typeof pipeToolSchema>;

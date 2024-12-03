@@ -1,5 +1,11 @@
 import type {Runner} from 'src/helpers';
-import {Message, MessageRole, Pipe as PipeI, ToolCall} from '../../types/pipes';
+import {
+	Message,
+	MessageRole,
+	Pipe as PipeI,
+	ToolCallResult,
+	Tools,
+} from '../../types/pipes';
 import {Request} from '../common/request';
 import {getLLMApiKey} from '../utils/get-llm-api-key';
 import {getApiUrl, isProd} from '../utils/is-prod';
@@ -19,6 +25,7 @@ export interface RunOptions {
 	threadId?: string;
 	rawResponse?: boolean;
 	runTools?: boolean;
+	tools?: Tools[];
 	name?: string; // Pipe name for SDK,
 	apiKey?: string; // pipe level key for SDK
 }
@@ -116,14 +123,16 @@ export class Pipe {
 		return tools;
 	}
 
-	private async runTools(toolCalls: ToolCall[]): Promise<Message[]> {
-		const toolPromises = toolCalls.map(async (toolCall: ToolCall) => {
+	private async runTools(toolCalls: ToolCallResult[]): Promise<Message[]> {
+		const toolPromises = toolCalls.map(async (toolCall: ToolCallResult) => {
 			const toolName = toolCall.function.name;
 			const toolParameters = JSON.parse(toolCall.function.arguments);
 			const toolFunction = this.tools[toolName];
 
 			if (!toolFunction) {
-				throw new Error(`Tool '${toolName}' not found`);
+				throw new Error(
+					`Tool ${toolName} not found. If this is intentional, please set runTools to false to disable tool execution by default.`,
+				);
 			}
 
 			const toolResponse = await toolFunction(toolParameters);
@@ -274,7 +283,13 @@ export class Pipe {
 			stream = false;
 		}
 
-		const runTools = options.runTools ?? true;
+		let runTools = options.runTools ?? true;
+
+		// Do not run tools if they are explicitly provided in the options.
+		if (options.tools && options.tools?.length) {
+			runTools = false;
+		}
+
 		delete options.runTools;
 
 		const body = {...options, stream};
@@ -321,7 +336,7 @@ export class Pipe {
 			// });
 
 			const toolResults = await this.runTools(
-				responseMessage.tool_calls as ToolCall[],
+				responseMessage.tool_calls as ToolCallResult[],
 			);
 			// logger('\npipe.run.toolResults');
 			// logger(toolResults, {depth: null, colors: true});
@@ -422,7 +437,7 @@ interface ContentChunk {
 
 interface ToolCallChunk {
 	type: 'toolCall';
-	toolCall: ToolCall;
+	toolCall: ToolCallResult;
 }
 
 interface ChoiceStream {
@@ -435,7 +450,7 @@ interface ChoiceStream {
 interface Delta {
 	role?: MessageRole;
 	content?: string;
-	tool_calls?: ToolCall[];
+	tool_calls?: ToolCallResult[];
 }
 
 interface UnknownChunk {
@@ -454,7 +469,7 @@ export interface ChunkStream {
 export interface Chunk {
 	type: 'content' | 'toolCall' | 'unknown';
 	content?: string;
-	toolCall?: ToolCall;
+	toolCall?: ToolCallResult;
 	rawChunk?: ChunkStream;
 }
 

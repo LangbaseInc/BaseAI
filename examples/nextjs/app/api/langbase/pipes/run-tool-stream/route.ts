@@ -9,9 +9,10 @@ export async function POST(req: NextRequest) {
 	const pipe = new Pipe(pipeWithToolsStream());
 
 	// 2. Run the pipe with user messages and other run options.
-	let {stream, threadId} = (await pipe.run(
-		runOptions,
-	)) as unknown as RunResponseStream;
+	let {stream, threadId} = (await pipe.run({
+		...runOptions,
+		stream: true,
+	})) as unknown as RunResponseStream;
 
 	// 3. Stream the response.
 	return new Response(stream, {
