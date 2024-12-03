@@ -18,7 +18,6 @@ import path from 'path';
 import color from 'picocolors';
 import { type MemoryI } from 'types/memory';
 import type { Pipe, PipeOld } from 'types/pipe';
-import { getStoredAuth } from './../auth/index';
 import {
 	handleGitSyncMemories,
 	updateDeployedCommitHash
@@ -28,11 +27,10 @@ import {
 	generateUpgradeInstructions,
 	isOldMemoryConfigFormat
 } from '@/utils/memory/handle-old-memory-config';
-
-export interface Account {
-	login: string;
-	apiKey: string;
-}
+import {
+	retrieveAuthentication,
+	type Account
+} from '@/utils/retrieve-credentials';
 
 interface ErrorResponse {
 	error?: { message: string };
@@ -157,26 +155,6 @@ async function readToolsDirectory({
 		return tools;
 	} catch (error) {
 		handleDirectoryReadError({ spinner, dir: toolsDir, error });
-		return null;
-	}
-}
-
-export async function retrieveAuthentication({
-	spinner
-}: {
-	spinner: Spinner;
-}): Promise<Account | null> {
-	spinner.start('Retrieving stored authentication');
-	try {
-		const account = await getStoredAuth();
-		if (!account) {
-			handleNoAccountFound({ spinner });
-			return null;
-		}
-		spinner.stop(`Deploying as ${color.cyan(account.login)}`);
-		return account;
-	} catch (error) {
-		handleAuthError({ spinner, error });
 		return null;
 	}
 }
@@ -355,23 +333,6 @@ function handleDirectoryReadError({
 	} else {
 		p.log.error(`Error reading directory: ${(error as Error).message}`);
 	}
-}
-
-function handleNoAccountFound({ spinner }: { spinner: Spinner }): void {
-	spinner.stop('No account found');
-	p.log.warn('No account found. Please authenticate first.');
-	p.log.info(`Run: ${color.green('npx baseai auth')}`);
-}
-
-function handleAuthError({
-	spinner,
-	error
-}: {
-	spinner: Spinner;
-	error: unknown;
-}): void {
-	spinner.stop('Failed to retrieve authentication');
-	p.log.error(`Error retrieving stored auth: ${(error as Error).message}`);
 }
 
 export function handleInvalidConfig({
@@ -932,11 +893,6 @@ async function getSignedUploadUrl({
 		memoryName
 	});
 
-	const isOrgAccount = account.apiKey.includes(':');
-
-	const ownerLogin = isOrgAccount
-		? account.apiKey.split(':')[0]
-		: account.login;
 	try {
 		const response = await fetch(uploadDocument, {
 			method: 'POST',
@@ -947,7 +903,6 @@ async function getSignedUploadUrl({
 			body: JSON.stringify({
 				meta,
 				memoryName,
-				ownerLogin,
 				fileName: documentName
 			})
 		});
@@ -1184,10 +1139,10 @@ export async function deploySingleMemory({
 		// Retrieve authentication
 		const account = await retrieveAuthentication({ spinner });
 		if (!account) {
-			p.log.error(
-				'Authentication failed. Please run "npx baseai auth" to authenticate.'
+			p.outro(
+				`No account found. Skipping deployment. \n Run: ${cyan('npx baseai@latest auth')}`
 			);
-			return;
+			process.exit(1);
 		}
 
 		// Call deployMemory function

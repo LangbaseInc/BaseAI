@@ -9,20 +9,10 @@ import {
 	outro,
 	password
 } from '@clack/prompts';
-import Conf from 'conf';
-import fs from 'fs';
+import fs from 'fs/promises';
 import open from 'open';
 import path from 'path';
 import color from 'picocolors';
-
-const config = new Conf({
-	projectName: 'baseai'
-});
-
-interface Account {
-	login: string;
-	apiKey: string;
-}
 
 export async function auth() {
 	p.intro(
@@ -72,17 +62,6 @@ export async function auth() {
 		process.exit(1);
 	}
 
-	// Store in Conf (old functionality)
-	const newAccount: Account = { login, apiKey };
-	const existingAccounts = (config.get('accounts') as Account[]) || [];
-	const updatedAccounts = [...existingAccounts, newAccount];
-	config.set('accounts', updatedAccounts);
-
-	// Store in .env file (new functionality)
-	// const envKeyName = apiKey.startsWith('user_')
-	// 	? 'LANGBASE_USER_API_KEY'
-	// 	: 'LANGBASE_ORG_API_KEY';
-
 	const envKeyName = 'LANGBASE_API_KEY';
 	const envContent = `\n# Langbase API key for https://langbase.com/${login}\n${envKeyName}=${apiKey}\n\n`;
 
@@ -99,37 +78,45 @@ export async function auth() {
 	const baiConfig = await loadConfig();
 	let envFile = baiConfig.envFilePath || '.env';
 
-	fs.appendFileSync(path.join(process.cwd(), envFile), envContent);
+	const envFileContent = await fs.readFile(envFile, 'utf-8');
+
+	const oldKey = envFileContent
+		.split('\n')
+		.reverse() // Reverse to get the latest key if there are multiple
+		.find(line => line.includes('LANGBASE_API_KEY'))
+		?.split('=')[1];
+
+	if (oldKey) {
+		const shouldOverwrite = await confirm({
+			message: `API key found in ${envFile}. Overwrite?`
+		});
+
+		if (isCancel(shouldOverwrite)) {
+			cancel('Operation cancelled.');
+			process.exit(0);
+		}
+
+		if (!shouldOverwrite) {
+			outro(
+				color.yellow('Operation cancelled. API key not overwritten.')
+			);
+			process.exit(0);
+		}
+
+		const newEnvContent = envFileContent.replace(
+			new RegExp(`LANGBASE_API_KEY=${oldKey}`),
+			envContent.trim()
+		);
+
+		await fs.writeFile(path.join(process.cwd(), envFile), newEnvContent);
+	} else {
+		await fs.appendFile(path.join(process.cwd(), envFile), envContent);
+	}
 
 	outro(
 		color.green(
-			`Authentication successful. Credentials stored in config and ${envFile}`
+			`Authentication successful. Credentials stored in ${envFile}`
 		)
 	);
-	console.log(color.dim(`Config file location: ${config.path}`));
 	process.exit(0);
-}
-
-export function getStoredAuth(): Account | undefined {
-	const accounts = (config.get('accounts') as Account[]) || [];
-	const currentLogin = config.get('currentAccount') as string | undefined;
-
-	if (currentLogin) {
-		return accounts.find(account => account.login === currentLogin);
-	}
-
-	return accounts[0]; // Return the first account if no current account is set
-}
-
-export function getStoredAccounts(): Account[] {
-	return (config.get('accounts') as Account[]) || [];
-}
-
-export function setCurrentAccount(login: string): boolean {
-	const accounts = getStoredAccounts();
-	if (accounts.some(account => account.login === login)) {
-		config.set('currentAccount', login);
-		return true;
-	}
-	return false;
 }
