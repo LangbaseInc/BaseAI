@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.39
+
+### Patch Changes
+
+-   📦 NEW: tools support in pipe.run()
+
 ## 0.9.38
 
 ### Patch Changes
