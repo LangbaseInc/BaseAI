@@ -44,6 +44,7 @@ const RequestBodySchema = z.object({
 	stream: z.boolean(),
 	messages: z.array(schemaMessage),
 	llmApiKey: z.string(),
+	tools: z.array(pipeToolSchema).optional(),
 	variables: VariablesSchema.optional()
 });
 
@@ -138,7 +139,8 @@ const handleRun = async (c: any) => {
 			messages,
 			llmApiKey,
 			stream,
-			variables
+			variables,
+			paramsTools: validatedBody.tools
 		});
 
 		return processLlmResponse(c, validatedBody, rawLlmResponse);

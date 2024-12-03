@@ -27,19 +27,22 @@ import { callPerplexity } from './call-perplexity';
 import { callTogether } from './call-together';
 import { callXAI } from './call-xai';
 import { getProvider } from '../utils/get-provider';
+import type { PipeTool } from 'types/tools';
 
 export async function callLLM({
 	pipe,
 	stream,
 	messages,
 	llmApiKey,
-	variables
+	variables,
+	paramsTools
 }: {
 	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
 	variables?: VariablesI;
+	paramsTools: PipeTool[] | undefined;
 }) {
 	try {
 		// Get the model provider from the pipe.
@@ -70,7 +73,8 @@ export async function callLLM({
 				pipe,
 				stream,
 				messages,
-				llmApiKey
+				llmApiKey,
+				paramsTools
 			});
 		}
 
@@ -78,9 +82,10 @@ export async function callLLM({
 			dlog('ANTHROPIC', '✅');
 			return await callAnthropic({
 				pipe,
+				stream,
 				messages,
 				llmApiKey,
-				stream
+				paramsTools
 			});
 		}
 
@@ -88,9 +93,10 @@ export async function callLLM({
 			dlog('TOGETHER_AI', '✅');
 			return await callTogether({
 				pipe,
+				stream,
 				messages,
 				llmApiKey,
-				stream
+				paramsTools,
 			});
 		}
 
@@ -110,7 +116,8 @@ export async function callLLM({
 				pipe,
 				messages,
 				llmApiKey,
-				stream
+				stream,
+				paramsTools
 			});
 		}
 
@@ -120,7 +127,8 @@ export async function callLLM({
 				pipe,
 				messages,
 				llmApiKey,
-				stream
+				stream,
+				paramsTools
 			});
 		}
 

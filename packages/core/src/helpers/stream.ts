@@ -1,7 +1,7 @@
 import {ChatCompletionStream} from 'openai/lib/ChatCompletionStream';
 import {ChunkStream} from 'src/pipes';
 import {Stream} from 'openai/streaming';
-import {ToolCall} from 'types/pipes';
+import {ToolCallResult} from 'types/pipes';
 
 export interface Runner extends ChatCompletionStream<null> {}
 
@@ -91,7 +91,7 @@ export function handleResponseStream({
  */
 export async function getToolsFromStream(
 	stream: ReadableStream<any>,
-): Promise<ToolCall[]> {
+): Promise<ToolCallResult[]> {
 	let run = getRunner(stream);
 	const {choices} = await run.finalChatCompletion();
 	return choices[0].message.tool_calls;

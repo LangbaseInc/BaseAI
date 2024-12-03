@@ -6,21 +6,24 @@ import { applyJsonModeIfEnabledForGoogle, handleLlmError } from './utils';
 import type { ModelParams } from 'types/providers';
 import type { Message, Pipe } from 'types/pipe';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { PipeTool } from 'types/tools';
 
 export async function callGoogle({
 	pipe,
 	messages,
 	llmApiKey,
-	stream
+	stream,
+	paramsTools
 }: {
 	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
+	paramsTools: PipeTool[] | undefined;
 }) {
 	try {
 		const modelParams = buildModelParams(pipe, stream, messages);
-		addToolsToParams(modelParams, pipe);
+		addToolsToParams(modelParams, pipe, paramsTools);
 
 		// Transform params according to provider's format
 		const transformedRequestParams = transformToProviderRequest({

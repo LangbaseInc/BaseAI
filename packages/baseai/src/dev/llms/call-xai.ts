@@ -5,17 +5,20 @@ import { handleLlmError } from './utils';
 import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { PipeTool } from 'types/tools';
 
 export async function callXAI({
 	pipe,
 	stream,
 	llmApiKey,
-	messages
+	messages,
+	paramsTools
 }: {
 	pipe: Pipe;
 	stream: boolean;
 	llmApiKey: string;
 	messages: Message[];
+	paramsTools: PipeTool[] | undefined;
 }) {
 	try {
 		const modelParams = buildModelParams(pipe, stream, messages);
@@ -27,7 +30,7 @@ export async function callXAI({
 		});
 
 		// Add tools (functions) to modelParams
-		addToolsToParams(modelParams, pipe);
+		addToolsToParams(modelParams, pipe, paramsTools);
 		dlog('modelParams', modelParams);
 
 		return await groq.chat.completions.create(modelParams as any);

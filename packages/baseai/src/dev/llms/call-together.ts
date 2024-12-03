@@ -5,17 +5,20 @@ import { applyJsonModeIfEnabled, handleLlmError } from './utils';
 import type { Message, Pipe } from 'types/pipe';
 import type { ModelParams } from 'types/providers';
 import { addToolsToParams } from '../utils/add-tools-to-params';
+import type { PipeTool } from 'types/tools';
 
 export async function callTogether({
 	pipe,
 	messages,
 	llmApiKey,
-	stream
+	stream,
+	paramsTools
 }: {
 	pipe: Pipe;
 	llmApiKey: string;
 	stream: boolean;
 	messages: Message[];
+	paramsTools: PipeTool[] | undefined;
 }) {
 	try {
 		const modelParams = buildModelParams(pipe, stream, messages);
@@ -29,7 +32,7 @@ export async function callTogether({
 		// Together behaves weirdly with stop value. Omitting it.
 		delete modelParams['stop'];
 		applyJsonModeIfEnabled(modelParams, pipe);
-		addToolsToParams(modelParams, pipe);
+		addToolsToParams(modelParams, pipe, paramsTools);
 		dlog('modelParams', modelParams);
 
 		return await together.chat.completions.create(modelParams as any);
