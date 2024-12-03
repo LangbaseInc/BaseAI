@@ -13,7 +13,7 @@ export function addToolsToParams(
 	const hasParamsTools = paramsTools && paramsTools.length > 0;
 
 	// 1. If no tools are provided, return the modelParams as is
-	if (!paramsTools && !pipeTools.length) return modelParams;
+	if (!hasParamsTools && !pipeTools.length) return modelParams;
 
 	const [providerString, modelName] = pipe.model.split(':');
 	const provider = getProvider(providerString);
