@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.38
+
+### Patch Changes
+
+-   📦 NEW: .env file based BaseAI auth
+
 ## 0.9.37
 
 ### Patch Changes
