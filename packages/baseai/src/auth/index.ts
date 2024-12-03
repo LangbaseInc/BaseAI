@@ -98,7 +98,7 @@ export async function auth() {
 
 		if (!shouldOverwrite) {
 			outro(
-				color.yellow('Operation cancelled. API key not overwritten.')
+				color.yellow('API key is not overwritten.')
 			);
 			process.exit(0);
 		}
@@ -115,7 +115,7 @@ export async function auth() {
 
 	outro(
 		color.green(
-			`Authentication successful. Credentials stored in ${envFile}`
+			`Authentication successful. API key is stored in ${envFile}`
 		)
 	);
 	process.exit(0);
