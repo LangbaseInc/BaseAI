@@ -17,11 +17,11 @@
 	"author": "Ahmad Awais <me@AhmadAwais.com> (https://twitter.com/MrAhmadAwais)",
 	"license": "UNLICENSED",
 	"dependencies": {
-		"@baseai/core": "^0.9.37",
+		"@baseai/core": "^0.9.38",
 		"dotenv": "^16.4.5"
 	},
 	"devDependencies": {
-		"baseai": "^0.9.37",
+		"baseai": "^0.9.38",
 		"tsx": "^4.19.0"
 	}
 }
