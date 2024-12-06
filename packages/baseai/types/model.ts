@@ -29,7 +29,8 @@ export type TogetherModels =
 	| 'together:mistralai/Mistral-7B-Instruct-v0.2'
 	| 'together:mistralai/Mixtral-8x7B-Instruct-v0.1'
 	| 'together:mistralai/Mixtral-8x22B-Instruct-v0.1'
-	| 'together:databricks/dbrx-instruct';
+	| 'together:databricks/dbrx-instruct'
+	| 'together:meta-llama/Llama-3.3-70B-Instruct-Turbo';
 
 export type AnthropicModels =
 	| 'anthropic:claude-3-5-sonnet-latest'
@@ -46,7 +47,8 @@ export type GroqModels =
 	| 'groq:llama3-8b-8192'
 	| 'groq:mixtral-8x7b-32768'
 	| 'groq:gemma2-9b-it'
-	| 'groq:gemma-7b-it';
+	| 'groq:gemma-7b-it'
+	| 'groq:llama-3.3-70b-versatile';
 
 export type GoogleModels =
 	| 'google:gemini-1.5-pro-latest'
@@ -61,7 +63,8 @@ export type FireworksAIModels =
 	| 'fireworks:llama-v3p1-8b-instruct'
 	| 'fireworks:llama-v3p1-70b-instruct'
 	| 'fireworks:llama-v3-70b-instruct'
-	| 'fireworks:yi-large';
+	| 'fireworks:yi-large'
+	| 'fireworks:llama-v3p3-70b-instruct';
 
 export type PerplexityModels =
 	| 'perplexity:llama-3.1-sonar-huge-128k-online'
