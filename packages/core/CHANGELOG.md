@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.40
+
+### Patch Changes
+
+-   📦 NEW: meta-llama/Llama-3.3-70B-Instruct-Turbo model
+
 ## 0.9.39
 
 ### Patch Changes
