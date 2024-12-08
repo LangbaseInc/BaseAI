@@ -78,21 +78,41 @@ function replaceVarsInMessagesWithVals({
 		// 1- message.content is empty
 		// 2- message.role is 'assistant'
 		// 3- message.tool_calls is an array of tool calls requested by LLM.
+
+		// 1. If tool call or no content, return msg as is
 		const isAssistantToolCall =
 			!message.content &&
 			message.role === 'assistant' &&
 			message.tool_calls?.length;
+		if (isAssistantToolCall || !message.content) return message;
 
-		// Since no content to replace variables in, return the message as is.
-		if (isAssistantToolCall) return message;
-		if (!message.content) return message;
+		// 2. If the content is an array, replace variables in each item
+		if (Array.isArray(message.content)) {
+			const updatedContent = message.content.map(contentItem => ({
+				...contentItem,
 
-		// Replace variables in the message content
+				text: contentItem.text?.replace(
+					variableRegex,
+					(match, varName) => {
+						const trimmedVarName = varName.trim(); // Trim any extra spaces
+
+						// If the variable exists in the map, replace with its value; otherwise, leave the placeholder intact
+						return variablesMap.get(trimmedVarName) || match;
+					}
+				)
+			}));
+			return {
+				...message,
+				content: updatedContent
+			};
+		}
+
+		// 3. If content is a string, replace variables in it
 		const updatedContent = message.content.replace(
 			variableRegex,
 			(match, varName) => {
-				const trimmedVarName = varName.trim(); // Trim any extra spaces
-				// If the variable exists in the map, replace with its value; otherwise, leave the placeholder intact
+				const trimmedVarName = varName.trim();
+
 				return variablesMap.get(trimmedVarName) || match;
 			}
 		);
