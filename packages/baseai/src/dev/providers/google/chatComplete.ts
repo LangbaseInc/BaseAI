@@ -439,7 +439,7 @@ export const GoogleChatCompleteStreamChunkTransform: (
 			model: '',
 			provider: 'google',
 			choices:
-				parsedChunk.candidates?.map(generation => {
+				parsedChunk.candidates?.map((generation, index) => {
 					let message: ProviderMessage = {
 						role: 'assistant',
 						content: ''
@@ -473,7 +473,7 @@ export const GoogleChatCompleteStreamChunkTransform: (
 					}
 					return {
 						delta: message,
-						index: generation.index,
+						index: generation.index ?? index,
 						finish_reason: generation.finishReason
 					};
 				}) ?? []
