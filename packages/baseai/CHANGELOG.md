@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.41
+
+### Patch Changes
+
+-   🐛 FIX: Google stream
+
 ## 0.9.40
 
 ### Patch Changes
