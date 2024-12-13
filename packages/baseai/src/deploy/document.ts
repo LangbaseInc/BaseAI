@@ -7,7 +7,7 @@ import {
 	handleError,
 	handleInvalidConfig,
 	listMemoryDocuments,
-	uploadDocumentsToMemory,
+	uploadDocumentsToMemory
 } from '.';
 import path from 'path';
 import fs from 'fs/promises';
@@ -19,7 +19,10 @@ import {
 } from '@/utils/memory/load-memory-files';
 import type { MemoryI } from 'types/memory';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
-import { retrieveAuthentication, type Account } from '@/utils/retrieve-credentials';
+import {
+	retrieveAuthentication,
+	type Account
+} from '@/utils/retrieve-credentials';
 
 type Spinner = ReturnType<typeof p.spinner>;
 
@@ -166,9 +169,9 @@ export async function handleSingleDocDeploy({
 			documents: [document],
 			name: memory.name
 		});
-		p.log.success(
-			`Document "${document.name}" uploaded to memory "${memory.name}".`
-		);
+		// p.log.success(
+		// 	`Document "${document.name}" uploaded to memory "${memory.name}".`
+		// );
 		return;
 	}
 
@@ -188,9 +191,9 @@ export async function handleSingleDocDeploy({
 			documents: [document],
 			name: memory.name
 		});
-		p.log.success(
-			`Document "${document.name}" uploaded to memory "${memory.name}".`
-		);
+		// p.log.success(
+		// 	`Document "${document.name}" uploaded to memory "${memory.name}".`
+		// );
 		return;
 	}
 
