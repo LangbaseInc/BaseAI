@@ -645,7 +645,7 @@ export async function uploadDocumentsToMemory({
 	account: Account;
 }) {
 	const BATCH_SIZE = 5; // Number of concurrent uploads
-	const RATE_LIMIT_DELAY = 1000; // 1 second delay between requests
+	const RATE_LIMIT_DELAY = 1500; // 1.5 second delay between requests
 
 	// Process documents in batches to avoid rate limiting
 	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
@@ -693,7 +693,7 @@ export async function deleteDocumentsFromMemory({
 	account: Account;
 }) {
 	const BATCH_SIZE = 5; // Number of concurrent uploads
-	const RATE_LIMIT_DELAY = 1000; // 1 second delay between requests
+	const RATE_LIMIT_DELAY = 1500; // 1.5 second delay between requests
 
 	p.log.info(`Deleting ${documents.length} documents from memory: ${name}`);
 
@@ -1123,7 +1123,7 @@ export async function handleGitSyncMemoryDeploy({
 	overwrite: boolean;
 }) {
 	const BATCH_SIZE = 5;
-	const RATE_LIMIT_DELAY = 1000;
+	const RATE_LIMIT_DELAY = 1500;
 
 	// Fetch existing documents once
 	const prodDocs = await listMemoryDocuments({
