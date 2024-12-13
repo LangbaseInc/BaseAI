@@ -1,122 +1,122 @@
 {
-	"name": "@baseai/core",
-	"description": "The Web AI Framework's core - BaseAI.dev",
-	"version": "0.9.41",
-	"license": "Apache-2.0",
-	"sideEffects": false,
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist/**",
-		"pipes/dist/**",
-		"helpers/dist/**",
-		"react/dist/**",
-		"CHANGELOG.md"
-	],
-	"scripts": {
-		"xbuild": "tsup src/index.ts --format esm,cjs --dts --external react",
-		"build": "tsup",
-		"dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
-		"xdev": "tsup --watch",
-		"lint": "eslint \"src/**/*.ts*\"",
-		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-		"type-check": "tsc --noEmit",
-		"prettier-check": "prettier --check \"./**/*.ts*\"",
-		"test": "pnpm test:node && pnpm test:edge",
-		"#test": "pnpm test:node && pnpm test:edge && pnpm test:ui && pnpm test:e2e",
-		"test:edge": "vitest --config vitest.edge.config.js --run",
-		"test:node": "vitest --config vitest.node.config.js --run",
-		"test:ui": "pnpm test:ui:react",
-		"test:ui:react": "vitest --config vitest.ui.react.config.js --run",
-		"test:e2e": "playwright test",
-		"test:edge:watch": "vitest --config vitest.edge.config.js",
-		"test:node:watch": "vitest --config vitest.node.config.js",
-		"test:ui:react:watch": "vitest --config vitest.ui.react.config.js"
-	},
-	"dependencies": {
-		"openai": "^4.63.0",
-		"zod": "^3.23.8"
-	},
-	"devDependencies": {
-		"@baseai/eslint-config": "workspace:*",
-		"@baseai/tsconfig": "workspace:*",
-		"@edge-runtime/vm": "^4.0.3",
-		"@playwright/test": "^1.47.2",
-		"@testing-library/react": "^16.0.1",
-		"@types/node": "^22.6.1",
-		"@types/react": "^18.3.9",
-		"@vitejs/plugin-react": "^4.3.1",
-		"eslint": "^8.57.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-prettier": "^5.2.1",
-		"jsdom": "^25.0.1",
-		"react": "^18",
-		"tsup": "^8.3.0",
-		"typescript": "^5.6.2",
-		"vitest": "1.6.0"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs"
-		},
-		"./react": {
-			"types": "./react/dist/index.d.ts",
-			"require": "./react/dist/index.js",
-			"import": "./react/dist/index.mjs"
-		},
-		"./pipes": {
-			"types": "./pipes/dist/index.d.ts",
-			"require": "./pipes/dist/index.js",
-			"import": "./pipes/dist/index.mjs"
-		},
-		"./helpers": {
-			"types": "./helpers/dist/index.d.ts",
-			"require": "./helpers/dist/index.js",
-			"import": "./helpers/dist/index.mjs"
-		}
-	},
-	"engines": {
-		"node": ">=18"
-	},
-	"peerDependencies": {
-		"react": "^18 || ^19",
-		"zod": "^3.0.0"
-	},
-	"peerDependenciesMeta": {
-		"react": {
-			"optional": true
-		},
-		"zod": {
-			"optional": true
-		}
-	},
-	"homepage": "https://BaseAI.dev",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/LangbaseInc/baseai.git"
-	},
-	"bugs": {
-		"url": "https://github.com/LangbaseInc/baseai/issues"
-	},
-	"author": {
-		"name": "Langbase",
-		"url": "https://BaseAI.dev"
-	},
-	"keywords": [
-		"ai",
-		"llm",
-		"langbase core",
-		"langbase sdk",
-		"baseai",
-		"base ai",
-		"langbase",
-		"langbase.com",
-		"generative AI"
-	]
+  "name": "@baseai/core",
+  "description": "The Web AI Framework's core - BaseAI.dev",
+  "version": "0.9.42-snapshot.0",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**",
+    "pipes/dist/**",
+    "helpers/dist/**",
+    "react/dist/**",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "xbuild": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "build": "tsup",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
+    "xdev": "tsup --watch",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "prettier-check": "prettier --check \"./**/*.ts*\"",
+    "test": "pnpm test:node && pnpm test:edge",
+    "#test": "pnpm test:node && pnpm test:edge && pnpm test:ui && pnpm test:e2e",
+    "test:edge": "vitest --config vitest.edge.config.js --run",
+    "test:node": "vitest --config vitest.node.config.js --run",
+    "test:ui": "pnpm test:ui:react",
+    "test:ui:react": "vitest --config vitest.ui.react.config.js --run",
+    "test:e2e": "playwright test",
+    "test:edge:watch": "vitest --config vitest.edge.config.js",
+    "test:node:watch": "vitest --config vitest.node.config.js",
+    "test:ui:react:watch": "vitest --config vitest.ui.react.config.js"
+  },
+  "dependencies": {
+    "openai": "^4.63.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@baseai/eslint-config": "workspace:*",
+    "@baseai/tsconfig": "workspace:*",
+    "@edge-runtime/vm": "^4.0.3",
+    "@playwright/test": "^1.47.2",
+    "@testing-library/react": "^16.0.1",
+    "@types/node": "^22.6.1",
+    "@types/react": "^18.3.9",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "jsdom": "^25.0.1",
+    "react": "^18",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2",
+    "vitest": "1.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./react": {
+      "types": "./react/dist/index.d.ts",
+      "require": "./react/dist/index.js",
+      "import": "./react/dist/index.mjs"
+    },
+    "./pipes": {
+      "types": "./pipes/dist/index.d.ts",
+      "require": "./pipes/dist/index.js",
+      "import": "./pipes/dist/index.mjs"
+    },
+    "./helpers": {
+      "types": "./helpers/dist/index.d.ts",
+      "require": "./helpers/dist/index.js",
+      "import": "./helpers/dist/index.mjs"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "zod": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
+  },
+  "homepage": "https://BaseAI.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LangbaseInc/baseai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LangbaseInc/baseai/issues"
+  },
+  "author": {
+    "name": "Langbase",
+    "url": "https://BaseAI.dev"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "langbase core",
+    "langbase sdk",
+    "baseai",
+    "base ai",
+    "langbase",
+    "langbase.com",
+    "generative AI"
+  ]
 }
