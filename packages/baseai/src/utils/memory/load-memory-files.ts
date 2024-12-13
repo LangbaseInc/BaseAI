@@ -65,8 +65,6 @@ export const loadMemoryFilesFromCustomDir = async ({
 		process.exit(1);
 	}
 
-	console.log('Reading documents in memory...');
-
 	// Get all files that match the glob patterns and are tracked by git
 	let allFiles: string[];
 	try {
