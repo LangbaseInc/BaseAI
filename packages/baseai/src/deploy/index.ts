@@ -662,7 +662,8 @@ export async function uploadDocumentsToMemory({
 				const signedUrl = await getSignedUploadUrl({
 					documentName: doc.name,
 					memoryName: name,
-					account
+					account,
+					meta: doc.meta
 				});
 
 				const uploadResponse = await uploadDocument(
