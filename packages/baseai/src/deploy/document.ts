@@ -7,7 +7,7 @@ import {
 	handleError,
 	handleInvalidConfig,
 	listMemoryDocuments,
-	uploadDocumentsToMemory,
+	uploadDocumentsToMemory
 } from '.';
 import path from 'path';
 import fs from 'fs/promises';
@@ -19,7 +19,10 @@ import {
 } from '@/utils/memory/load-memory-files';
 import type { MemoryI } from 'types/memory';
 import { compareDocumentLists } from '@/utils/memory/compare-docs-list';
-import { retrieveAuthentication, type Account } from '@/utils/retrieve-credentials';
+import {
+	retrieveAuthentication,
+	type Account
+} from '@/utils/retrieve-credentials';
 
 type Spinner = ReturnType<typeof p.spinner>;
 
@@ -114,11 +117,18 @@ async function deployDocument({
 			process.exit(1);
 		}
 
+		// Fetch the existing documents
+		const prodDocs = await listMemoryDocuments({
+			account,
+			memoryName
+		});
+
 		await handleSingleDocDeploy({
 			memory: memoryObject,
 			account,
 			document,
-			overwrite
+			overwrite,
+			prodDocs
 		});
 
 		spinner.stop(
@@ -139,22 +149,18 @@ export async function handleSingleDocDeploy({
 	memory,
 	account,
 	document,
-	overwrite
+	overwrite,
+	prodDocs
 }: {
 	memory: MemoryI;
 	account: Account;
 	document: MemoryDocumentI;
 	overwrite: boolean;
+	prodDocs: string[];
 }) {
 	p.log.info(
 		`Checking "${memory.name}" memory for document "${document.name}".`
 	);
-
-	// Fetch the existing documents
-	const prodDocs = await listMemoryDocuments({
-		account,
-		memoryName: memory.name
-	});
 
 	// If overwrite is present, deploy.
 	if (overwrite) {
@@ -163,9 +169,9 @@ export async function handleSingleDocDeploy({
 			documents: [document],
 			name: memory.name
 		});
-		p.log.success(
-			`Document "${document.name}" uploaded to memory "${memory.name}".`
-		);
+		// p.log.success(
+		// 	`Document "${document.name}" uploaded to memory "${memory.name}".`
+		// );
 		return;
 	}
 
@@ -185,9 +191,9 @@ export async function handleSingleDocDeploy({
 			documents: [document],
 			name: memory.name
 		});
-		p.log.success(
-			`Document "${document.name}" uploaded to memory "${memory.name}".`
-		);
+		// p.log.success(
+		// 	`Document "${document.name}" uploaded to memory "${memory.name}".`
+		// );
 		return;
 	}
 
