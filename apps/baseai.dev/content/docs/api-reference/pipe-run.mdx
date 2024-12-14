@@ -83,6 +83,7 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
                 ```ts {{title: 'RunOptions Object'}}
                 interface RunOptions {
                     messages?: Message[];
+                    runTools?: boolean;
                     variables?: Variable[];
                     threadId?: string;
                     rawResponse?: boolean;
@@ -106,7 +107,6 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
                     role: 'user' | 'assistant' | 'system'| 'tool';
                     content: string | null;
                     name?: string;
-                    runTools?: boolean;
                     tool_call_id?: string;
                     tool_calls?: ToolCall[];
                 }
@@ -123,9 +123,6 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
                     </Property>
                     <Property name="name" type="string">
                         The name of the tool called by LLM
-                    </Property>
-                    <Property name="runTools" type="boolean">
-                        Enable if you want BaseAI to automically run tools.
                     </Property>
                     <Property name="tool_call_id" type="string">
                         The id of the tool called by LLM
@@ -158,6 +155,14 @@ The BaseAI core package provides a `pipe.run()` function that you can use in you
         </Properties>
 
         ---
+
+        ### runTools
+
+        <Properties>
+            <Property name="runTools" type="boolean">
+                Enable if you want BaseAI to automically run tools**.**
+            </Property>
+        </Properties>
 
         ### variables
 
