@@ -20,6 +20,7 @@ import { loadConfig } from '../config/config-handler';
 import { logger } from '../logger-utils';
 import { generateLocalEmbeddings } from './generate-local-embeddings';
 import { getOpenAIEmbeddings } from './generate-openai-embeddings';
+import { getMessageContent } from '@/dev/utils/thread/get-message-content';
 
 export async function checkDirectoryExists(directoryPath: string) {
 	try {
@@ -155,7 +156,7 @@ export const addContextFromMemory = async ({
 		const lastUserMsg = [...messages]
 			.reverse()
 			.find(m => m.role === 'user');
-		const userPrompt = lastUserMsg?.content;
+		const userPrompt = getMessageContent(lastUserMsg!);
 
 		// If there is no user prompt, return the messages.
 		if (!userPrompt) return;
