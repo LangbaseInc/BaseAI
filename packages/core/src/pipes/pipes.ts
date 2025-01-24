@@ -28,6 +28,7 @@ export interface RunOptions {
 	tools?: Tools[];
 	name?: string; // Pipe name for SDK,
 	apiKey?: string; // pipe level key for SDK
+	llmKey?: string; // LLM API key
 }
 
 export interface RunOptionsStream extends RunOptions {
@@ -92,6 +93,7 @@ export class Pipe {
 	private hasTools: boolean;
 	private prod: boolean;
 	private baseUrl: string;
+	private entityApiKey?: string;
 
 	constructor(options: PipeOptions) {
 		this.prod = options.prod ?? isProd();
@@ -102,6 +104,7 @@ export class Pipe {
 			baseUrl: this.baseUrl,
 		});
 		this.pipe = options;
+		this.entityApiKey = options.apiKey;
 
 		delete this.pipe.prod;
 		delete this.pipe.apiKey;
@@ -272,6 +275,15 @@ export class Pipe {
 			this.request = new Request({
 				apiKey: options.apiKey,
 				baseUrl: this.baseUrl,
+				...((options.llmKey && {llmKey: options.llmKey}) || {}),
+			});
+		}
+
+		if (options.llmKey && !options.apiKey) {
+			this.request = new Request({
+				apiKey: this.entityApiKey,
+				baseUrl: this.baseUrl,
+				llmKey: options.llmKey,
 			});
 		}
 

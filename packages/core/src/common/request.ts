@@ -14,6 +14,7 @@ interface RequestConfig {
 	apiKey?: string;
 	baseUrl: string;
 	timeout?: number;
+	llmKey?: string;
 }
 
 interface SendOptions extends RequestOptions {
@@ -90,6 +91,7 @@ export class Request {
 		return {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${this.config.apiKey}`,
+			'LB-LLM-Key': this.config.llmKey ?? '',
 			...headers,
 		};
 	}
