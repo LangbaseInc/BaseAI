@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.42
+
+### Patch Changes
+
+-   📦 NEW: LB-LLM-Key header support
+
 ## 0.9.41
 
 ### Patch Changes
