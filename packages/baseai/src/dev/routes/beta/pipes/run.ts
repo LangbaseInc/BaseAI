@@ -4,7 +4,7 @@ import { dlog } from '@/dev/utils/dlog';
 import { handleStreamingResponse } from '@/dev/utils/provider-handlers/streaming-response-handler';
 import { logger } from '@/utils/logger-utils';
 import { Hono } from 'hono';
-import { schemaMessage, VariablesSchema } from 'types/pipe';
+import { schemaMessage, schemaPipeMessage, VariablesSchema } from 'types/pipe';
 import { z } from 'zod';
 
 // Schema definitions
@@ -31,7 +31,7 @@ const PipeSchema = z.object({
 	status: z.string(),
 	meta: MetaSchema,
 	model: ModelSchema,
-	messages: z.array(schemaMessage),
+	messages: z.array(schemaPipeMessage),
 	functions: z.array(z.unknown()).default([]),
 	memorysets: z.array(z.string().trim().min(1)).default([]),
 	variables: VariablesSchema
