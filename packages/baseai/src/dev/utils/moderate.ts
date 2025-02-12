@@ -29,7 +29,10 @@ export async function moderate({
 	}
 
 	// Perform moderation on the constructed prompt text
-	const moderation = await openai.moderations.create({ input: promptText });
+	const moderation = await openai.moderations.create({
+		model: 'omni-moderation-latest',
+		input: promptText
+	});
 	const result = moderation?.results[0];
 	// dlog('moderation:', result);
 
