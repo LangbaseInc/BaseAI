@@ -1,5 +1,11 @@
 # `baseai` SDK
 
+## 0.9.43
+
+### Patch Changes
+
+-   Fix moderation
+
 ## 0.9.42
 
 ### Patch Changes
