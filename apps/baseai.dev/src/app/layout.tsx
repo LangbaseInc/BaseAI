@@ -1,5 +1,5 @@
 import { Providers } from '@/app/providers';
-import CrispClient from '@/components/crisp';
+import IntercomClient from '@/components/intercom';
 import '@/styles/tailwind.css';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
@@ -53,7 +53,7 @@ export default async function RootLayout({
 		<html lang="en" className="h-full" suppressHydrationWarning>
 			<body className={`${inter.className}`}>
 				<Providers>
-					<CrispClient />
+					<IntercomClient />
 					{children}
 				</Providers>
 			</body>
