@@ -1,20 +1,23 @@
-import langGraphQL from 'shiki/languages/graphql.tmLanguage.json' assert { type: 'json' };
-import langJS from 'shiki/languages/javascript.tmLanguage.json' assert { type: 'json' };
-import langJSX from 'shiki/languages/jsx.tmLanguage.json' assert { type: 'json' };
-import langJSON from 'shiki/languages/json.tmLanguage.json' assert { type: 'json' };
-import langXML from 'shiki/languages/xml.tmLanguage.json' assert { type: 'json' };
-import langYAML from 'shiki/languages/yaml.tmLanguage.json' assert { type: 'json' };
-import langPHP from 'shiki/languages/php.tmLanguage.json' assert { type: 'json' };
-import langHTML from 'shiki/languages/html.tmLanguage.json' assert { type: 'json' };
-import langCSS from 'shiki/languages/css.tmLanguage.json' assert { type: 'json' };
-import langSCSS from 'shiki/languages/scss.tmLanguage.json' assert { type: 'json' };
-import langSASS from 'shiki/languages/sass.tmLanguage.json' assert { type: 'json' };
-import langLESS from 'shiki/languages/less.tmLanguage.json' assert { type: 'json' };
-import langMarkdown from 'shiki/languages/markdown.tmLanguage.json' assert { type: 'json' };
-import langTS from 'shiki/languages/typescript.tmLanguage.json' assert { type: 'json' };
-import langTSX from 'shiki/languages/tsx.tmLanguage.json' assert { type: 'json' };
-import langShell from 'shiki/languages/shellscript.tmLanguage.json' assert { type: 'json' };
-import langPy from 'shiki/languages/python.tmLanguage.json' assert { type: 'json' };
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const langGraphQL = require('shiki/languages/graphql.tmLanguage.json');
+const langJS = require('shiki/languages/javascript.tmLanguage.json');
+const langJSX = require('shiki/languages/jsx.tmLanguage.json');
+const langJSON = require('shiki/languages/json.tmLanguage.json');
+const langXML = require('shiki/languages/xml.tmLanguage.json');
+const langYAML = require('shiki/languages/yaml.tmLanguage.json');
+const langPHP = require('shiki/languages/php.tmLanguage.json');
+const langHTML = require('shiki/languages/html.tmLanguage.json');
+const langCSS = require('shiki/languages/css.tmLanguage.json');
+const langSCSS = require('shiki/languages/scss.tmLanguage.json');
+const langSASS = require('shiki/languages/sass.tmLanguage.json');
+const langLESS = require('shiki/languages/less.tmLanguage.json');
+const langMarkdown = require('shiki/languages/markdown.tmLanguage.json');
+const langTS = require('shiki/languages/typescript.tmLanguage.json');
+const langTSX = require('shiki/languages/tsx.tmLanguage.json');
+const langShell = require('shiki/languages/shellscript.tmLanguage.json');
+const langPy = require('shiki/languages/python.tmLanguage.json');
 
 const lang = [
 	{

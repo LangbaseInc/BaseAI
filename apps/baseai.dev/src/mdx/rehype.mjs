@@ -1,11 +1,14 @@
+import { createRequire } from 'module';
 import { slugifyWithCounter } from '@sindresorhus/slugify';
 import * as acorn from 'acorn';
 import { toString } from 'mdast-util-to-string';
 import { mdxAnnotations } from 'mdx-annotations';
 import shiki from 'shiki';
 import { visit } from 'unist-util-visit';
-import theme from './themes/shades-of-purple.json' assert { type: 'json' };
 import lang from './languages.mjs';
+
+const require = createRequire(import.meta.url);
+const theme = require('./themes/shades-of-purple.json');
 
 export function rehypeParseCodeBlocks() {
 	return tree => {
