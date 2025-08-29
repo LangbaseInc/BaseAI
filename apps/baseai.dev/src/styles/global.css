@@ -116,3 +116,18 @@ html {
 	font-weight: normal;
 	font-style: normal;
 }
+
+/* Crisp Chat Widget Style Overrides */
+#crisp-chatbox .cc-1d4mk.cc-8mq05 {
+	background-color: black !important;
+}
+
+/* Additional selector for better specificity */
+#crisp-chatbox [data-id="chat_opened"] .cc-1d4mk {
+	background-color: black !important;
+}
+
+/* Target the chat bubble background */
+.crisp-client .cc-1d4mk {
+	background-color: black !important;
+}
