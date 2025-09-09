@@ -1,5 +1,11 @@
 # baseai
 
+## 0.9.44
+
+### Patch Changes
+
+-   👌 IMPROVE: Pinned chalk version
+
 ## 0.9.43
 
 ### Patch Changes
