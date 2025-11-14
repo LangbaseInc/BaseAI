@@ -1,3 +1,6 @@
+> BaseAI is now archived in the favor of [Langbase AI Primitives](https://langbase.com/docs). The more we built BaseAI the more we realized frameworks are a bad idea in AI engineering. This space is moving fast and frameworks become blockers. Instead you should be using AI primitives, like [memory, pipes, agents](https://langbase.com/docs) that work with any language as APIs and with TypeScript and Python SDKs. You can use any coding agent, like [CommandCode](https://commandcode.ai) to make your own AI framework with these AI primitives. BaseAI is a great example how. 
+
+
 <p align="center">
   <a href="https://baseai.dev">
       <img src="https://github.com/user-attachments/assets/6d447930-e347-4ce3-908f-0d6d676c517e">
