@@ -577,12 +577,6 @@ export async function upsertMemory({
 					p.log.info(
 						`Memory "${memory.name}" already exists. Updating changed documents.`
 					);
-					await handleGitSyncMemoryDeploy({
-						memory,
-						account,
-						documents,
-						overwrite
-					});
 
 					if (docsToDelete?.length > 0) {
 						await deleteDocumentsFromMemory({
@@ -591,6 +585,13 @@ export async function upsertMemory({
 							account
 						});
 					}
+
+					await handleGitSyncMemoryDeploy({
+						memory,
+						account,
+						documents,
+						overwrite
+					});
 
 					await updateDeployedCommitHash(memory.name);
 
@@ -643,24 +644,43 @@ export async function uploadDocumentsToMemory({
 	name: string;
 	account: Account;
 }) {
-	for (const doc of documents) {
-		try {
-			p.log.message(`Uploading document: ${doc.name} ....`);
-			await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
-			const signedUrl = await getSignedUploadUrl({
-				documentName: doc.name,
-				memoryName: name,
-				account,
-				meta: doc.meta
-			});
+	const BATCH_SIZE = 5; // Number of concurrent uploads
+	const RATE_LIMIT_DELAY = 1500; // 1.5 second delay between requests
 
-			const uploadResponse = await uploadDocument(signedUrl, doc.blob);
-			dlog(`Upload response status: ${uploadResponse.status}`);
+	// Process documents in batches to avoid rate limiting
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
 
-			p.log.message(`Uploaded document: ${doc.name}`);
-		} catch (error) {
-			throw error;
-		}
+		const batchUploadPromises = batch.map(async (doc, index) => {
+			try {
+				// Stagger requests within batch
+				await new Promise(resolve =>
+					setTimeout(resolve, index * RATE_LIMIT_DELAY)
+				);
+
+				// p.log.message(`Uploading document: ${doc.name} ....`);
+				const signedUrl = await getSignedUploadUrl({
+					documentName: doc.name,
+					memoryName: name,
+					account,
+					meta: doc.meta
+				});
+
+				const uploadResponse = await uploadDocument(
+					signedUrl,
+					doc.blob
+				);
+				dlog(`Upload response status: ${uploadResponse.status}`);
+
+				p.log.message(`Uploaded document: ${doc.name}`);
+			} catch (error: any) {
+				throw new Error(
+					`Failed to upload ${doc.name}: ${error.message ?? error}`
+				);
+			}
+		});
+
+		await Promise.all(batchUploadPromises);
 	}
 }
 
@@ -673,25 +693,37 @@ export async function deleteDocumentsFromMemory({
 	name: string;
 	account: Account;
 }) {
-	p.log.info(`Deleting documents from memory: ${name}`);
+	const BATCH_SIZE = 5; // Number of concurrent uploads
+	const RATE_LIMIT_DELAY = 1500; // 1.5 second delay between requests
 
-	for (const doc of documents) {
-		try {
-			p.log.message(`Deleting document: ${doc} ....`);
-			await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
+	p.log.info(`Deleting ${documents.length} documents from memory: ${name}`);
 
-			const deleteResponse = await deleteDocument({
-				documentName: doc,
-				memoryName: name,
-				account
-			});
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
+		const batchPromises = batch.map(async (doc, index) => {
+			try {
+				await new Promise(resolve =>
+					setTimeout(resolve, index * RATE_LIMIT_DELAY)
+				);
 
-			dlog(`Delete response status: ${deleteResponse.status}`);
+				// p.log.message(`Deleting document: ${doc}`);
+				const deleteResponse = await deleteDocument({
+					documentName: doc,
+					memoryName: name,
+					account
+				});
 
-			p.log.message(`Deleted document: ${doc}`);
-		} catch (error) {
-			throw error;
-		}
+				dlog(`Delete response status: ${deleteResponse.status}`);
+				p.log.message(`Deleted document: ${doc}`);
+				return deleteResponse;
+			} catch (error: any) {
+				throw new Error(
+					`Failed to delete ${doc}: ${error.message ?? error}`
+				);
+			}
+		});
+
+		await Promise.all(batchPromises);
 	}
 	p.log.info(`Deleted documents from memory: ${name}`);
 }
@@ -1091,14 +1123,32 @@ export async function handleGitSyncMemoryDeploy({
 	documents: MemoryDocumentI[];
 	overwrite: boolean;
 }) {
-	for (const doc in documents) {
-		await new Promise(resolve => setTimeout(resolve, 800)); // To avoid rate limiting
-		await handleSingleDocDeploy({
-			memory,
-			account,
-			document: documents[doc],
-			overwrite: true // TODO: Implement overwrite for git-sync memories
+	const BATCH_SIZE = 5;
+	const RATE_LIMIT_DELAY = 1500;
+
+	// Fetch existing documents once
+	const prodDocs = await listMemoryDocuments({
+		account,
+		memoryName: memory.name
+	});
+
+	// Process in batches
+	for (let i = 0; i < documents.length; i += BATCH_SIZE) {
+		const batch = documents.slice(i, i + BATCH_SIZE);
+		const batchPromises = batch.map(async (doc, index) => {
+			await new Promise(resolve =>
+				setTimeout(resolve, index * RATE_LIMIT_DELAY)
+			);
+			return handleSingleDocDeploy({
+				memory,
+				account,
+				document: doc,
+				overwrite: true,
+				prodDocs
+			});
 		});
+
+		await Promise.all(batchPromises);
 	}
 }
 
