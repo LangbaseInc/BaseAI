@@ -7,6 +7,7 @@ const nextConfig = {
 	images: {
 		domains: ['raw.githubusercontent.com/']
 	},
+	transpilePackages: ['next-mdx-remote'],
 	async redirects() {
 		return [];
 	}
