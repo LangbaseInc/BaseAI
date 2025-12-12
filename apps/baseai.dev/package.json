@@ -46,7 +46,7 @@
 		"mdast-util-to-string": "^4.0.0",
 		"mdx-annotations": "^0.1.1",
 		"mxcn": "^2.0.0",
-		"next": "^14.0.4",
+		"next": "14.2.35",
 		"next-mdx-remote": "^5.0.0",
 		"next-themes": "^0.2.1",
 		"react": "^18.2.0",
