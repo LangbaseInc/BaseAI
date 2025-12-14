@@ -13,7 +13,52 @@ import type {
 } from './model';
 import type { PipeTool } from './tools';
 
+const contentTypeSchema = z.object({
+	type: z.string(),
+	text: z.string().optional(),
+	image_url: z
+		.object({
+			url: z.string(),
+			detail: z.string().optional()
+		})
+		.optional()
+});
+
 export const schemaMessage = z
+	.object({
+		role: z.enum(['system', 'user', 'assistant', 'function', 'tool']),
+		content: z
+			.union([z.string(), z.array(contentTypeSchema), z.null()])
+			.optional(),
+		tool_call_id: z.string().optional(),
+		name: z.string().optional(),
+		tool_calls: z
+			.array(
+				z.object({
+					id: z.string(),
+					type: z.string(),
+					function: z.record(z.unknown())
+				})
+			)
+			.optional()
+	})
+	.refine(
+		({ content, role, tool_calls }) => {
+			// If content is null, role isn't assistant and tool_calls is not present.
+			// then the schema is invalid
+			// because the message content is null and its not an assistant tool call
+			const isSchemaInvalid =
+				content === null && role !== 'assistant' && !tool_calls;
+
+			if (isSchemaInvalid) return false;
+			return true;
+		},
+		{
+			message: 'Message content cannot be empty.'
+		}
+	);
+
+export const schemaPipeMessage = z
 	.object({
 		role: z.enum(['system', 'user', 'assistant', 'function', 'tool']),
 		content: z.string().nullable(),
@@ -46,6 +91,7 @@ export const schemaMessage = z
 	);
 
 export type Message = z.infer<typeof schemaMessage>;
+export type PipeMessage = z.infer<typeof schemaPipeMessage>;
 
 export const VariableSchema = z.object({
 	name: z.string(),
@@ -98,7 +144,7 @@ export interface Pipe {
 	stop: string[];
 	tool_choice: ToolChoice;
 	parallel_tool_calls: boolean;
-	messages: Message[];
+	messages: PipeMessage[];
 	variables: VariablesI;
 	tools: PipeTool[];
 	memory: {
